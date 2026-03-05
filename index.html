@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backoffice Demand Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        .nav-button {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        #toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-800">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <header class="mb-12 text-center">
+            <!-- Novo Logo -->
+            <div class="flex justify-center mb-6">
+                <img src="https://www.lsinterbank.com.br/storage/settings/footer/01JF0S1DVXJBF1WYM31A9351AN.png"
+                    alt="LS Inter Bank" class="h-20 object-contain drop-shadow-md">
+            </div>
+
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Control</h1>
+            <p class="text-slate-500 mb-6">Gestão de Demandas e Ajustes de Operação</p>
+
+            <button onclick="exportToExcel()"
+                class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                <span>Exportar Dados em Excel (<span id="export-count">0</span> salvos)</span>
+            </button>
+        </header>
+
+        <!-- Navigation Grid Section (Colorizado com Bordas) -->
+        <section id="nav-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <button onclick="openForm('cadastro-form')"
+                class="nav-button border-2 border-blue-500 bg-blue-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-blue-600 p-4 rounded-full text-white">
+                    <i data-lucide="user-plus" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-blue-700">CADASTRO</span>
+            </button>
+
+            <button onclick="openForm('suporte-form')"
+                class="nav-button border-2 border-orange-500 bg-orange-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-orange-600 p-4 rounded-full text-white">
+                    <i data-lucide="life-buoy" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-orange-700">SUPORTE</span>
+            </button>
+
+            <button onclick="openForm('imp-operacoes-form')"
+                class="nav-button border-2 border-emerald-500 bg-emerald-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-emerald-600 p-4 rounded-full text-white">
+                    <i data-lucide="import" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-emerald-700">IMP DE OPERAÇÕES</span>
+            </button>
+
+            <button onclick="openForm('cheques-form')"
+                class="nav-button border-2 border-purple-500 bg-purple-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-purple-600 p-4 rounded-full text-white">
+                    <i data-lucide="banknote" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-purple-700">CHEQUES</span>
+            </button>
+
+            <button onclick="openForm('ajuste-form')"
+                class="nav-button border-2 border-indigo-500 bg-indigo-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-indigo-600 p-4 rounded-full text-white">
+                    <i data-lucide="settings-2" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-indigo-700">AJUSTE DE OPERAÇÕES</span>
+            </button>
+
+            <button onclick="openForm('defesas-form')"
+                class="nav-button border-2 border-rose-500 bg-rose-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
+                <div class="bg-rose-600 p-4 rounded-full text-white">
+                    <i data-lucide="shield" class="w-8 h-8"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wide text-rose-700">DEFESAS</span>
+            </button>
+        </section>
+
+        <!-- Botão Abrir Histórico -->
+        <div id="historico-btn-container" class="mt-12 text-center">
+            <button onclick="openHistorico()"
+                class="inline-flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white font-medium py-3 px-8 rounded-xl shadow-lg transition-all hover:-translate-y-1">
+                <i data-lucide="line-chart" class="w-5 h-5"></i>
+                <span>Ver Histórico & Gráficos</span>
+            </button>
+        </div>
+
+        <!-- Template Genérico de Gerentes Dropdown para reaproveitamento via Javascript/HTML -->
+        <datalist id="sys-gerentes" class="hidden">
+            <!-- Não usaremos mais datalist, as options serão colocadas direto nos selects -->
+        </datalist>
+
+        <!-- 1. CADASTRO Form -->
+        <section id="cadastro-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-500 pl-3">Novo Cadastro</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-cadastro" class="space-y-6">
+                        <input type="hidden" name="form_type" value="CADASTRO">
+
+                        <!-- Common Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Field -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Cadastro</label>
+                            <select name="tipo_cadastro" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="Renovação">Renovação</option>
+                                <option value="Prospecção">Prospecção</option>
+                                <option value="Renovação 10+">Renovação 10+</option>
+                                <option value="Risco Sacado">Risco Sacado</option>
+                                <option value="Inclusão">Inclusão</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Cadastro</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SUPORTE Form -->
+        <section id="suporte-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-orange-500 pl-3">Novo Suporte</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-suporte" class="space-y-6">
+                        <input type="hidden" name="form_type" value="SUPORTE">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Field -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Suporte</label>
+                            <select id="tipo-suporte-sel" name="tipo_suporte" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <optgroup label="Categorias">
+                                    <option value="Assinatura da Operação">Assinatura da Operação</option>
+                                    <option value="Desbloqueio de Login">Desbloqueio de Login</option>
+                                    <option value="Suporte Importação">Suporte Importação</option>
+                                    <option value="Suporte Primeira Operação">Suporte Primeira Operação</option>
+                                    <option value="Suporte QProf">Suporte QProf</option>
+                                    <option value="Carta de Circularização">Carta de Circularização</option>
+                                    <option value="Outros">Outros</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <!-- Extra Field For 'Outros' -->
+                        <div id="suporte-outros-div" class="hidden">
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Qual?</label>
+                            <input type="text" id="suporte-outros-input" name="detalhe_outro"
+                                placeholder="Descreva brevemente..."
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-orange-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Suporte</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. IMP DE OPERAÇÕES Form -->
+        <section id="imp-operacoes-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-emerald-500 pl-3">Importação de
+                        Operações</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-imp" class="space-y-6">
+                        <input type="hidden" name="form_type" value="IMP DE OPERAÇÕES">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Quantidade</label>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" onclick="changeQty('qty-imp', -1, 1)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="minus" class="w-5 h-5"></i>
+                                    </button>
+                                    <input type="number" id="qty-imp" name="quantidade" value="1" min="1" required
+                                        class="w-24 text-center font-bold text-xl px-2 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none appearance-none">
+                                    <button type="button" onclick="changeQty('qty-imp', 1, 1)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="plus" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Nota de Serviço</label>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" onclick="changeQty('ns-imp', -1, 0)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="minus" class="w-5 h-5"></i>
+                                    </button>
+                                    <input type="number" id="ns-imp" name="nota_servico" value="0" min="0" required
+                                        class="w-24 text-center font-bold text-xl px-2 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none appearance-none">
+                                    <button type="button" onclick="changeQty('ns-imp', 1, 0)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="plus" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-emerald-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Importação</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CHEQUES Form -->
+        <section id="cheques-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-purple-500 pl-3">Novo Cheque</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-cheques" class="space-y-6">
+                        <input type="hidden" name="form_type" value="CHEQUES">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Field -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Quantidade</label>
+                            <div class="flex items-center space-x-3">
+                                <button type="button" onclick="changeQty('qty-cheque', -1, 1)"
+                                    class="w-12 h-12 rounded-full flex items-center justify-center bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors shadow-sm focus:outline-none">
+                                    <i data-lucide="minus" class="w-6 h-6"></i>
+                                </button>
+                                <input type="number" id="qty-cheque" name="quantidade" value="1" min="1" required
+                                    class="w-32 text-center font-bold text-2xl px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none appearance-none">
+                                <button type="button" onclick="changeQty('qty-cheque', 1, 1)"
+                                    class="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors shadow-sm focus:outline-none">
+                                    <i data-lucide="plus" class="w-6 h-6"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-purple-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Cheque</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. AJUSTE DE OPERAÇÕES Form -->
+        <section id="ajuste-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-500 pl-3">Ajuste de Operação
+                    </h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-ajuste" class="space-y-6">
+                        <input type="hidden" name="form_type" value="AJUSTE DE OPERAÇÃO">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Field -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Ajuste</label>
+                            <select name="tipo_ajuste" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="Alteração de Rótulo">Alteração de Rótulo</option>
+                                <option value="Alteração de Valor">Alteração de Valor</option>
+                                <option value="Alteração de Vencimento">Alteração de Vencimento</option>
+                                <option value="Alteração Número NF">Alteração Número NF</option>
+                                <option value="Anexo de Lastro">Anexo de Lastro</option>
+                                <option value="Desmembrar Operação">Desmembrar Operação</option>
+                                <option value="Retorno de Operação">Retorno de Operação</option>
+                                <option value="Solicitar Unificar">Solicitar Unificar</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Ajuste</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DEFESAS Form -->
+        <section id="defesas-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-rose-500 pl-3">Nova Defesa</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                    <form id="form-defesas" class="space-y-6">
+                        <input type="hidden" name="form_type" value="DEFESAS">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Arthur">Arthur</option>
+                                    <option value="Cristiane">Cristiane</option>
+                                    <option value="Giovanna">Giovanna</option>
+                                    <option value="Kamily">Kamily</option>
+                                    <option value="Stefania">Stefania</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
+                                <option value="CAMILA">CAMILA</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="WESLEI">WESLEI</option>
+                                <option value="YARA">YARA</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all outline-none">
+                        </div>
+
+                        <!-- Specific Fields -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Defesa</label>
+                            <select name="tipo_defesa" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="Defesa em Tela">Defesa em Tela</option>
+                                <option value="Pleito de Operação">Pleito de Operação</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-rose-200 transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Defesa</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. HISTÓRICO & GRÁFICOS (DASHBOARD) -->
+        <section id="historico-section" class="form-section hidden">
+            <div class="w-full mx-auto">
+                <div class="mb-6 flex items-center">
+                    <button type="button" onclick="closeForm()"
+                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </button>
+                    <h2 class="text-3xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3">Dashboard Analítico
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Tabela de Dados Históricos -->
+                    <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-xl flex flex-col h-[600px]">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico de Registros
+                            </h3>
+                            <!-- Filtros Básicos -->
+                            <div class="flex space-x-2">
+                                <input type="text" id="filter-cedente" placeholder="Buscar Cedente..."
+                                    class="px-3 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-500"
+                                    oninput="renderTable()">
+                                <select id="filter-tipo"
+                                    class="px-3 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-500"
+                                    onchange="renderTable()">
+                                    <option value="">Todos os Tipos</option>
+                                    <option value="CADASTRO">Cadastro</option>
+                                    <option value="SUPORTE">Suporte</option>
+                                    <option value="IMP DE OPERAÇÕES">Imp de Operações</option>
+                                    <option value="CHEQUES">Cheques</option>
+                                    <option value="AJUSTE DE OPERAÇÃO">Ajuste de Operação</option>
+                                    <option value="DEFESAS">Defesas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Wrapper para dar rolagem (overflow) apenas na tabela -->
+                        <div class="overflow-y-auto flex-1 rounded-lg border border-slate-200">
+                            <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
+                                <thead class="bg-slate-50 sticky top-0">
+                                    <tr>
+                                        <th class="px-4 py-3 font-semibold text-slate-600">Data</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-600">Formulário</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-600">Feito Por</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-600">Cedente</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-600">Gerente</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table-body" class="bg-white divide-y divide-slate-100">
+                                    <!-- Rows JS dinâmicas aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico (Chart.js) -->
+                    <div
+                        class="glass-card rounded-2xl p-6 shadow-xl flex flex-col justify-center items-center h-[600px]">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6 w-full text-left flex items-center gap-2">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-slate-500"></i> Distribuição de Demandas
+                        </h3>
+                        <div class="w-full relative flex-1 flex items-center justify-center">
+                            <!-- Altura controlada pelo container paterno -->
+                            <canvas id="demandPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Application State & Cloud Storage Simulation
+        let savedRecords = [];
+        let demandChartInstance = null;
+
+        const navGrid = document.getElementById('nav-grid');
+        const historicoBtnContainer = document.getElementById('historico-btn-container');
+        const allForms = document.querySelectorAll('.form-section');
+        const exportCount = document.getElementById('export-count');
+        const suporteOutrosDiv = document.getElementById('suporte-outros-div');
+        const suporteOutrosInput = document.getElementById('suporte-outros-input');
+
+        // Initial Data Setup
+        window.addEventListener('DOMContentLoaded', () => {
+            // Setup Dates
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                input.value = today;
+            });
+
+            // Recupera base "na nuvem" (LocalStorage)
+            const stored = localStorage.getItem('@BackofficeFlow:records');
+            if (stored) {
+                savedRecords = JSON.parse(stored);
+                exportCount.innerText = savedRecords.length;
+            }
+
+            // Register form submits
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', handleFormSubmit);
+            });
+
+            // Logic for 'Outros' in Suporte Form
+            const supSelect = document.getElementById('tipo-suporte-sel');
+            if (supSelect) {
+                supSelect.addEventListener('change', (e) => {
+                    if (e.target.value === 'Outros') {
+                        suporteOutrosDiv.classList.remove('hidden');
+                        suporteOutrosInput.setAttribute('required', 'true');
+                    } else {
+                        suporteOutrosDiv.classList.add('hidden');
+                        suporteOutrosInput.removeAttribute('required');
+                        suporteOutrosInput.value = '';
+                    }
+                });
+            }
+        });
+
+        // Navigation Functions
+        function openForm(formId) {
+            navGrid.classList.add('hidden');
+            historicoBtnContainer.classList.add('hidden');
+            allForms.forEach(f => f.classList.add('hidden'));
+
+            const targetForm = document.getElementById(formId);
+            if (targetForm) {
+                targetForm.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function closeForm() {
+            allForms.forEach(f => {
+                f.classList.add('hidden');
+                // Reset form inputs except date
+                const formEl = f.querySelector('form');
+                if (formEl) formEl.reset();
+            });
+
+            // Re-apply today to dates and hide 'outros'
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                input.value = today;
+            });
+            suporteOutrosDiv.classList.add('hidden');
+            suporteOutrosInput.removeAttribute('required');
+
+            navGrid.classList.remove('hidden');
+            historicoBtnContainer.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openHistorico() {
+            openForm('historico-section');
+            renderTable();
+            renderChart();
+        }
+
+        // Qty adjustment function for specific fields
+        function changeQty(inputId, delta, minValue) {
+            const input = document.getElementById(inputId);
+            let val = parseInt(input.value) || 0;
+            val += delta;
+            if (val < minValue) val = minValue;
+            input.value = val;
+        }
+
+        // Form Handling logic
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const dataObj = Object.fromEntries(formData.entries());
+
+            // Format Timestamp
+            dataObj['Registrado Em'] = new Date().toLocaleString('pt-BR');
+
+            // Reconcile 'Outros' se for do Suporte
+            if (dataObj['tipo_suporte'] === 'Outros' && dataObj['detalhe_outro']) {
+                dataObj['tipo_suporte'] = `Outros: ${dataObj['detalhe_outro']}`;
+            }
+            // Retirar detalhe_outro puro pra não sujar o excel
+            delete dataObj['detalhe_outro'];
+
+            // Save state
+            savedRecords.push(dataObj);
+
+            // Salvar no LocalStorage (Nuvem emulada)
+            localStorage.setItem('@BackofficeFlow:records', JSON.stringify(savedRecords));
+
+            // Update UI count
+            exportCount.innerText = savedRecords.length;
+
+            const formTypeStr = dataObj['form_type'] || 'Registro';
+            showToast(`${formTypeStr} salvo com sucesso!`, 'success');
+
+            setTimeout(() => {
+                closeForm();
+            }, 800);
+        }
+
+        // --- DASHBOARD: Histórico e Gráfico ---
+
+        function renderTable() {
+            const tbody = document.getElementById('history-table-body');
+            const term = document.getElementById('filter-cedente').value.toLowerCase();
+            const typeFilter = document.getElementById('filter-tipo').value;
+
+            tbody.innerHTML = '';
+
+            if (savedRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum registro encontrado no histórico.</td></tr>`;
+                return;
+            }
+
+            // Aplicando Filtros
+            const filtered = savedRecords.filter(r => {
+                const matchName = !term || (r.cedente && r.cedente.toLowerCase().includes(term));
+                const matchType = !typeFilter || r['form_type'] === typeFilter;
+                return matchName && matchType;
+            });
+
+            // Gerando HTML das Linhas (Mais recentes primeiro)
+            [...filtered].reverse().forEach(record => {
+                // Formatação visual da Tag de Tipo
+                let typeColor = 'bg-slate-100 text-slate-800';
+                if (record.form_type === 'CADASTRO') typeColor = 'bg-blue-100 text-blue-800';
+                if (record.form_type === 'SUPORTE') typeColor = 'bg-orange-100 text-orange-800';
+                if (record.form_type === 'IMP DE OPERAÇÕES') typeColor = 'bg-emerald-100 text-emerald-800';
+                if (record.form_type === 'CHEQUES') typeColor = 'bg-purple-100 text-purple-800';
+                if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
+                if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-4 py-3 whitespace-nowrap text-slate-500">${record['Registrado Em']}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${typeColor}">
+                            ${record.form_type}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
+                    <td class="px-4 py-3 text-slate-700">${record.cedente || '-'}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('demandPieChart').getContext('2d');
+
+            // Agrupar contagens
+            const counts = {
+                'CADASTRO': 0, 'SUPORTE': 0, 'IMP DE OPERAÇÕES': 0,
+                'AJUSTE DE OPERAÇÃO': 0, 'DEFESAS': 0, 'CHEQUES': 0
+            };
+
+            savedRecords.forEach(r => {
+                if (counts[r.form_type] !== undefined) {
+                    counts[r.form_type]++;
+                }
+            });
+
+            // As cores referenciando as exatas matizes requisitadas da imagem
+            // 'Suporte': Azul escuro, 'Imp': Laranja, 'Ajuste In Tela': Verde escuro, 'Cadastro': Azul Claro, 'Análise Recusa': Roxo, 'Cheques/Outros': Verde Lima
+            const dataValues = [
+                counts['SUPORTE'],
+                counts['IMP DE OPERAÇÕES'],
+                counts['AJUSTE DE OPERAÇÃO'],
+                counts['CADASTRO'],
+                counts['DEFESAS'],
+                counts['CHEQUES']
+            ];
+
+            const backgroundColors = [
+                '#1f618d', // Suporte (Azul Escuro)
+                '#eb883b', // Imp Operacoes (Laranja)
+                '#196f3d', // Ajuste em Tela (Verde Escuro)
+                '#00a8e8', // Cadastro (Azul Claro/Ciano)
+                '#9b3e94', // Defesas/Recusas (Roxo)
+                '#59a14f'  // Cheques/Extra (Verde Claro)
+            ];
+
+            const labels = [
+                'SUPORTE', 'IMP DE OPERAÇÕES', 'AJUSTE DE OPERAÇÃO EM TELA',
+                'CADASTRO', 'ANÁLISE RECUSAS/DEFESA DE OPERAÇÃO', 'CHEQUES'
+            ];
+
+            // Destruir instance velha c/ animação caso formos re-renderizar
+            if (demandChartInstance) demandChartInstance.destroy();
+
+            demandChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        hoverOffset: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11,
+                                    weight: 'bold'
+                                },
+                                color: '#334155',
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    label += percentage + '% (' + value + ')';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export data to XLSX logic featuring SheetJS
+        function exportToExcel() {
+            if (savedRecords.length === 0) {
+                showToast('Nenhum dado para exportar ainda.', 'info');
+                return;
+            }
+
+            try {
+                // Cria uma nova worksheet com base nos dados cacheados na variável
+                const worksheet = XLSX.utils.json_to_sheet(savedRecords);
+
+                // Cria um novo workbook virtual e anexa a sheet
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Registros - Backoffice");
+
+                // Gera arquivo real e deflagra download
+                const filename = `Backoffice_Export_${new Date().getTime()}.xlsx`;
+                XLSX.writeFile(workbook, filename);
+
+                showToast('Arquivo .XLSX gerado e baixado!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Erro ao exportar os dados. Verifique o console.', 'error');
+            }
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
+            const icon = type === 'success' ? 'check-circle' : 'info';
+
+            toast.className = `${bgColor} text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 mb-4 transform transition-all duration-300 opacity-0 translate-y-[-20px]`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-6 h-6"></i>
+                <span class="font-medium">${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Animate in
+            setTimeout(() => {
+                toast.classList.replace('opacity-0', 'opacity-100');
+                toast.classList.replace('translate-y-[-20px]', 'translate-y-0');
+            }, 10);
+
+            // Remove
+            setTimeout(() => {
+                toast.classList.replace('opacity-100', 'opacity-0');
+                toast.classList.add('translate-x-[20px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
