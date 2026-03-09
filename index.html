@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -802,9 +803,42 @@
         // Init Lucide Icons
         lucide.createIcons();
 
-        // Application State & Cloud Storage Simulation
+        // ---------------- SUPABASE CONFIGURATION ----------------
+        const supabaseUrl = 'https://mjndgazkvfgbruiszsjb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qbmRnYXprdmZnYnJ1aXN6c2piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTc2NzQsImV4cCI6MjA4ODYzMzY3NH0.epFA9LirLYSoJdrQyTQNR2-m2-9O2w00J9vJjR21PYE';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // --------------------------------------------------------
+
+        // Application State
         let savedRecords = [];
         let demandChartInstance = null;
+
+        // Fetch do Supabase
+        async function fetchRecords() {
+            try {
+                // Tabela que vamos criar chamará "demandas"
+                const { data, error } = await supabaseClient
+                    .from('demandas')
+                    .select('*')
+                    .order('registrado_em', { ascending: true }); // do mais antigo pro mais novo (para bater reverse)
+
+                if (error) throw error;
+
+                if (data) {
+                    savedRecords = data;
+                    exportCount.innerText = savedRecords.length;
+
+                    // Se o histórico estiver aberto, re-renderiza
+                    const histSec = document.getElementById('historico-section');
+                    if (histSec && !histSec.classList.contains('hidden')) {
+                        renderTable();
+                        renderChart();
+                    }
+                }
+            } catch (err) {
+                console.error("Erro ao buscar Supabase:", err);
+            }
+        }
 
         const navGrid = document.getElementById('nav-grid');
         const historicoBtnContainer = document.getElementById('historico-btn-container');
@@ -821,12 +855,8 @@
                 input.value = today;
             });
 
-            // Recupera base "na nuvem" (LocalStorage)
-            const stored = localStorage.getItem('@BackofficeFlow:records');
-            if (stored) {
-                savedRecords = JSON.parse(stored);
-                exportCount.innerText = savedRecords.length;
-            }
+            // Recupera base "na nuvem" (agora via Supabase)
+            fetchRecords();
 
             // Register form submits
             document.querySelectorAll('form').forEach(form => {
@@ -899,37 +929,57 @@
         }
 
         // Form Handling logic
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
             const dataObj = Object.fromEntries(formData.entries());
 
             // Format Timestamp
-            dataObj['Registrado Em'] = new Date().toLocaleString('pt-BR');
+            dataObj['registrado_em'] = new Date().toISOString();
+            // no banco, esse valor deve ser text, ou timestamptz. usaremos timestamptz
+
+            // Converter números par number
+            if (dataObj['quantidade']) dataObj['quantidade'] = parseInt(dataObj['quantidade']);
+            if (dataObj['nota_servico']) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']);
 
             // Reconcile 'Outros' se for do Suporte
             if (dataObj['tipo_suporte'] === 'Outros' && dataObj['detalhe_outro']) {
                 dataObj['tipo_suporte'] = `Outros: ${dataObj['detalhe_outro']}`;
             }
-            // Retirar detalhe_outro puro pra não sujar o excel
+            // Retirar detalhe_outro puro pra não sujar o DB
             delete dataObj['detalhe_outro'];
 
-            // Save state
-            savedRecords.push(dataObj);
+            // Botão de loading na UI
+            const btnSubmit = form.querySelector('button[type="submit"]');
+            const originalBtnText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Salvando...</span>`;
+            btnSubmit.disabled = true;
+            lucide.createIcons();
 
-            // Salvar no LocalStorage (Nuvem emulada)
-            localStorage.setItem('@BackofficeFlow:records', JSON.stringify(savedRecords));
+            try {
+                // Inserir no Supabase
+                const { error } = await supabaseClient.from('demandas').insert([dataObj]);
+                if (error) throw error;
 
-            // Update UI count
-            exportCount.innerText = savedRecords.length;
+                // Fetch atualizado
+                await fetchRecords();
 
-            const formTypeStr = dataObj['form_type'] || 'Registro';
-            showToast(`${formTypeStr} salvo com sucesso!`, 'success');
+                const formTypeStr = dataObj['form_type'] || 'Registro';
+                showToast(`${formTypeStr} salvo com sucesso!`, 'success');
 
-            setTimeout(() => {
-                closeForm();
-            }, 800);
+                setTimeout(() => {
+                    closeForm();
+                }, 800);
+
+            } catch (error) {
+                console.error('Erro no salvamento:', error);
+                showToast('Erro ao salvar no banco. Verifique console.', 'error');
+            } finally {
+                btnSubmit.innerHTML = originalBtnText;
+                btnSubmit.disabled = false;
+                lucide.createIcons();
+            }
         }
 
         // --- DASHBOARD: Histórico e Gráfico ---
@@ -964,10 +1014,11 @@
                 if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
                 if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
 
+                const dataRegistro = new Date(record['registrado_em']).toLocaleString('pt-BR');
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
                 tr.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap text-slate-500">${record['Registrado Em']}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-slate-500">${dataRegistro}</td>
                     <td class="px-4 py-3 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${typeColor}">
                             ${record.form_type}
