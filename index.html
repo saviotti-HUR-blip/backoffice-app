@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -203,18 +204,45 @@
                                 class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
                         </div>
 
-                        <!-- Specific Field -->
+                        <!-- Specific Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Cadastro</label>
+                                <select name="tipo_cadastro" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione o tipo</option>
+                                    <option value="Renovação">Renovação</option>
+                                    <option value="Prospecção">Prospecção</option>
+                                    <option value="Renovação 10+">Renovação 10+</option>
+                                    <option value="Risco Sacado">Risco Sacado</option>
+                                    <option value="Inclusão">Inclusão</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Fase do Cadastro</label>
+                                <select name="fase_cadastro" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione a fase</option>
+                                    <option value="TRIAGEM DE DOCUMENTOS">TRIAGEM DE DOCUMENTOS</option>
+                                    <option value="TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO">TRIAGEM
+                                        FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO</option>
+                                    <option value="RENOVAÇÃO FINALIZADA">RENOVAÇÃO FINALIZADA</option>
+                                    <option value="CADASTRO APROVADO">CADASTRO APROVADO</option>
+                                    <option value="AGUARDANDO REVISÃO - DIRETOR COMERCIAL">AGUARDANDO REVISÃO - DIRETOR
+                                        COMERCIAL</option>
+                                    <option value="CADASTRO REPROVADO">CADASTRO REPROVADO</option>
+                                    <option value="ELABORAÇÃO DE APRESENTAÇÃO">ELABORAÇÃO DE APRESENTAÇÃO</option>
+                                    <option value="INSERIDO EM STANDBY">INSERIDO EM STANDBY</option>
+                                    <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Cadastro</label>
-                            <select name="tipo_cadastro" required
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
-                                <option value="" disabled selected>Selecione o tipo</option>
-                                <option value="Renovação">Renovação</option>
-                                <option value="Prospecção">Prospecção</option>
-                                <option value="Renovação 10+">Renovação 10+</option>
-                                <option value="Risco Sacado">Risco Sacado</option>
-                                <option value="Inclusão">Inclusão</option>
-                            </select>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Grupo (Opcional)</label>
+                            <input type="text" name="grupo" placeholder="Nome do grupo"
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
                         </div>
 
                         <div class="pt-4">
@@ -738,65 +766,160 @@
                     </h2>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Tabela de Dados Históricos -->
-                    <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-xl flex flex-col h-[600px]">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                                <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico de Registros
-                            </h3>
-                            <!-- Filtros Básicos -->
-                            <div class="flex space-x-2">
-                                <input type="text" id="filter-cedente" placeholder="Buscar Cedente..."
-                                    class="px-3 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-500"
-                                    oninput="renderTable()">
-                                <select id="filter-tipo"
-                                    class="px-3 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-500"
-                                    onchange="renderTable()">
-                                    <option value="">Todos os Tipos</option>
-                                    <option value="CADASTRO">Cadastro</option>
-                                    <option value="SUPORTE">Suporte</option>
-                                    <option value="IMP DE OPERAÇÕES">Imp de Operações</option>
-                                    <option value="CHEQUES">Cheques</option>
-                                    <option value="AJUSTE DE OPERAÇÃO">Ajuste de Operação</option>
-                                    <option value="DEFESAS">Defesas</option>
-                                </select>
-                            </div>
+                <div class="glass-card rounded-2xl p-6 shadow-xl flex flex-col h-[500px] mb-8 relative">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico de Registros
+                        </h3>
+                        <button onclick="clearAllFilters()"
+                            class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
+                            <i data-lucide="filter-x" class="w-4 h-4"></i> Limpar Filtros
+                        </button>
+                    </div>
+
+                    <!-- Menu Flutuante de Filtro Estilo Excel (Oculto por padrão) -->
+                    <div id="excel-filter-menu"
+                        class="hidden absolute z-50 bg-white border border-slate-200 shadow-2xl rounded-xl w-64 p-3 flex-col text-sm text-slate-700">
+                        <!-- Opções de Ordenação -->
+                        <button id="btn-sort-asc"
+                            class="w-full text-left px-3 py-2 hover:bg-slate-100 rounded-md flex items-center gap-2 transition-colors">
+                            <i data-lucide="arrow-down-a-z" class="w-4 h-4 text-slate-500"></i> Classificar
+                            Crescente
+                        </button>
+                        <button id="btn-sort-desc"
+                            class="w-full text-left px-3 py-2 hover:bg-slate-100 rounded-md flex items-center gap-2 transition-colors mb-2">
+                            <i data-lucide="arrow-up-z-a" class="w-4 h-4 text-slate-500"></i> Classificar
+                            Decrescente
+                        </button>
+
+                        <hr class="border-slate-200 mb-2">
+
+                        <!-- Barra de Pesquisa -->
+                        <div class="relative mb-2">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-2 top-1.5 text-slate-400"></i>
+                            <input type="text" id="filter-search-input" placeholder="Pesquisar..."
+                                class="w-full pl-8 pr-2 py-1.5 border border-slate-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                         </div>
 
-                        <!-- Wrapper para dar rolagem (overflow) apenas na tabela -->
-                        <div class="overflow-y-auto flex-1 rounded-lg border border-slate-200">
-                            <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
-                                <thead class="bg-slate-50 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-3 font-semibold text-slate-600">Data</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-600">Formulário</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-600">Feito Por</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-600">Cedente</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-600">Gerente</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="history-table-body" class="bg-white divide-y divide-slate-100">
-                                    <!-- Rows JS dinâmicas aqui -->
-                                </tbody>
-                            </table>
+                        <!-- Lista de Checkboxes -->
+                        <div class="flex-1 overflow-y-auto max-h-48 border border-slate-200 rounded-md p-2 bg-slate-50"
+                            id="filter-checkbox-list">
+                            <!-- Preenchido dinamicamente via JS -->
+                        </div>
+
+                        <!-- Botões de Ação -->
+                        <div class="flex justify-end gap-2 mt-3">
+                            <button id="btn-filter-cancel"
+                                class="px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors bg-white font-medium shadow-sm">Cancelar</button>
+                            <button id="btn-filter-ok"
+                                class="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm shadow-blue-200">OK</button>
                         </div>
                     </div>
 
-                    <!-- Gráfico (Chart.js) -->
-                    <div
-                        class="glass-card rounded-2xl p-6 shadow-xl flex flex-col justify-center items-center h-[600px]">
-                        <h3 class="text-xl font-bold text-slate-800 mb-6 w-full text-left flex items-center gap-2">
-                            <i data-lucide="pie-chart" class="w-5 h-5 text-slate-500"></i> Distribuição de Demandas
+                    <!-- Wrapper para dar rolagem (overflow) na tabela -->
+                    <div class="overflow-y-auto flex-1 rounded-lg border border-slate-200 relative">
+                        <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
+                            <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
+                                <tr>
+                                    <!-- Cabeçalhos Interativos -->
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'data', 'Data')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Data</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'form_type', 'Formulário')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Formulário</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Feito Por</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'cedente', 'Cedente')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Cedente</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors border-r border-slate-200"
+                                        onclick="openFilterMenu(event, 'fase_cadastro', 'Fase')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Fase</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'gerente', 'Gerente')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Gerente</span>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body" class="bg-white divide-y divide-slate-100">
+                                <!-- Rows JS dinâmicas aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Gráficos (Abaixo da Tabela, 3 Colunas) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- Gráfico Demandas -->
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                        <h3
+                            class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
+                            <i data-lucide="pie-chart" class="w-4 h-4 text-slate-500"></i> Demandas
                         </h3>
                         <div class="w-full relative flex-1 flex items-center justify-center">
-                            <!-- Altura controlada pelo container paterno -->
                             <canvas id="demandPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico Gerentes -->
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                        <h3
+                            class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
+                            <i data-lucide="users" class="w-4 h-4 text-slate-500"></i> Gerentes
+                        </h3>
+                        <div class="w-full relative flex-1 flex items-center justify-center">
+                            <canvas id="gerentesPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico Colaboradores -->
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                        <h3
+                            class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
+                            <i data-lucide="user-check" class="w-4 h-4 text-slate-500"></i> Feito Por
+                        </h3>
+                        <div class="w-full relative flex-1 flex items-center justify-center">
+                            <canvas id="colaboradoresPieChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+    </div>
+    </div>
+    </div>
+    </section>
     </div>
 
     <script>
@@ -809,18 +932,36 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         // --------------------------------------------------------
 
+        // Register DataLabels plugin globally
+        Chart.register(ChartDataLabels);
+
         // Application State
-        let savedRecords = [];
+        let savedRecords = []; // Raw data
+        let processedRecords = []; // Data after filters and sorting
+
+        // Filter and Sort State
+        let activeFilters = {
+            'data': new Set(),
+            'form_type': new Set(),
+            'feito_por': new Set(),
+            'cedente': new Set(),
+            'gerente': new Set(),
+            'fase_cadastro': new Set()
+        };
+        let currentSort = { column: 'registrado_em', direction: 'desc' }; // default sort
+
         let demandChartInstance = null;
+        let gerentesChartInstance = null;
+        let colaboradoresChartInstance = null;
 
         // Fetch do Supabase
         async function fetchRecords() {
             try {
-                // Tabela que vamos criar chamará "demandas"
+                // Tabela "demandas"
                 const { data, error } = await supabaseClient
                     .from('demandas')
                     .select('*')
-                    .order('registrado_em', { ascending: true }); // do mais antigo pro mais novo (para bater reverse)
+                    .order('registrado_em', { ascending: false });
 
                 if (error) throw error;
 
@@ -828,11 +969,13 @@
                     savedRecords = data;
                     exportCount.innerText = savedRecords.length;
 
+                    // Initialize all filters with all unique values across the dataset
+                    resetFilters();
+
                     // Se o histórico estiver aberto, re-renderiza
                     const histSec = document.getElementById('historico-section');
                     if (histSec && !histSec.classList.contains('hidden')) {
-                        renderTable();
-                        renderChart();
+                        applyFiltersAndSort();
                     }
                 }
             } catch (err) {
@@ -984,28 +1127,239 @@
 
         // --- DASHBOARD: Histórico e Gráfico ---
 
-        function renderTable() {
-            const tbody = document.getElementById('history-table-body');
-            const term = document.getElementById('filter-cedente').value.toLowerCase();
-            const typeFilter = document.getElementById('filter-tipo').value;
+        // State variables for the currently open menu
+        let currentFilterColumn = null;
+        let currentFilterOptions = []; // Array of {value, label}
 
-            tbody.innerHTML = '';
+        // Element references
+        const filterMenu = document.getElementById('excel-filter-menu');
+        const filterSearchInput = document.getElementById('filter-search-input');
+        const filterCheckboxList = document.getElementById('filter-checkbox-list');
+        const btnSortAsc = document.getElementById('btn-sort-asc');
+        const btnSortDesc = document.getElementById('btn-sort-desc');
+        const btnFilterOk = document.getElementById('btn-filter-ok');
+        const btnFilterCancel = document.getElementById('btn-filter-cancel');
 
-            if (savedRecords.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum registro encontrado no histórico.</td></tr>`;
+        // Close menu on outside click
+        document.addEventListener('click', (e) => {
+            if (!filterMenu.classList.contains('hidden') &&
+                !filterMenu.contains(e.target) &&
+                !e.target.closest('th')) { // Se não clicou dentro do menu nem num TH
+                closeFilterMenu();
+            }
+        });
+
+        function clearAllFilters() {
+            resetFilters();
+            currentSort = { column: 'registrado_em', direction: 'desc' };
+            applyFiltersAndSort();
+        }
+
+        function resetFilters() {
+            const columns = ['data', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente'];
+            columns.forEach(col => {
+                activeFilters[col] = new Set(savedRecords.map(r => formatDataForDisplay(r[col], col)));
+            });
+        }
+
+        // Helper para formatar data DD/MM/YYYY ou retornar texto puro
+        function formatDataForDisplay(value, col) {
+            if (!value) return '-';
+            if (col === 'data' && value.includes('-')) {
+                const p = value.split('-');
+                if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
+            }
+            return value;
+        }
+
+        function openFilterMenu(event, column, title) {
+            // Prevent event bubbling
+            event.stopPropagation();
+
+            // Toggle logic: se clicou no mesmo que já estava aberto, fecha
+            if (currentFilterColumn === column && !filterMenu.classList.contains('hidden')) {
+                closeFilterMenu();
                 return;
             }
 
-            // Aplicando Filtros
-            const filtered = savedRecords.filter(r => {
-                const matchName = !term || (r.cedente && r.cedente.toLowerCase().includes(term));
-                const matchType = !typeFilter || r['form_type'] === typeFilter;
-                return matchName && matchType;
+            currentFilterColumn = column;
+
+            // Build unique options list for this column from the RAW savedRecords
+            const uniqueRawValues = [...new Set(savedRecords.map(r => formatDataForDisplay(r[column], column)))].sort();
+            currentFilterOptions = uniqueRawValues.map(v => ({
+                value: v,
+                label: v,
+                checked: activeFilters[column] ? activeFilters[column].has(v) : false
+            }));
+
+            // Calculate Position relative to the Th header clicked
+            const thRect = event.currentTarget.getBoundingClientRect();
+            // Try to position below the header. If it overflows right, adjust.
+            let leftPos = thRect.left;
+            const menuWidth = 256; // w-64 is 256px
+            if (leftPos + menuWidth > window.innerWidth) {
+                leftPos = window.innerWidth - menuWidth - 20;
+            }
+
+            filterMenu.style.top = `${thRect.bottom + window.scrollY}px`;
+            filterMenu.style.left = `${leftPos + window.scrollX}px`;
+
+            // Populating DOM
+            filterSearchInput.value = '';
+            renderFilterCheckboxes();
+
+            filterMenu.classList.remove('hidden');
+        }
+
+        function closeFilterMenu() {
+            filterMenu.classList.add('hidden');
+            currentFilterColumn = null;
+        }
+
+        function renderFilterCheckboxes(searchTerm = '') {
+            filterCheckboxList.innerHTML = '';
+
+            // Filter options based on search box
+            const filteredOptions = currentFilterOptions.filter(opt =>
+                String(opt.label).toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            // Add "(Selecionar Tudo)" checkbox
+            const allChecked = filteredOptions.every(opt => opt.checked);
+
+            const selectAllDiv = document.createElement('div');
+            selectAllDiv.className = 'flex items-center gap-2 mb-2 pb-2 border-b border-slate-200';
+            selectAllDiv.innerHTML = `
+                <input type="checkbox" id="filter-cb-all" class="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer" ${allChecked ? 'checked' : ''}>
+                <label for="filter-cb-all" class="font-medium cursor-pointer select-none">(Selecionar Tudo)</label>
+            `;
+            filterCheckboxList.appendChild(selectAllDiv);
+
+            // Add Event Listener to Select All
+            selectAllDiv.querySelector('input').addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                filteredOptions.forEach(opt => opt.checked = isChecked);
+                // Re-render items to update their visual checkbox state
+                renderFilterCheckboxes(searchTerm);
             });
 
-            // Gerando HTML das Linhas (Mais recentes primeiro)
-            [...filtered].reverse().forEach(record => {
-                // Formatação visual da Tag de Tipo
+            // Render individual options
+            filteredOptions.forEach((opt, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex items-center gap-2 mb-1.5 cursor-pointer hover:bg-slate-200 px-1 rounded';
+                itemDiv.innerHTML = `
+                    <input type="checkbox" id="filter-cb-${index}" data-val="${opt.value}" class="individual-cb w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer" ${opt.checked ? 'checked' : ''}>
+                    <label for="filter-cb-${index}" class="cursor-pointer select-none truncate flex-1" title="${opt.label}">${opt.label}</label>
+                `;
+                filterCheckboxList.appendChild(itemDiv);
+
+                // Listeners reais para atualizar o state no array
+                itemDiv.querySelector('input').addEventListener('change', (e) => {
+                    opt.checked = e.target.checked;
+                    // Update the "Selecionar Tudo" box status dynamically
+                    const allCb = document.getElementById('filter-cb-all');
+                    if (allCb) {
+                        allCb.checked = filteredOptions.every(o => o.checked);
+                    }
+                });
+            });
+        }
+
+        // Search Input Event
+        filterSearchInput.addEventListener('input', (e) => {
+            renderFilterCheckboxes(e.target.value);
+        });
+
+        // Sorting Actions
+        btnSortAsc.addEventListener('click', () => {
+            currentSort = { column: currentFilterColumn, direction: 'asc' };
+            applyFiltersAndSort();
+            closeFilterMenu();
+        });
+
+        btnSortDesc.addEventListener('click', () => {
+            currentSort = { column: currentFilterColumn, direction: 'desc' };
+            applyFiltersAndSort();
+            closeFilterMenu();
+        });
+
+        // Apply Filters Action
+        btnFilterOk.addEventListener('click', () => {
+            // Update the global activeFilters Set for the current column based on currentFilterOptions
+            activeFilters[currentFilterColumn].clear();
+            currentFilterOptions.forEach(opt => {
+                if (opt.checked) {
+                    activeFilters[currentFilterColumn].add(opt.value);
+                }
+            });
+            applyFiltersAndSort();
+            closeFilterMenu();
+        });
+
+        btnFilterCancel.addEventListener('click', () => {
+            closeFilterMenu();
+        });
+
+        // Core processing function
+        function applyFiltersAndSort() {
+            // 1. Filter
+            processedRecords = savedRecords.filter(r => {
+                const dataStr = formatDataForDisplay(r.data, 'data');
+                const formType = formatDataForDisplay(r.form_type, 'form_type');
+                const feitoPor = formatDataForDisplay(r.feito_por, 'feito_por');
+                const cedente = formatDataForDisplay(r.cedente, 'cedente');
+                const fase = formatDataForDisplay(r.fase_cadastro, 'fase_cadastro');
+                const gerente = formatDataForDisplay(r.gerente, 'gerente');
+
+                return activeFilters['data'].has(dataStr) &&
+                    activeFilters['form_type'].has(formType) &&
+                    activeFilters['feito_por'].has(feitoPor) &&
+                    activeFilters['cedente'].has(cedente) &&
+                    activeFilters['fase_cadastro'].has(fase) &&
+                    activeFilters['gerente'].has(gerente);
+            });
+
+            // 2. Sort
+            processedRecords.sort((a, b) => {
+                let valA = formatDataForDisplay(a[currentSort.column], currentSort.column);
+                let valB = formatDataForDisplay(b[currentSort.column], currentSort.column);
+
+                // Tratar datas pt-br no "Data" column pra sortear correto (YYYYMMDD)
+                if (currentSort.column === 'data' && valA.includes('/')) {
+                    valA = valA.split('/').reverse().join('');
+                    valB = valB.split('/').reverse().join('');
+                } else if (currentSort.column === 'registrado_em') {
+                    // ISO Date sort string
+                    valA = a['registrado_em'] || '';
+                    valB = b['registrado_em'] || '';
+                } else if (currentSort.column === 'quantidade') {
+                    valA = parseInt(a.quantidade || 0);
+                    valB = parseInt(b.quantidade || 0);
+                } else {
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            // 3. Render Views
+            renderTable();
+            renderChart();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+
+            if (processedRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum registro corresponde aos filtros selecionados.</td></tr>`;
+                return;
+            }
+
+            processedRecords.forEach(record => {
                 let typeColor = 'bg-slate-100 text-slate-800';
                 if (record.form_type === 'CADASTRO') typeColor = 'bg-blue-100 text-blue-800';
                 if (record.form_type === 'SUPORTE') typeColor = 'bg-orange-100 text-orange-800';
@@ -1014,112 +1368,148 @@
                 if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
                 if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
 
-                const dataRegistro = new Date(record['registrado_em']).toLocaleString('pt-BR');
+                const dataExibicao = formatDataForDisplay(record.data, 'data');
+                const faseExibicao = record.fase_cadastro || '-';
+
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition-colors';
                 tr.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap text-slate-500">${dataRegistro}</td>
-                    <td class="px-4 py-3 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${typeColor}">
+                    <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
+                    <td class="px-4 py-2.5 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full ${typeColor} truncate max-w-[140px]" title="${record.form_type}">
                             ${record.form_type}
                         </span>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
-                    <td class="px-4 py-3 text-slate-700">${record.cedente || '-'}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
+                    <td class="px-4 py-2.5 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
+                    <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px]" title="${record.cedente}">${record.cedente || '-'}</td>
+                    <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px] text-xs font-semibold" title="${faseExibicao}">${faseExibicao}</td>
+                    <td class="px-4 py-2.5 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
                 `;
                 tbody.appendChild(tr);
             });
+            lucide.createIcons();
         }
 
         function renderChart() {
-            const ctx = document.getElementById('demandPieChart').getContext('2d');
+            // Conta os Active Records baseados no array processado final
+            const activeRecords = processedRecords;
+
+            const ctxDemandas = document.getElementById('demandPieChart').getContext('2d');
+            const ctxGerentes = document.getElementById('gerentesPieChart').getContext('2d');
+            const ctxColaboradores = document.getElementById('colaboradoresPieChart').getContext('2d');
 
             // Agrupar contagens
-            const counts = {
+            const countsDemandas = {
                 'CADASTRO': 0, 'SUPORTE': 0, 'IMP DE OPERAÇÕES': 0,
                 'AJUSTE DE OPERAÇÃO': 0, 'DEFESAS': 0, 'CHEQUES': 0
             };
+            const countsGerentes = {};
+            const countsColaboradores = { 'Arthur': 0, 'Cristiane': 0, 'Kamily': 0, 'Stefania': 0, 'Giovanna': 0 };
 
-            savedRecords.forEach(r => {
-                if (counts[r.form_type] !== undefined) {
-                    counts[r.form_type]++;
+            activeRecords.forEach(r => {
+                if (countsDemandas[r.form_type] !== undefined) countsDemandas[r.form_type]++;
+
+                if (r.gerente) {
+                    countsGerentes[r.gerente] = (countsGerentes[r.gerente] || 0) + 1;
+                }
+
+                if (r.feito_por && countsColaboradores[r.feito_por] !== undefined) {
+                    countsColaboradores[r.feito_por]++;
+                } else if (r.feito_por) {
+                    countsColaboradores[r.feito_por] = (countsColaboradores[r.feito_por] || 0) + 1;
                 }
             });
 
-            // As cores referenciando as exatas matizes requisitadas da imagem
-            // 'Suporte': Azul escuro, 'Imp': Laranja, 'Ajuste In Tela': Verde escuro, 'Cadastro': Azul Claro, 'Análise Recusa': Roxo, 'Cheques/Outros': Verde Lima
-            const dataValues = [
-                counts['SUPORTE'],
-                counts['IMP DE OPERAÇÕES'],
-                counts['AJUSTE DE OPERAÇÃO'],
-                counts['CADASTRO'],
-                counts['DEFESAS'],
-                counts['CHEQUES']
-            ];
-
-            const backgroundColors = [
-                '#1f618d', // Suporte (Azul Escuro)
-                '#eb883b', // Imp Operacoes (Laranja)
-                '#196f3d', // Ajuste em Tela (Verde Escuro)
-                '#00a8e8', // Cadastro (Azul Claro/Ciano)
-                '#9b3e94', // Defesas/Recusas (Roxo)
-                '#59a14f'  // Cheques/Extra (Verde Claro)
-            ];
-
-            const labels = [
-                'SUPORTE', 'IMP DE OPERAÇÕES', 'AJUSTE DE OPERAÇÃO EM TELA',
-                'CADASTRO', 'ANÁLISE RECUSAS/DEFESA DE OPERAÇÃO', 'CHEQUES'
-            ];
-
-            // Destruir instance velha c/ animação caso formos re-renderizar
             if (demandChartInstance) demandChartInstance.destroy();
+            if (gerentesChartInstance) gerentesChartInstance.destroy();
+            if (colaboradoresChartInstance) colaboradoresChartInstance.destroy();
 
-            demandChartInstance = new Chart(ctx, {
+            // Limit chart size with flex grid container adjustments
+            // Configuração para Rótulos (DataLabels) no LADO DE FORA
+            const datalabelsConfig = {
+                color: '#334155', // Tema escuro para fundo branco
+                anchor: 'end',
+                align: 'end',
+                offset: 2,
+                font: { weight: 'bold', size: 10, family: "'Inter', sans-serif" },
+                formatter: (value, ctx) => {
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => { sum += Number(data); });
+                    if (sum === 0 || value === 0) return null; // Esconde se for 0
+                    let percentage = (value * 100 / sum).toFixed(0) + "%";
+                    return percentage;
+                }
+            };
+
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 20, bottom: 20, left: 30, right: 30 // Espaço para rótulos externos
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'left',
+                        labels: { font: { family: "'Inter', sans-serif", size: 9 }, color: '#475569', boxWidth: 10, padding: 8 }
+                    },
+                    datalabels: datalabelsConfig
+                }
+            };
+
+            // ---- GRÁFICO DEMANDAS ----
+            const labelsDemandas = [
+                'SUPORTE', 'IMP DE OPERAÇÕES', 'AJUSTE DE OPERAÇÃO',
+                'CADASTRO', 'DEFESAS', 'CHEQUES'
+            ];
+            const dataDemandas = [
+                countsDemandas['SUPORTE'], countsDemandas['IMP DE OPERAÇÕES'], countsDemandas['AJUSTE DE OPERAÇÃO'],
+                countsDemandas['CADASTRO'], countsDemandas['DEFESAS'], countsDemandas['CHEQUES']
+            ];
+            const colorsDemandas = [
+                '#1f618d', '#eb883b', '#196f3d',
+                '#00a8e8', '#9b3e94', '#59a14f'
+            ];
+
+            demandChartInstance = new Chart(ctxDemandas, {
                 type: 'pie',
                 data: {
-                    labels: labels,
-                    datasets: [{
-                        data: dataValues,
-                        backgroundColor: backgroundColors,
-                        borderWidth: 1,
-                        borderColor: '#ffffff',
-                        hoverOffset: 12
-                    }]
+                    labels: labelsDemandas,
+                    datasets: [{ data: dataDemandas, backgroundColor: colorsDemandas, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                font: {
-                                    family: "'Inter', sans-serif",
-                                    size: 11,
-                                    weight: 'bold'
-                                },
-                                color: '#334155',
-                                padding: 20
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    let value = context.raw;
-                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                                    label += percentage + '% (' + value + ')';
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
+                options: commonOptions
+            });
+
+            // ---- GRÁFICO GERENTES ----
+            // Ordenar para ficar mais bonito no gráfico as maiores fatias
+            const gerentesOrdenados = Object.entries(countsGerentes).sort((a, b) => b[1] - a[1]);
+            const labelsGerentes = gerentesOrdenados.map(g => g[0]);
+            const dataGerentes = gerentesOrdenados.map(g => g[1]);
+            const colorsGerentes = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef'];
+
+            gerentesChartInstance = new Chart(ctxGerentes, {
+                type: 'pie',
+                data: {
+                    labels: labelsGerentes,
+                    datasets: [{ data: dataGerentes, backgroundColor: colorsGerentes, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
+                },
+                options: commonOptions
+            });
+
+            // ---- GRÁFICO COLABORADORES ----
+            const labelsColaboradores = Object.keys(countsColaboradores);
+            const dataColaboradores = Object.values(countsColaboradores);
+            const colorsColaboradores = ['#0ea5e9', '#d946ef', '#f97316', '#22c55e', '#6366f1', '#eab308'];
+
+            colaboradoresChartInstance = new Chart(ctxColaboradores, {
+                type: 'pie',
+                data: {
+                    labels: labelsColaboradores,
+                    datasets: [{ data: dataColaboradores, backgroundColor: colorsColaboradores, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
+                },
+                options: commonOptions
             });
         }
 
