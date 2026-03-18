@@ -226,15 +226,15 @@
                                     <option value="TRIAGEM DE DOCUMENTOS">TRIAGEM DE DOCUMENTOS</option>
                                     <option value="TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO">TRIAGEM
                                         FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO</option>
-                                    <option value="RENOVAÇÃO FINALIZADA">RENOVAÇÃO FINALIZADA</option>
-                                    <option value="CADASTRO APROVADO">CADASTRO APROVADO</option>
+                                    <option value="ELABORAÇÃO DE APRESENTAÇÃO">ELABORAÇÃO DE APRESENTAÇÃO</option>
+                                    <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO</option>
                                     <option value="AGUARDANDO REVISÃO - DIRETOR COMERCIAL">AGUARDANDO REVISÃO - DIRETOR
                                         COMERCIAL</option>
+                                    <option value="AGUARDANDO COMITÊ">AGUARDANDO COMITÊ</option>
+                                    <option value="CADASTRO APROVADO">CADASTRO APROVADO</option>
                                     <option value="CADASTRO REPROVADO">CADASTRO REPROVADO</option>
-                                    <option value="ELABORAÇÃO DE APRESENTAÇÃO">ELABORAÇÃO DE APRESENTAÇÃO</option>
-                                    <option value="INSERIDO EM STANDBY">INSERIDO EM STANDBY</option>
-                                    <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO
-                                    </option>
+                                    <option value="RENOVAÇÃO FINALIZADA">RENOVAÇÃO FINALIZADA</option>
+                                    <option value="INSERIDO EM STAND-BY">INSERIDO EM STAND-BY</option>
                                 </select>
                             </div>
                         </div>
@@ -766,10 +766,10 @@
                     </h2>
                 </div>
 
-                <div class="glass-card rounded-2xl p-6 shadow-xl flex flex-col h-[500px] mb-8 relative">
+                <div class="glass-card rounded-2xl p-6 shadow-xl flex flex-col min-h-[500px] mb-8 relative">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                            <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico de Registros
+                            <i data-lucide="user-check" class="w-5 h-5 text-slate-500"></i> Acompanhamento de Cadastros
                         </h3>
                         <button onclick="clearAllFilters()"
                             class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
@@ -777,47 +777,8 @@
                         </button>
                     </div>
 
-                    <!-- Menu Flutuante de Filtro Estilo Excel (Oculto por padrão) -->
-                    <div id="excel-filter-menu"
-                        class="hidden absolute z-50 bg-white border border-slate-200 shadow-2xl rounded-xl w-64 p-3 flex-col text-sm text-slate-700">
-                        <!-- Opções de Ordenação -->
-                        <button id="btn-sort-asc"
-                            class="w-full text-left px-3 py-2 hover:bg-slate-100 rounded-md flex items-center gap-2 transition-colors">
-                            <i data-lucide="arrow-down-a-z" class="w-4 h-4 text-slate-500"></i> Classificar
-                            Crescente
-                        </button>
-                        <button id="btn-sort-desc"
-                            class="w-full text-left px-3 py-2 hover:bg-slate-100 rounded-md flex items-center gap-2 transition-colors mb-2">
-                            <i data-lucide="arrow-up-z-a" class="w-4 h-4 text-slate-500"></i> Classificar
-                            Decrescente
-                        </button>
-
-                        <hr class="border-slate-200 mb-2">
-
-                        <!-- Barra de Pesquisa -->
-                        <div class="relative mb-2">
-                            <i data-lucide="search" class="w-4 h-4 absolute left-2 top-1.5 text-slate-400"></i>
-                            <input type="text" id="filter-search-input" placeholder="Pesquisar..."
-                                class="w-full pl-8 pr-2 py-1.5 border border-slate-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-                        </div>
-
-                        <!-- Lista de Checkboxes -->
-                        <div class="flex-1 overflow-y-auto max-h-48 border border-slate-200 rounded-md p-2 bg-slate-50"
-                            id="filter-checkbox-list">
-                            <!-- Preenchido dinamicamente via JS -->
-                        </div>
-
-                        <!-- Botões de Ação -->
-                        <div class="flex justify-end gap-2 mt-3">
-                            <button id="btn-filter-cancel"
-                                class="px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors bg-white font-medium shadow-sm">Cancelar</button>
-                            <button id="btn-filter-ok"
-                                class="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm shadow-blue-200">OK</button>
-                        </div>
-                    </div>
-
-                    <!-- Wrapper para dar rolagem (overflow) na tabela -->
-                    <div class="overflow-y-auto flex-1 rounded-lg border border-slate-200 relative">
+                    <!-- Wrapper Cadastro -->
+                    <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8" style="max-height: 800px;">
                         <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
                             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
                                 <tr>
@@ -826,48 +787,97 @@
                                         onclick="openFilterMenu(event, 'data', 'Data')">
                                         <div class="flex items-center justify-between">
                                             <span>Data</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'form_type', 'Formulário')">
                                         <div class="flex items-center justify-between">
                                             <span>Formulário</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
                                         <div class="flex items-center justify-between">
                                             <span>Feito Por</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'cedente', 'Cedente')">
                                         <div class="flex items-center justify-between">
                                             <span>Cedente</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors border-r border-slate-200"
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors border-x border-slate-200"
                                         onclick="openFilterMenu(event, 'fase_cadastro', 'Fase')">
                                         <div class="flex items-center justify-between">
-                                            <span>Fase</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <span>Fase (Acompanhamento)</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'gerente', 'Gerente')">
                                         <div class="flex items-center justify-between">
                                             <span>Gerente</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="cadastro-table-body" class="bg-white divide-y divide-slate-100">
+                                <!-- Rows JS dinâmicas aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico Geral de Operações
+                        </h3>
+                    </div>
+
+                    <!-- Wrapper Histórico Geral -->
+                    <div class="overflow-x-auto overflow-y-auto flex-1 rounded-lg border border-slate-200 relative mb-4" style="max-height: 800px;">
+                        <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
+                            <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
+                                <tr>
+                                    <!-- Cabeçalhos Interativos -->
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'data', 'Data')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Data</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'form_type', 'Formulário')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Formulário</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Feito Por</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'cedente', 'Cedente')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Cedente</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'gerente', 'Gerente')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Gerente</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                 </tr>
@@ -879,10 +889,10 @@
                     </div>
                 </div>
 
-                <!-- Gráficos (Abaixo da Tabela, 3 Colunas) -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Gráficos (Abaixo da Tabela, 1 Coluna) -->
+                <div class="grid grid-cols-1 gap-8 mb-8">
                     <!-- Gráfico Demandas -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
                         <h3
                             class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="pie-chart" class="w-4 h-4 text-slate-500"></i> Demandas
@@ -893,7 +903,7 @@
                     </div>
 
                     <!-- Gráfico Gerentes -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
                         <h3
                             class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="users" class="w-4 h-4 text-slate-500"></i> Gerentes
@@ -904,7 +914,7 @@
                     </div>
 
                     <!-- Gráfico Colaboradores -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[350px] shrink-0">
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
                         <h3
                             class="text-sm font-bold text-slate-800 mb-2 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="user-check" class="w-4 h-4 text-slate-500"></i> Feito Por
@@ -920,6 +930,30 @@
     </div>
     </div>
     </section>
+    </div>
+
+    <!-- Filter Menu (Sobreposto) -->
+    <div id="excel-filter-menu" class="hidden absolute z-[99999] w-72 bg-white rounded-lg shadow-2xl border border-slate-200 mt-2 p-3 font-sans text-sm">
+        <div class="mb-3 relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
+            <input type="text" id="filter-search-input" placeholder="Pesquisar..." 
+                class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+        </div>
+        <div class="flex flex-col gap-1 mb-3 pb-3 border-b border-slate-100">
+            <button id="btn-sort-asc" class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
+                <i data-lucide="sort-asc" class="w-4 h-4"></i>
+                <span>Classificar de A a Z</span>
+            </button>
+            <button id="btn-sort-desc" class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
+                <i data-lucide="sort-desc" class="w-4 h-4"></i>
+                <span>Classificar de Z a A</span>
+            </button>
+        </div>
+        <div id="filter-checkbox-list" class="max-h-60 overflow-y-auto mb-3 space-y-1.5 pr-1"></div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+            <button id="btn-filter-cancel" class="px-3 py-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded font-medium transition-colors">Cancelar</button>
+            <button id="btn-filter-ok" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow-sm transition-colors">OK</button>
+        </div>
     </div>
 
     <script>
@@ -1192,23 +1226,31 @@
                 checked: activeFilters[column] ? activeFilters[column].has(v) : false
             }));
 
+            // Populating DOM first to compute correct height
+            filterSearchInput.value = '';
+            renderFilterCheckboxes();
+
+            filterMenu.classList.remove('hidden');
+
             // Calculate Position relative to the Th header clicked
             const thRect = event.currentTarget.getBoundingClientRect();
-            // Try to position below the header. If it overflows right, adjust.
             let leftPos = thRect.left;
             const menuWidth = 256; // w-64 is 256px
             if (leftPos + menuWidth > window.innerWidth) {
                 leftPos = window.innerWidth - menuWidth - 20;
             }
 
-            filterMenu.style.top = `${thRect.bottom + window.scrollY}px`;
+            const menuHeight = filterMenu.offsetHeight || 300;
+            
+            // Fica acima das colunas da tabela
+            let topPos = thRect.top + window.scrollY - menuHeight - 8;
+            if (topPos < window.scrollY) {
+                // Se escapar da tela pra cima, posiciona em baixo
+                topPos = thRect.bottom + window.scrollY + 8;
+            }
+
+            filterMenu.style.top = `${topPos}px`;
             filterMenu.style.left = `${leftPos + window.scrollX}px`;
-
-            // Populating DOM
-            filterSearchInput.value = '';
-            renderFilterCheckboxes();
-
-            filterMenu.classList.remove('hidden');
         }
 
         function closeFilterMenu() {
@@ -1351,43 +1393,119 @@
         }
 
         function renderTable() {
-            const tbody = document.getElementById('history-table-body');
-            tbody.innerHTML = '';
+            const tbodyCadastro = document.getElementById('cadastro-table-body');
+            const tbodyGeral = document.getElementById('history-table-body');
+            if (tbodyCadastro) tbodyCadastro.innerHTML = '';
+            if (tbodyGeral) tbodyGeral.innerHTML = '';
 
-            if (processedRecords.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum registro corresponde aos filtros selecionados.</td></tr>`;
-                return;
+            const cadastroRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
+            const geralRecords = processedRecords.filter(r => r.form_type !== 'CADASTRO');
+
+            if (tbodyCadastro) {
+                if (cadastroRecords.length === 0) {
+                    tbodyCadastro.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">Nenhum cadastro corresponde aos filtros.</td></tr>`;
+                } else {
+                    cadastroRecords.forEach(record => {
+                        const dataExibicao = formatDataForDisplay(record.data, 'data');
+                        const faseExibicao = record.fase_cadastro || '-';
+                        
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-slate-50 transition-colors';
+                        tr.innerHTML = `
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 truncate max-w-[140px]" title="CADASTRO">
+                                    CADASTRO
+                                </span>
+                            </td>
+                            <td class="px-4 py-2.5 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
+                            <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px]" title="${record.cedente}">${record.cedente || '-'}</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700 bg-blue-50/50">
+                                <select onchange="changeFaseDireto('${record.id}', this.value)" class="text-[10px] font-bold text-slate-700 bg-white border border-blue-200 rounded py-1 px-2 w-[260px] cursor-pointer outline-none focus:ring-1 focus:ring-blue-500 shadow-sm leading-tight uppercase">
+                                    ${FASES_CADASTRO_ORDER.map(fase => `<option value="${fase}" ${fase === record.fase_cadastro ? 'selected' : ''}>${fase}</option>`).join('')}
+                                </select>
+                            </td>
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
+                        `;
+                        tbodyCadastro.appendChild(tr);
+                    });
+                }
             }
 
-            processedRecords.forEach(record => {
-                let typeColor = 'bg-slate-100 text-slate-800';
-                if (record.form_type === 'CADASTRO') typeColor = 'bg-blue-100 text-blue-800';
-                if (record.form_type === 'SUPORTE') typeColor = 'bg-orange-100 text-orange-800';
-                if (record.form_type === 'IMP DE OPERAÇÕES') typeColor = 'bg-emerald-100 text-emerald-800';
-                if (record.form_type === 'CHEQUES') typeColor = 'bg-purple-100 text-purple-800';
-                if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
-                if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
+            if (tbodyGeral) {
+                if (geralRecords.length === 0) {
+                    tbodyGeral.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum registro corresponde aos filtros selecionados.</td></tr>`;
+                } else {
+                    geralRecords.forEach(record => {
+                        let typeColor = 'bg-slate-100 text-slate-800';
+                        if (record.form_type === 'SUPORTE') typeColor = 'bg-orange-100 text-orange-800';
+                        if (record.form_type === 'IMP DE OPERAÇÕES') typeColor = 'bg-emerald-100 text-emerald-800';
+                        if (record.form_type === 'CHEQUES') typeColor = 'bg-purple-100 text-purple-800';
+                        if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
+                        if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
 
-                const dataExibicao = formatDataForDisplay(record.data, 'data');
-                const faseExibicao = record.fase_cadastro || '-';
+                        const dataExibicao = formatDataForDisplay(record.data, 'data');
 
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition-colors';
-                tr.innerHTML = `
-                    <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
-                    <td class="px-4 py-2.5 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full ${typeColor} truncate max-w-[140px]" title="${record.form_type}">
-                            ${record.form_type}
-                        </span>
-                    </td>
-                    <td class="px-4 py-2.5 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
-                    <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px]" title="${record.cedente}">${record.cedente || '-'}</td>
-                    <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px] text-xs font-semibold" title="${faseExibicao}">${faseExibicao}</td>
-                    <td class="px-4 py-2.5 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-slate-50 transition-colors';
+                        tr.innerHTML = `
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full ${typeColor} truncate max-w-[140px]" title="${record.form_type}">
+                                    ${record.form_type}
+                                </span>
+                            </td>
+                            <td class="px-4 py-2.5 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
+                            <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px]" title="${record.cedente}">${record.cedente || '-'}</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
+                        `;
+                        tbodyGeral.appendChild(tr);
+                    });
+                }
+            }
             lucide.createIcons();
+        }
+
+        const FASES_CADASTRO_ORDER = [
+            "TRIAGEM DE DOCUMENTOS",
+            "TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO",
+            "ELABORAÇÃO DE APRESENTAÇÃO",
+            "APRESENTAÇÃO AGUARDANDO REVISÃO",
+            "AGUARDANDO REVISÃO - DIRETOR COMERCIAL",
+            "AGUARDANDO COMITÊ",
+            "CADASTRO APROVADO",
+            "CADASTRO REPROVADO",
+            "RENOVAÇÃO FINALIZADA",
+            "INSERIDO EM STAND-BY"
+        ];
+
+        async function changeFaseDireto(recordId, newFase) {
+            const record = savedRecords.find(r => r.id === recordId || r.id == recordId);
+            if (!record) return;
+
+            const prevFase = record.fase_cadastro;
+            if (prevFase === newFase) return;
+            
+            // UI update (otimista)
+            record.fase_cadastro = newFase;
+            applyFiltersAndSort(); 
+
+            try {
+                // Supabase UPDATE
+                const { error } = await supabaseClient
+                    .from('demandas')
+                    .update({ fase_cadastro: newFase })
+                    .eq('id', record.id);
+                
+                if (error) {
+                    throw error;
+                }
+            } catch (err) {
+                console.error("Erro ao alterar fase do kanban:", err);
+                record.fase_cadastro = prevFase; // revert fallback
+                applyFiltersAndSort();
+                alert('Ocorreu um erro ao alterar a fase do cadastro no servidor.');
+            }
         }
 
         function renderChart() {
