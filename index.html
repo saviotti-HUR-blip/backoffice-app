@@ -306,6 +306,7 @@
                                 <option value="CLAUDIA">CLAUDIA</option>
                                 <option value="ELIZABETH">ELIZABETH</option>
                                 <option value="GUILHERME">GUILHERME</option>
+                                <option value="INDICAÇÃO">INDICAÇÃO</option>
                                 <option value="JULIA">JULIA</option>
                                 <option value="MARLENE">MARLENE</option>
                                 <option value="RAFAELA">RAFAELA</option>
@@ -436,7 +437,7 @@
                         </div>
 
                         <!-- Specific Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1">Quantidade</label>
                                 <div class="flex items-center space-x-3">
@@ -463,6 +464,22 @@
                                     <input type="number" id="ns-imp" name="nota_servico" value="0" min="0" required
                                         class="w-24 text-center font-bold text-xl px-2 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none appearance-none">
                                     <button type="button" onclick="changeQty('ns-imp', 1, 0)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="plus" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Cheque</label>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" onclick="changeQty('cheque-imp', -1, 0)"
+                                        class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors shadow-sm focus:outline-none">
+                                        <i data-lucide="minus" class="w-5 h-5"></i>
+                                    </button>
+                                    <input type="number" id="cheque-imp" name="cheque" value="0" min="0" required
+                                        class="w-24 text-center font-bold text-xl px-2 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all outline-none appearance-none">
+                                    <button type="button" onclick="changeQty('cheque-imp', 1, 0)"
                                         class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors shadow-sm focus:outline-none">
                                         <i data-lucide="plus" class="w-5 h-5"></i>
                                     </button>
