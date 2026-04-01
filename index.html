@@ -816,6 +816,13 @@
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                        onclick="openFilterMenu(event, 'tipo_cadastro', 'Tipo de Cadastro')">
+                                        <div class="flex items-center justify-between">
+                                            <span>Tipo de Cadastro</span>
+                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                        </div>
+                                    </th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'form_type', 'Formulário')">
                                         <div class="flex items-center justify-between">
                                             <span>Formulário</span>
@@ -930,6 +937,20 @@
                         </div>
                     </div>
 
+                    <!-- Gráfico Tipo de Cadastro -->
+                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
+                        <h3
+                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                            <i data-lucide="file-signature" class="w-4 h-4 text-slate-500"></i> Tipos de Cadastro
+                        </h3>
+                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                            TOTAL: <span id="total-tipo-cadastro">0</span>
+                        </div>
+                        <div class="w-full relative flex-1 flex items-center justify-center">
+                            <canvas id="tipoCadastroPieChart"></canvas>
+                        </div>
+                    </div>
+
                     <!-- Gráfico Suporte -->
                     <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
                         <h3
@@ -1024,6 +1045,7 @@
         // Filter and Sort State
         let activeFilters = {
             'mes': new Set(),
+            'tipo_cadastro': new Set(),
             'form_type': new Set(),
             'feito_por': new Set(),
             'cedente': new Set(),
@@ -1033,6 +1055,7 @@
         let currentSort = { column: 'registrado_em', direction: 'desc' }; // default sort
 
         let demandChartInstance = null;
+        let tipoCadastroChartInstance = null;
         let suporteChartInstance = null;
         let gerentesChartInstance = null;
         let colaboradoresChartInstance = null;
@@ -1247,7 +1270,7 @@
         }
 
         function resetFilters() {
-            const columns = ['mes', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente'];
+            const columns = ['mes', 'tipo_cadastro', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente'];
             columns.forEach(col => {
                 activeFilters[col] = new Set(savedRecords.map(r => formatDataForDisplay(r[col], col)));
             });
@@ -1423,6 +1446,7 @@
             // 1. Filter
             processedRecords = savedRecords.filter(r => {
                 const mesStr = formatDataForDisplay(r.mes, 'mes');
+                const tipoCadastro = formatDataForDisplay(r.tipo_cadastro, 'tipo_cadastro');
                 const formType = formatDataForDisplay(r.form_type, 'form_type');
                 const feitoPor = formatDataForDisplay(r.feito_por, 'feito_por');
                 const cedente = formatDataForDisplay(r.cedente, 'cedente');
@@ -1430,6 +1454,7 @@
                 const gerente = formatDataForDisplay(r.gerente, 'gerente');
 
                 return activeFilters['mes'].has(mesStr) &&
+                    activeFilters['tipo_cadastro'].has(tipoCadastro) &&
                     activeFilters['form_type'].has(formType) &&
                     activeFilters['feito_por'].has(feitoPor) &&
                     activeFilters['cedente'].has(cedente) &&
@@ -1490,16 +1515,18 @@
 
             if (tbodyCadastro) {
                 if (cadastroRecords.length === 0) {
-                    tbodyCadastro.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">Nenhum cadastro corresponde aos filtros.</td></tr>`;
+                    tbodyCadastro.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500">Nenhum cadastro corresponde aos filtros.</td></tr>`;
                 } else {
                     cadastroRecords.forEach(record => {
                         const dataExibicao = formatDataForDisplay(record.data, 'data');
                         const faseExibicao = record.fase_cadastro || '-';
+                        const tipoCadastroExibicao = record.tipo_cadastro || '-';
                         
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-slate-50 transition-colors';
                         tr.innerHTML = `
                             <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700 font-medium">${tipoCadastroExibicao}</td>
                             <td class="px-4 py-2.5 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 truncate max-w-[140px]" title="CADASTRO">
                                     CADASTRO
@@ -1600,6 +1627,7 @@
             const activeRecords = processedRecords;
 
             const ctxDemandas = document.getElementById('demandPieChart').getContext('2d');
+            const ctxTipoCadastro = document.getElementById('tipoCadastroPieChart').getContext('2d');
             const ctxSuporte = document.getElementById('suportePieChart').getContext('2d');
             const ctxGerentes = document.getElementById('gerentesPieChart').getContext('2d');
             const ctxColaboradores = document.getElementById('colaboradoresPieChart').getContext('2d');
@@ -1609,12 +1637,17 @@
                 'CADASTRO': 0, 'SUPORTE': 0, 'IMP DE OPERAÇÕES': 0,
                 'AJUSTE DE OPERAÇÃO': 0, 'DEFESAS': 0, 'CHEQUES': 0
             };
+            const countsTipoCadastro = {};
             const countsSuporte = {};
             const countsGerentes = {};
             const countsColaboradores = { 'Arthur': 0, 'Cristiane': 0, 'Kamily': 0, 'Stefania': 0, 'Giovanna': 0 };
 
             activeRecords.forEach(r => {
                 if (countsDemandas[r.form_type] !== undefined) countsDemandas[r.form_type]++;
+
+                if (r.form_type === 'CADASTRO' && r.tipo_cadastro) {
+                    countsTipoCadastro[r.tipo_cadastro] = (countsTipoCadastro[r.tipo_cadastro] || 0) + 1;
+                }
 
                 if (r.form_type === 'SUPORTE' && r.tipo_suporte) {
                     let tipo = r.tipo_suporte;
@@ -1637,12 +1670,16 @@
 
             // Atualização dos totais visuais na grid de gráficos
             const sumDemandas = Object.values(countsDemandas).reduce((a, b) => a + b, 0);
+            const sumTipoCadastro = Object.values(countsTipoCadastro).reduce((a, b) => a + b, 0);
             const sumSuporte = Object.values(countsSuporte).reduce((a, b) => a + b, 0);
             const sumGerentes = Object.values(countsGerentes).reduce((a, b) => a + b, 0);
             const sumColaboradores = Object.values(countsColaboradores).reduce((a, b) => a + b, 0);
 
             const dtDemandas = document.getElementById('total-demandas');
             if (dtDemandas) dtDemandas.innerText = sumDemandas;
+
+            const dtTipoCadastro = document.getElementById('total-tipo-cadastro');
+            if (dtTipoCadastro) dtTipoCadastro.innerText = sumTipoCadastro;
 
             const dtSuporte = document.getElementById('total-suporte');
             if (dtSuporte) dtSuporte.innerText = sumSuporte;
@@ -1654,6 +1691,7 @@
             if (dtColaboradores) dtColaboradores.innerText = sumColaboradores;
 
             if (demandChartInstance) demandChartInstance.destroy();
+            if (tipoCadastroChartInstance) tipoCadastroChartInstance.destroy();
             if (suporteChartInstance) suporteChartInstance.destroy();
             if (gerentesChartInstance) gerentesChartInstance.destroy();
             if (colaboradoresChartInstance) colaboradoresChartInstance.destroy();
@@ -1712,6 +1750,21 @@
                 data: {
                     labels: labelsDemandas,
                     datasets: [{ data: dataDemandas, backgroundColor: colorsDemandas, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
+                },
+                options: commonOptions
+            });
+
+            // ---- GRÁFICO TIPO DE CADASTRO ----
+            const tipoCadastroOrdenados = Object.entries(countsTipoCadastro).sort((a, b) => b[1] - a[1]);
+            const labelsTipoCadastro = tipoCadastroOrdenados.map(s => s[0]);
+            const dataTipoCadastro = tipoCadastroOrdenados.map(s => s[1]);
+            const colorsTipoCadastro = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444', '#14b8a6', '#64748b'];
+
+            tipoCadastroChartInstance = new Chart(ctxTipoCadastro, {
+                type: 'pie',
+                data: {
+                    labels: labelsTipoCadastro,
+                    datasets: [{ data: dataTipoCadastro, backgroundColor: colorsTipoCadastro, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
                 },
                 options: commonOptions
             });
