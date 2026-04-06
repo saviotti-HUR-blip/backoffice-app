@@ -1056,7 +1056,7 @@
             'gerente': new Set(),
             'fase_cadastro': new Set()
         };
-        let currentSort = { column: 'registrado_em', direction: 'desc' }; // default sort
+        let currentSort = { column: 'data', direction: 'desc' }; // default sort
 
         let demandChartInstance = null;
         let tipoCadastroChartInstance = null;
@@ -1175,8 +1175,7 @@
 
         function openHistorico() {
             openForm('historico-section');
-            renderTable();
-            renderChart();
+            clearAllFilters();
         }
 
         // Qty adjustment function for specific fields
@@ -1269,7 +1268,7 @@
 
         function clearAllFilters() {
             resetFilters();
-            currentSort = { column: 'registrado_em', direction: 'desc' };
+            currentSort = { column: 'data', direction: 'desc' };
             applyFiltersAndSort();
         }
 
