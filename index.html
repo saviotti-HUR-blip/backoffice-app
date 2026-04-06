@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backoffice Demand Control</title>
+    <title>Backoffice Controle LS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://media.licdn.com/dms/image/v2/C4E0BAQEWqp2g5wrNJA/company-logo_200_200/company-logo_200_200/0/1640619871199/lsinterbank_logo?e=1776902400&v=beta&t=_y-gw3GQ9PwoQ0KYnd-puJ6CEqsAIcAaQs5y_Y19OzA">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -61,7 +62,7 @@
                     alt="LS Inter Bank" class="h-20 object-contain drop-shadow-md">
             </div>
 
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Control</h1>
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Controle</h1>
             <p class="text-slate-500 mb-6">Gestão de Demandas e Ajustes de Operação</p>
 
             <button onclick="exportToExcel()"
@@ -227,7 +228,8 @@
                                     <option value="TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO">TRIAGEM
                                         FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO</option>
                                     <option value="ELABORAÇÃO DE APRESENTAÇÃO">ELABORAÇÃO DE APRESENTAÇÃO</option>
-                                    <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO</option>
+                                    <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO
+                                    </option>
                                     <option value="AGUARDANDO REVISÃO - DIRETOR COMERCIAL">AGUARDANDO REVISÃO - DIRETOR
                                         COMERCIAL</option>
                                     <option value="AGUARDANDO COMITÊ">AGUARDANDO COMITÊ</option>
@@ -803,7 +805,8 @@
                     </div>
 
                     <!-- Wrapper Cadastro -->
-                    <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8" style="max-height: 800px;">
+                    <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8"
+                        style="max-height: 800px;">
                         <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
                             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
                                 <tr>
@@ -812,49 +815,56 @@
                                         onclick="openFilterMenu(event, 'mes', 'Data')">
                                         <div class="flex items-center justify-between">
                                             <span>Data</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'tipo_cadastro', 'Tipo de Cadastro')">
                                         <div class="flex items-center justify-between">
                                             <span>Tipo de Cadastro</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'form_type', 'Formulário')">
                                         <div class="flex items-center justify-between">
                                             <span>Formulário</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
                                         <div class="flex items-center justify-between">
                                             <span>Feito Por</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'cedente', 'Cedente')">
                                         <div class="flex items-center justify-between">
                                             <span>Cedente</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors border-x border-slate-200"
                                         onclick="openFilterMenu(event, 'fase_cadastro', 'Fase')">
                                         <div class="flex items-center justify-between">
                                             <span>Fase (Acompanhamento)</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'gerente', 'Gerente')">
                                         <div class="flex items-center justify-between">
                                             <span>Gerente</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                 </tr>
@@ -872,7 +882,8 @@
                     </div>
 
                     <!-- Wrapper Histórico Geral -->
-                    <div class="overflow-x-auto overflow-y-auto flex-1 rounded-lg border border-slate-200 relative mb-4" style="max-height: 800px;">
+                    <div class="overflow-x-auto overflow-y-auto flex-1 rounded-lg border border-slate-200 relative mb-4"
+                        style="max-height: 800px;">
                         <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
                             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
                                 <tr>
@@ -881,35 +892,40 @@
                                         onclick="openFilterMenu(event, 'mes', 'Data')">
                                         <div class="flex items-center justify-between">
                                             <span>Data</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'form_type', 'Formulário')">
                                         <div class="flex items-center justify-between">
                                             <span>Formulário</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
                                         <div class="flex items-center justify-between">
                                             <span>Feito Por</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'cedente', 'Cedente')">
                                         <div class="flex items-center justify-between">
                                             <span>Cedente</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                     <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                         onclick="openFilterMenu(event, 'gerente', 'Gerente')">
                                         <div class="flex items-center justify-between">
                                             <span>Gerente</span>
-                                            <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                            <i data-lucide="filter"
+                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
                                         </div>
                                     </th>
                                 </tr>
@@ -929,7 +945,8 @@
                             class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="pie-chart" class="w-4 h-4 text-slate-500"></i> Demandas
                         </h3>
-                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                        <div
+                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
                             TOTAL: <span id="total-demandas">0</span>
                         </div>
                         <div class="w-full relative flex-1 flex items-center justify-center">
@@ -943,7 +960,8 @@
                             class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="file-signature" class="w-4 h-4 text-slate-500"></i> Tipos de Cadastro
                         </h3>
-                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                        <div
+                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
                             TOTAL: <span id="total-tipo-cadastro">0</span>
                         </div>
                         <div class="w-full relative flex-1 flex items-center justify-center">
@@ -957,7 +975,8 @@
                             class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="life-buoy" class="w-4 h-4 text-slate-500"></i> Tipos de Suporte
                         </h3>
-                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                        <div
+                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
                             TOTAL: <span id="total-suporte">0</span>
                         </div>
                         <div class="w-full relative flex-1 flex items-center justify-center">
@@ -971,7 +990,8 @@
                             class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="users" class="w-4 h-4 text-slate-500"></i> Gerentes
                         </h3>
-                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                        <div
+                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
                             TOTAL: <span id="total-gerentes">0</span>
                         </div>
                         <div class="w-full relative flex-1 flex items-center justify-center">
@@ -985,7 +1005,8 @@
                             class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
                             <i data-lucide="user-check" class="w-4 h-4 text-slate-500"></i> Feito Por
                         </h3>
-                        <div class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                        <div
+                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
                             TOTAL: <span id="total-colaboradores">0</span>
                         </div>
                         <div class="w-full relative flex-1 flex items-center justify-center">
@@ -1002,26 +1023,31 @@
     </div>
 
     <!-- Filter Menu (Sobreposto) -->
-    <div id="excel-filter-menu" class="hidden absolute z-[99999] w-72 bg-white rounded-lg shadow-2xl border border-slate-200 mt-2 p-3 font-sans text-sm">
+    <div id="excel-filter-menu"
+        class="hidden absolute z-[99999] w-72 bg-white rounded-lg shadow-2xl border border-slate-200 mt-2 p-3 font-sans text-sm">
         <div class="mb-3 relative">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
-            <input type="text" id="filter-search-input" placeholder="Pesquisar..." 
+            <input type="text" id="filter-search-input" placeholder="Pesquisar..."
                 class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
         </div>
         <div class="flex flex-col gap-1 mb-3 pb-3 border-b border-slate-100">
-            <button id="btn-sort-asc" class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
+            <button id="btn-sort-asc"
+                class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
                 <i data-lucide="sort-asc" class="w-4 h-4"></i>
                 <span>Classificar de A a Z</span>
             </button>
-            <button id="btn-sort-desc" class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
+            <button id="btn-sort-desc"
+                class="flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-100 rounded text-left transition-colors">
                 <i data-lucide="sort-desc" class="w-4 h-4"></i>
                 <span>Classificar de Z a A</span>
             </button>
         </div>
         <div id="filter-checkbox-list" class="max-h-60 overflow-y-auto mb-3 space-y-1.5 pr-1"></div>
         <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-            <button id="btn-filter-cancel" class="px-3 py-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded font-medium transition-colors">Cancelar</button>
-            <button id="btn-filter-ok" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow-sm transition-colors">OK</button>
+            <button id="btn-filter-cancel"
+                class="px-3 py-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded font-medium transition-colors">Cancelar</button>
+            <button id="btn-filter-ok"
+                class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow-sm transition-colors">OK</button>
         </div>
     </div>
 
@@ -1309,7 +1335,7 @@
             if (column === 'mes') {
                 uniqueRawValues.sort((a, b) => {
                     if (a === '-' || b === '-') return 0;
-                    const partsA = a.split(' ')[0].split('/'); 
+                    const partsA = a.split(' ')[0].split('/');
                     const partsB = b.split(' ')[0].split('/');
                     const keyA = partsA.length === 2 ? partsA[1] + partsA[0] : a;
                     const keyB = partsB.length === 2 ? partsB[1] + partsB[0] : b;
@@ -1318,7 +1344,7 @@
             } else {
                 uniqueRawValues.sort();
             }
-            
+
             currentFilterOptions = uniqueRawValues.map(v => ({
                 value: v,
                 label: v,
@@ -1340,7 +1366,7 @@
             }
 
             const menuHeight = filterMenu.offsetHeight || 300;
-            
+
             // Fica acima das colunas da tabela
             let topPos = thRect.top + window.scrollY - menuHeight - 8;
             if (topPos < window.scrollY) {
@@ -1521,7 +1547,7 @@
                         const dataExibicao = formatDataForDisplay(record.data, 'data');
                         const faseExibicao = record.fase_cadastro || '-';
                         const tipoCadastroExibicao = record.tipo_cadastro || '-';
-                        
+
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-slate-50 transition-colors';
                         tr.innerHTML = `
@@ -1599,10 +1625,10 @@
 
             const prevFase = record.fase_cadastro;
             if (prevFase === newFase) return;
-            
+
             // UI update (otimista)
             record.fase_cadastro = newFase;
-            applyFiltersAndSort(); 
+            applyFiltersAndSort();
 
             try {
                 // Supabase UPDATE
@@ -1610,7 +1636,7 @@
                     .from('demandas')
                     .update({ fase_cadastro: newFase })
                     .eq('id', record.id);
-                
+
                 if (error) {
                     throw error;
                 }
