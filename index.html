@@ -65,11 +65,18 @@
             <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Controle</h1>
             <p class="text-slate-500 mb-6">Gestão de Demandas e Ajustes de Operação</p>
 
-            <button onclick="exportToExcel()"
-                class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors">
-                <i data-lucide="download" class="w-5 h-5"></i>
-                <span>Exportar Dados em Excel (<span id="export-count">0</span> salvos)</span>
-            </button>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/50 p-4 rounded-2xl max-w-lg mx-auto shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-2">
+                    <label for="export-month" class="text-sm font-semibold text-slate-700">Filtrar Mês:</label>
+                    <input type="month" id="export-month" class="px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-700 font-medium" onchange="updateExportCount()">
+                </div>
+                <button onclick="exportToExcel()"
+                    class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors">
+                    <i data-lucide="download" class="w-5 h-5"></i>
+                    <span>Exportar Excel (<span id="export-count">0</span>)</span>
+                </button>
+            </div>
+            <div class="mt-3 text-xs text-slate-400 font-medium tracking-wide w-full text-center">Total Geral na Nuvem (Ilimitado): <span id="cloud-count">0</span></div>
         </header>
 
         <!-- Navigation Grid Section (Colorizado com Bordas) -->
@@ -535,8 +542,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Suporte</label>
-                            <select name="tipo_suporte" required
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Demanda</label>
+                            <select name="tipo_demanda" required
                                 class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none bg-white">
                                 <option value="" disabled selected>Selecione o tipo</option>
                                 <option value="Envio de Ata">Envio de Ata</option>
@@ -1064,27 +1071,58 @@
         let gerentesChartInstance = null;
         let colaboradoresChartInstance = null;
 
-        // Fetch do Supabase
+        // Fetch do Supabase (com paginação para ilimitados)
         async function fetchRecords() {
             try {
-                // Tabela "demandas"
-                const { data, error } = await supabaseClient
-                    .from('demandas')
-                    .select('*')
-                    .order('registrado_em', { ascending: false });
+                let allData = [];
+                let hasMore = true;
+                let from = 0;
+                let to = 999;
+                const pageSize = 1000;
+                
+                // Loading indicativo visual básico (opcional)
+                const cloudCountObj = document.getElementById('cloud-count');
+                if(cloudCountObj) cloudCountObj.innerText = "...";
 
-                if (error) throw error;
+                while(hasMore) {
+                    const { data, error } = await supabaseClient
+                        .from('demandas')
+                        .select('*')
+                        .order('registrado_em', { ascending: false })
+                        .range(from, to);
 
-                if (data) {
-                    savedRecords = data.map(r => {
+                    if (error) throw error;
+                    
+                    if (data && data.length > 0) {
+                        allData = allData.concat(data);
+                        from += pageSize;
+                        to += pageSize;
+                    } 
+                    if (!data || data.length < pageSize) {
+                        hasMore = false;
+                    }
+                }
+
+                if (allData.length > 0) {
+                    savedRecords = allData.map(r => {
                         let mesVal = '-';
                         if (r.data && r.data.includes('-')) {
                             const p = r.data.split('-');
-                            mesVal = `${p[0]}-${p[1]}`;
+                            mesVal = `${p[0]}-${p[1]}`; // YYYY-MM
                         }
                         return { ...r, mes: mesVal };
                     });
-                    exportCount.innerText = savedRecords.length;
+                    
+                    if (typeof updateExportCount === 'function') {
+                        updateExportCount();
+                    } else {
+                        const exportCountObj = document.getElementById('export-count');
+                        if(exportCountObj) exportCountObj.innerText = savedRecords.length;
+                    }
+
+                    if(cloudCountObj) {
+                        cloudCountObj.innerText = savedRecords.length + " encontrados";
+                    }
 
                     // Initialize all filters with all unique values across the dataset
                     resetFilters();
@@ -1097,6 +1135,7 @@
                 }
             } catch (err) {
                 console.error("Erro ao buscar Supabase:", err);
+                if(document.getElementById('cloud-count')) document.getElementById('cloud-count').innerText = "Erro!";
             }
         }
 
@@ -1198,10 +1237,10 @@
             dataObj['registrado_em'] = new Date().toISOString();
             // no banco, esse valor deve ser text, ou timestamptz. usaremos timestamptz
 
-            // Converter números para number (inclusive zeros)
-            if (dataObj['quantidade'] !== undefined) dataObj['quantidade'] = parseInt(dataObj['quantidade']) || 0;
-            if (dataObj['nota_servico'] !== undefined) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']) || 0;
-            if (dataObj['cheque'] !== undefined) dataObj['cheque'] = parseInt(dataObj['cheque']) || 0;
+            // Converter números para number (valores zero ou vazios viram null)
+            if (dataObj['quantidade'] !== undefined) dataObj['quantidade'] = parseInt(dataObj['quantidade']) || null;
+            if (dataObj['nota_servico'] !== undefined) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']) || null;
+            if (dataObj['cheque'] !== undefined) dataObj['cheque'] = parseInt(dataObj['cheque']) || null;
 
             // Reconcile 'Outros' se for do Suporte
             if (dataObj['tipo_suporte'] === 'Outros' && dataObj['detalhe_outro']) {
@@ -1818,6 +1857,21 @@
             });
         }
 
+        // Helper to update the button count
+        function updateExportCount() {
+            const elMonth = document.getElementById('export-month');
+            const elCount = document.getElementById('export-count');
+            if (elMonth && elCount) {
+                const monthVal = elMonth.value; // Formato YYYY-MM
+                if (!monthVal) {
+                    elCount.innerText = savedRecords.length;
+                } else {
+                    const filtered = savedRecords.filter(r => r.mes === monthVal);
+                    elCount.innerText = filtered.length;
+                }
+            }
+        }
+
         // Export data to XLSX logic featuring SheetJS
         function exportToExcel() {
             if (savedRecords.length === 0) {
@@ -1825,19 +1879,35 @@
                 return;
             }
 
+            const elMonth = document.getElementById('export-month');
+            const monthVal = elMonth ? elMonth.value : '';
+            let dataToExport = savedRecords;
+
+            if (monthVal) {
+                dataToExport = savedRecords.filter(r => r.mes === monthVal);
+            }
+
+            if (dataToExport.length === 0) {
+                showToast('Nenhum dado encontrado para o mês selecionado.', 'warning');
+                return;
+            }
+
             try {
-                // Cria uma nova worksheet com base nos dados cacheados na variável
-                const worksheet = XLSX.utils.json_to_sheet(savedRecords);
+                // Cria uma nova worksheet com base nos dados filtrados
+                const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 
                 // Cria um novo workbook virtual e anexa a sheet
                 const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Registros - Backoffice");
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Registros");
 
                 // Gera arquivo real e deflagra download
-                const filename = `Backoffice_Export_${new Date().getTime()}.xlsx`;
+                let filename = `Backoffice_Export_${new Date().getTime()}.xlsx`;
+                if (monthVal) {
+                    filename = `Backoffice_Export_${monthVal.replace('-', '_')}.xlsx`;
+                }
                 XLSX.writeFile(workbook, filename);
 
-                showToast('Arquivo .XLSX gerado e baixado!', 'success');
+                showToast(`Arquivo .XLSX gerado! (${dataToExport.length} registros)`, 'success');
             } catch (err) {
                 console.error(err);
                 showToast('Erro ao exportar os dados. Verifique o console.', 'error');
