@@ -24,9 +24,17 @@
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .glass-card {
@@ -51,7 +59,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transition: left 0.5s ease;
         }
 
@@ -61,7 +69,7 @@
 
         .nav-button:hover {
             transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
         }
 
         .nav-button:active {
@@ -69,22 +77,53 @@
         }
 
         /* Gradient icon backgrounds */
-        .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8); }
-        .icon-orange { background: linear-gradient(135deg, #fb923c, #ea580c, #c2410c); }
-        .icon-emerald { background: linear-gradient(135deg, #34d399, #10b981, #059669); }
-        .icon-purple { background: linear-gradient(135deg, #a78bfa, #8b5cf6, #7c3aed); }
-        .icon-indigo { background: linear-gradient(135deg, #818cf8, #6366f1, #4f46e5); }
-        .icon-rose { background: linear-gradient(135deg, #fb7185, #f43f5e, #e11d48); }
+        .icon-blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8);
+        }
+
+        .icon-orange {
+            background: linear-gradient(135deg, #fb923c, #ea580c, #c2410c);
+        }
+
+        .icon-emerald {
+            background: linear-gradient(135deg, #34d399, #10b981, #059669);
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6, #7c3aed);
+        }
+
+        .icon-indigo {
+            background: linear-gradient(135deg, #818cf8, #6366f1, #4f46e5);
+        }
+
+        .icon-rose {
+            background: linear-gradient(135deg, #fb7185, #f43f5e, #e11d48);
+        }
 
         /* Entrance animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .animate-fade-in-up {
@@ -98,12 +137,29 @@
         }
 
         /* Stagger delays for nav cards */
-        .stagger-1 { animation-delay: 0.05s; }
-        .stagger-2 { animation-delay: 0.1s; }
-        .stagger-3 { animation-delay: 0.15s; }
-        .stagger-4 { animation-delay: 0.2s; }
-        .stagger-5 { animation-delay: 0.25s; }
-        .stagger-6 { animation-delay: 0.3s; }
+        .stagger-1 {
+            animation-delay: 0.05s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.15s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.25s;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.3s;
+        }
 
         /* Gradient text */
         .gradient-heading {
@@ -115,12 +171,22 @@
 
         /* Pulse dot indicator */
         @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.5); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
         }
 
         .pulse-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #22c55e;
             animation: pulse-dot 2s ease infinite;
@@ -139,10 +205,24 @@
         }
 
         /* Improved scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
         /* ===== FORM STYLES ===== */
         .form-header-banner {
@@ -153,6 +233,7 @@
             gap: 14px;
             margin: -32px -32px 28px -32px;
         }
+
         .form-header-banner h2 {
             font-size: 1.5rem;
             font-weight: 800;
@@ -160,16 +241,18 @@
             letter-spacing: -0.02em;
             margin: 0;
         }
+
         .form-header-banner .banner-icon {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
         .form-header-banner p {
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             font-size: 0.78rem;
             margin: 2px 0 0 0;
         }
@@ -186,11 +269,12 @@
             color: #64748b;
             background: white;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             transition: all 0.2s ease;
             cursor: pointer;
             margin-bottom: 20px;
         }
+
         .back-btn:hover {
             background: #f1f5f9;
             color: #334155;
@@ -220,12 +304,16 @@
             transition: all 0.2s ease;
             outline: none;
         }
+
         .field-input:focus {
             border-color: var(--form-accent, #3b82f6);
             background: white;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
         }
-        .field-input::placeholder { color: #94a3b8; }
+
+        .field-input::placeholder {
+            color: #94a3b8;
+        }
 
         /* Section divider inside form */
         .form-section-label {
@@ -239,6 +327,7 @@
             gap: 8px;
             margin-bottom: 14px;
         }
+
         .form-section-label::after {
             content: '';
             flex: 1;
@@ -258,29 +347,64 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             cursor: pointer;
             letter-spacing: 0.01em;
         }
+
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px -6px var(--btn-shadow, rgba(59,130,246,0.35));
+            box-shadow: 0 12px 24px -6px var(--btn-shadow, rgba(59, 130, 246, 0.35));
         }
-        .btn-submit:active { transform: translateY(0); }
-        .btn-blue   { background: linear-gradient(135deg, #3b82f6, #2563eb); --btn-shadow: rgba(37,99,235,0.4); }
-        .btn-orange { background: linear-gradient(135deg, #f97316, #ea580c); --btn-shadow: rgba(234,88,12,0.4); }
-        .btn-emerald{ background: linear-gradient(135deg, #10b981, #059669); --btn-shadow: rgba(5,150,105,0.4); }
-        .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); --btn-shadow: rgba(124,58,237,0.4); }
-        .btn-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); --btn-shadow: rgba(79,70,229,0.4); }
-        .btn-rose   { background: linear-gradient(135deg, #f43f5e, #e11d48); --btn-shadow: rgba(225,29,72,0.4); }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            --btn-shadow: rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-orange {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            --btn-shadow: rgba(234, 88, 12, 0.4);
+        }
+
+        .btn-emerald {
+            background: linear-gradient(135deg, #10b981, #059669);
+            --btn-shadow: rgba(5, 150, 105, 0.4);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            --btn-shadow: rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-indigo {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            --btn-shadow: rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-rose {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            --btn-shadow: rgba(225, 29, 72, 0.4);
+        }
 
         /* Table improvements */
         .premium-table tbody tr {
             transition: background 0.15s ease;
         }
-        .premium-table tbody tr:nth-child(even) { background: #f8fafc; }
-        .premium-table tbody tr:hover { background: #eff6ff !important; }
+
+        .premium-table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .premium-table tbody tr:hover {
+            background: #eff6ff !important;
+        }
+
         .premium-table thead th {
             background: linear-gradient(180deg, #f1f5f9, #e8edf5);
             font-size: 0.7rem;
@@ -295,14 +419,15 @@
         .chart-card {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-            border: 1px solid rgba(226,232,240,0.8);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(226, 232, 240, 0.8);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             height: 480px;
         }
+
         .chart-card-header {
             width: 100%;
             padding: 16px 20px 12px;
@@ -312,6 +437,7 @@
             gap: 8px;
             border-bottom: 1px solid #f1f5f9;
         }
+
         .chart-card-body {
             width: 100%;
             flex: 1;
@@ -320,11 +446,13 @@
             justify-content: center;
             padding: 16px;
         }
+
         .chart-accent-bar {
             width: 100%;
             height: 4px;
             border-radius: 4px 4px 0 0;
         }
+
         .chart-total-badge {
             display: inline-flex;
             align-items: center;
@@ -347,7 +475,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 8px 32px rgba(15,23,42,0.3);
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.3);
         }
 
         /* Checkbox pill style */
@@ -366,12 +494,18 @@
             transition: all 0.15s ease;
             user-select: none;
         }
+
         .checkbox-pill:has(input:checked) {
             background: #dbeafe;
             border-color: #93c5fd;
             color: #1d4ed8;
         }
-        .checkbox-pill input { width: 14px; height: 14px; accent-color: #3b82f6; }
+
+        .checkbox-pill input {
+            width: 14px;
+            height: 14px;
+            accent-color: #3b82f6;
+        }
     </style>
 </head>
 
@@ -392,7 +526,8 @@
                 </div>
             </div>
 
-            <h1 class="text-4xl md:text-5xl font-extrabold gradient-heading mb-3 tracking-tight">Backoffice Controle</h1>
+            <h1 class="text-4xl md:text-5xl font-extrabold gradient-heading mb-3 tracking-tight">Backoffice Controle
+            </h1>
             <p class="text-slate-500 mb-8 text-lg font-light">Gestão de Demandas e Ajustes de Operação</p>
 
             <div
@@ -409,7 +544,8 @@
                     <span>Exportar Excel (<span id="export-count">0</span>)</span>
                 </button>
             </div>
-            <div class="mt-4 text-xs text-slate-400 font-medium tracking-wide w-full text-center flex items-center justify-center gap-2">
+            <div
+                class="mt-4 text-xs text-slate-400 font-medium tracking-wide w-full text-center flex items-center justify-center gap-2">
                 <span class="pulse-dot"></span>
                 Total Geral na Nuvem (Ilimitado): <span id="cloud-count" class="font-bold text-slate-600">0</span>
             </div>
@@ -494,7 +630,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #3b82f6;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #2563eb, #1d4ed8, #1e40af);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #2563eb, #1d4ed8, #1e40af);">
                         <div class="banner-icon"><i data-lucide="user-plus" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Novo Cadastro</h2>
@@ -707,11 +844,15 @@
 
                         <div class="flex items-center gap-4 pt-2 mb-8 justify-end">
                             <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
-                                <label for="export_cadastro_month" class="text-sm font-bold text-slate-700">Mês/Ano:</label>
-                                <input type="month" id="export_cadastro_month" class="px-3 py-1.5 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                <label for="export_cadastro_month"
+                                    class="text-sm font-bold text-slate-700">Mês/Ano:</label>
+                                <input type="month" id="export_cadastro_month"
+                                    class="px-3 py-1.5 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                             </div>
-                            <button type="button" onclick="exportCadastroHtmlToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
-                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Extrair para Planilha HTML</span>
+                            <button type="button" onclick="exportCadastroHtmlToExcel()"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Extrair para Planilha
+                                    HTML</span>
                             </button>
                         </div>
 
@@ -719,7 +860,8 @@
                         <div class="mt-12 pt-8 border-t border-slate-200">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                                    <i data-lucide="user-check" class="w-5 h-5 text-slate-500"></i> Acompanhamento de Cadastros <span id="qtde-cadastros" class="text-blue-600 ml-1">0</span>
+                                    <i data-lucide="user-check" class="w-5 h-5 text-slate-500"></i> Acompanhamento de
+                                    Cadastros <span id="qtde-cadastros" class="text-blue-600 ml-1">0</span>
                                 </h3>
                                 <button type="button" onclick="clearAllFilters()"
                                     class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
@@ -735,67 +877,115 @@
                                         <tr>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'mes', 'Mês')">
-                                                <div class="flex items-center gap-2"><span>Recebido Em</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Recebido Em</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'cedente', 'Cedente')">
-                                                <div class="flex items-center gap-2"><span>Cedente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Cedente</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'tipo_cadastro', 'Tipo de Cadastro')">
-                                                <div class="flex items-center gap-2"><span>Tipo de Cadastro</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Tipo de Cadastro</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'porte', 'Porte')">
-                                                <div class="flex items-center gap-2"><span>Porte</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Porte</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'gerente', 'Gerente')">
-                                                <div class="flex items-center gap-2"><span>Gerente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Gerente</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
-                                                <div class="flex items-center gap-2"><span>Feito Por</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Feito Por</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'status', 'Status')">
-                                                <div class="flex items-center gap-2"><span>Status</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Status</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'grupo', 'Grupo')">
-                                                <div class="flex items-center gap-2"><span>Grupo</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Grupo</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'pendencias_triagem', 'Pendências Triagem')">
-                                                <div class="flex items-center gap-2"><span>Pendências Triagem</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Pendências Triagem</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'pleito_gerente', 'Pleito do Gerente')">
-                                                <div class="flex items-center gap-2"><span>Pleito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Pleito</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'envio_cadastro', 'Envio Cadastro')">
-                                                <div class="flex items-center gap-2"><span>Envio Cadastro</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Envio Cadastro</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'data_retorno_credito', 'Retorno Crédito')">
-                                                <div class="flex items-center gap-2"><span>Retorno Crédito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Retorno Crédito</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'pendencias_credito', 'Pendências Crédito')">
-                                                <div class="flex items-center gap-2"><span>Pendências Crédito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Pendências Crédito</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'data_envio', 'Data Envio')">
-                                                <div class="flex items-center gap-2"><span>Data Envio</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Data Envio</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'data_elaboracao', 'Data Elaboração')">
-                                                <div class="flex items-center gap-2"><span>Data Elaboração</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Data Elaboração</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'data_comite', 'Data Comitê')">
-                                                <div class="flex items-center gap-2"><span>Data Comitê</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                                <div class="flex items-center gap-2"><span>Data Comitê</span><i
+                                                        data-lucide="filter"
+                                                        class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
+                                                </div>
                                             </th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 text-center">Ação</th>
                                         </tr>
@@ -834,7 +1024,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #f97316;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #ea580c, #c2410c, #9a3412);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #ea580c, #c2410c, #9a3412);">
                         <div class="banner-icon"><i data-lucide="life-buoy" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Novo Suporte</h2>
@@ -948,7 +1139,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #10b981;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #059669, #047857, #065f46);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #059669, #047857, #065f46);">
                         <div class="banner-icon"><i data-lucide="import" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Importação de Operações</h2>
@@ -1079,7 +1271,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #8b5cf6;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6);">
                         <div class="banner-icon"><i data-lucide="layout-list" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Nova Demanda</h2>
@@ -1156,7 +1349,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #6366f1;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #4f46e5, #4338ca, #3730a3);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #4f46e5, #4338ca, #3730a3);">
                         <div class="banner-icon"><i data-lucide="settings-2" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Ajuste de Operação</h2>
@@ -1254,7 +1448,8 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
                 </button>
                 <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #f43f5e;">
-                    <div class="form-header-banner" style="background: linear-gradient(135deg, #e11d48, #be185d, #9d174d);">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #e11d48, #be185d, #9d174d);">
                         <div class="banner-icon"><i data-lucide="shield" class="w-6 h-6 text-white"></i></div>
                         <div>
                             <h2>Nova Defesa</h2>
@@ -1432,10 +1627,12 @@
                         <div class="chart-accent-bar" style="background: linear-gradient(90deg,#3b82f6,#6366f1);"></div>
                         <div class="chart-card-header">
                             <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg" style="background:#eff6ff;"><i data-lucide="pie-chart" class="w-4 h-4 text-blue-600"></i></div>
+                                <div class="p-1.5 rounded-lg" style="background:#eff6ff;"><i data-lucide="pie-chart"
+                                        class="w-4 h-4 text-blue-600"></i></div>
                                 <span class="font-bold text-slate-800 text-sm">Distribuição por Tipo</span>
                             </div>
-                            <div class="chart-total-badge">TOTAL <span id="total-demandas" class="text-slate-800 font-extrabold">0</span></div>
+                            <div class="chart-total-badge">TOTAL <span id="total-demandas"
+                                    class="text-slate-800 font-extrabold">0</span></div>
                         </div>
                         <div class="chart-card-body"><canvas id="demandPieChart"></canvas></div>
                     </div>
@@ -1445,10 +1642,12 @@
                         <div class="chart-accent-bar" style="background: linear-gradient(90deg,#f97316,#ef4444);"></div>
                         <div class="chart-card-header">
                             <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg" style="background:#fff7ed;"><i data-lucide="life-buoy" class="w-4 h-4 text-orange-600"></i></div>
+                                <div class="p-1.5 rounded-lg" style="background:#fff7ed;"><i data-lucide="life-buoy"
+                                        class="w-4 h-4 text-orange-600"></i></div>
                                 <span class="font-bold text-slate-800 text-sm">Tipos de Suporte</span>
                             </div>
-                            <div class="chart-total-badge">TOTAL <span id="total-suporte" class="text-slate-800 font-extrabold">0</span></div>
+                            <div class="chart-total-badge">TOTAL <span id="total-suporte"
+                                    class="text-slate-800 font-extrabold">0</span></div>
                         </div>
                         <div class="chart-card-body"><canvas id="suportePieChart"></canvas></div>
                     </div>
@@ -1458,10 +1657,12 @@
                         <div class="chart-accent-bar" style="background: linear-gradient(90deg,#10b981,#06b6d4);"></div>
                         <div class="chart-card-header">
                             <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg" style="background:#ecfdf5;"><i data-lucide="users" class="w-4 h-4 text-emerald-600"></i></div>
+                                <div class="p-1.5 rounded-lg" style="background:#ecfdf5;"><i data-lucide="users"
+                                        class="w-4 h-4 text-emerald-600"></i></div>
                                 <span class="font-bold text-slate-800 text-sm">Gerentes</span>
                             </div>
-                            <div class="chart-total-badge">TOTAL <span id="total-gerentes" class="text-slate-800 font-extrabold">0</span></div>
+                            <div class="chart-total-badge">TOTAL <span id="total-gerentes"
+                                    class="text-slate-800 font-extrabold">0</span></div>
                         </div>
                         <div class="chart-card-body"><canvas id="gerentesPieChart"></canvas></div>
                     </div>
@@ -1471,10 +1672,12 @@
                         <div class="chart-accent-bar" style="background: linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
                         <div class="chart-card-header">
                             <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg" style="background:#faf5ff;"><i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i></div>
+                                <div class="p-1.5 rounded-lg" style="background:#faf5ff;"><i data-lucide="user-check"
+                                        class="w-4 h-4 text-purple-600"></i></div>
                                 <span class="font-bold text-slate-800 text-sm">Feito Por</span>
                             </div>
-                            <div class="chart-total-badge">TOTAL <span id="total-colaboradores" class="text-slate-800 font-extrabold">0</span></div>
+                            <div class="chart-total-badge">TOTAL <span id="total-colaboradores"
+                                    class="text-slate-800 font-extrabold">0</span></div>
                         </div>
                         <div class="chart-card-body"><canvas id="colaboradoresPieChart"></canvas></div>
                     </div>
@@ -1750,7 +1953,7 @@
                     if (!dataObj[cleanKey]) dataObj[cleanKey] = [];
                     dataObj[cleanKey].push(value);
                 } else {
-                    dataObj[key] = value;
+                    dataObj[key] = value === "" ? null : value;
                 }
             }
 
@@ -1779,9 +1982,9 @@
                 delete dataObj['pendencias_credito_text'];
             }
 
-            if (dataObj['quantidade'] !== undefined) dataObj['quantidade'] = parseInt(dataObj['quantidade']) || null;
-            if (dataObj['nota_servico'] !== undefined) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']) || null;
-            if (dataObj['cheque'] !== undefined) dataObj['cheque'] = parseInt(dataObj['cheque']) || null;
+            if (dataObj['quantidade'] !== undefined && dataObj['quantidade'] !== null) dataObj['quantidade'] = parseInt(dataObj['quantidade']);
+            if (dataObj['nota_servico'] !== undefined && dataObj['nota_servico'] !== null) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']);
+            if (dataObj['cheque'] !== undefined && dataObj['cheque'] !== null) dataObj['cheque'] = parseInt(dataObj['cheque']);
 
             // Reconcile 'Outros' se for do Suporte
             if (dataObj['tipo_suporte'] === 'Outros' && dataObj['detalhe_outro']) {
@@ -1807,7 +2010,7 @@
                     const { error: insertError } = await supabaseClient.from('demandas').insert([dataObj]);
                     saveError = insertError;
                 }
-                
+
                 if (saveError) throw saveError;
 
                 // Fetch atualizado
@@ -2050,7 +2253,7 @@
                 const porte = formatDataForDisplay(r.porte, 'porte');
                 const status = formatDataForDisplay(r.status, 'status');
                 const grupo = formatDataForDisplay(r.grupo, 'grupo');
-                
+
                 const pt = formatDataForDisplay(r.pendencias_triagem, 'pendencias_triagem');
                 const pl = formatDataForDisplay(r.pleito_gerente, 'pleito_gerente');
                 const ec = formatDataForDisplay(r.envio_cadastro, 'envio_cadastro');
@@ -2514,7 +2717,7 @@
                 showToast("Nenhum cadastro encontrado para exportar.", "warning");
                 return;
             }
-            
+
             let htmlTable = `<meta charset="UTF-8"><table><thead><tr>
                 <th>RECEBIDO EM:</th><th>CEDENTE</th><th>TIPO DE CADASTRO</th><th>PORTE</th>
                 <th>GERENTE</th><th>FEITO POR</th><th>STATUS</th><th>GRUPO</th>
@@ -2559,7 +2762,7 @@
 
             openForm('cadastro-form');
             const form = document.getElementById('form-cadastro');
-            
+
             // Atribuir campos nativos
             // "Recebido Em" usa a coluna recebido_em; fallback para "data" (usada pelos outros formulários)
             form.elements['recebido_em'].value = record.recebido_em || record.data || '';
@@ -2584,7 +2787,7 @@
                 const arr = (triagemInputs.length !== undefined) ? Array.from(triagemInputs) : [triagemInputs];
                 arr.forEach(cb => cb.checked = false);
                 const valDB = Array.isArray(record.pendencias_triagem) ? record.pendencias_triagem : (record.pendencias_triagem ? String(record.pendencias_triagem).split(', ') : []);
-                arr.forEach(cb => { 
+                arr.forEach(cb => {
                     if (valDB.includes(cb.value)) cb.checked = true;
                 });
             }
@@ -2595,7 +2798,7 @@
                 const arr = (creditoInputs.length !== undefined) ? Array.from(creditoInputs) : [creditoInputs];
                 arr.forEach(cb => cb.checked = false);
                 const valDB = Array.isArray(record.pendencias_credito_check) ? record.pendencias_credito_check : (record.pendencias_credito_check ? String(record.pendencias_credito_check).split(', ') : []);
-                arr.forEach(cb => { 
+                arr.forEach(cb => {
                     if (valDB.includes(cb.value)) cb.checked = true;
                 });
             }
@@ -2611,7 +2814,7 @@
                 form.appendChild(hiddenId);
             }
             hiddenId.value = record.id;
-            
+
             // Atualiza Botão Salvar
             const btnSubmit = form.querySelector('button[type="submit"]');
             btnSubmit.innerHTML = `<i data-lucide="edit-3" class="w-5 h-5"></i><span>Atualizar Cadastro</span>`;
