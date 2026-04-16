@@ -12,7 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="https://media.licdn.com/dms/image/v2/C4E0BAQEWqp2g5wrNJA/company-logo_200_200/company-logo_200_200/0/1640619871199/lsinterbank_logo?e=1776902400&v=beta&t=_y-gw3GQ9PwoQ0KYnd-puJ6CEqsAIcAaQs5y_Y19OzA">
+    <link rel="icon" type="image/png"
+        href="https://media.licdn.com/dms/image/v2/C4E0BAQEWqp2g5wrNJA/company-logo_200_200/company-logo_200_200/0/1640619871199/lsinterbank_logo?e=1776902400&v=beta&t=_y-gw3GQ9PwoQ0KYnd-puJ6CEqsAIcAaQs5y_Y19OzA">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -65,10 +66,13 @@
             <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Controle</h1>
             <p class="text-slate-500 mb-6">Gestão de Demandas e Ajustes de Operação</p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/50 p-4 rounded-2xl max-w-lg mx-auto shadow-sm border border-slate-200">
+            <div
+                class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/50 p-4 rounded-2xl max-w-lg mx-auto shadow-sm border border-slate-200">
                 <div class="flex items-center space-x-2">
                     <label for="export-month" class="text-sm font-semibold text-slate-700">Filtrar Mês:</label>
-                    <input type="month" id="export-month" class="px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-700 font-medium" onchange="updateExportCount()">
+                    <input type="month" id="export-month"
+                        class="px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-700 font-medium"
+                        onchange="updateExportCount()">
                 </div>
                 <button onclick="exportToExcel()"
                     class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors">
@@ -76,7 +80,8 @@
                     <span>Exportar Excel (<span id="export-count">0</span>)</span>
                 </button>
             </div>
-            <div class="mt-3 text-xs text-slate-400 font-medium tracking-wide w-full text-center">Total Geral na Nuvem (Ilimitado): <span id="cloud-count">0</span></div>
+            <div class="mt-3 text-xs text-slate-400 font-medium tracking-wide w-full text-center">Total Geral na Nuvem
+                (Ilimitado): <span id="cloud-count">0</span></div>
         </header>
 
         <!-- Navigation Grid Section (Colorizado com Bordas) -->
@@ -146,7 +151,7 @@
 
         <!-- 1. CADASTRO Form -->
         <section id="cadastro-form" class="form-section hidden">
-            <div class="max-w-2xl mx-auto">
+            <div class="max-w-[1240px] w-full mx-auto">
                 <div class="mb-6 flex items-center">
                     <button type="button" onclick="closeForm()"
                         class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
@@ -155,110 +160,327 @@
                     <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-500 pl-3">Novo Cadastro</h2>
                 </div>
                 <div class="glass-card rounded-2xl p-8 shadow-xl">
-                    <form id="form-cadastro" class="space-y-6">
+                    <form id="form-cadastro" class="space-y-6 text-left">
                         <input type="hidden" name="form_type" value="CADASTRO">
 
-                        <!-- Common Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
-                                <input type="date" name="data" required
-                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Recebido Em</label>
+                                <input type="date" name="recebido_em" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                                <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Cadastro</label>
+                                <select name="tipo_cadastro" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white text-sm">
+                                    <option value="" disabled selected>Selecione</option>
+                                    <option value="Prospecção">Prospecção</option>
+                                    <option value="Renovação">Renovação</option>
+                                    <option value="Inclusão">Inclusão</option>
+                                    <option value="Risco Sacado">Risco Sacado</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Porte</label>
+                                <select name="porte" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white text-sm">
+                                    <option value="" disabled selected>Selecione</option>
+                                    <option value="SMALL">SMALL</option>
+                                    <option value="MIDDLE">MIDDLE</option>
+                                    <option value="CORPORATE">CORPORATE</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                                <select name="gerente" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white text-sm">
+                                    <option value="" disabled selected>Selecione o gerente</option>
+                                    <option value="ADM">ADM</option>
+                                    <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                    <option value="ANA TAVARES">ANA TAVARES</option>
+                                    <option value="ANTONIO">ANTONIO</option>
+                                    <option value="AUGUSTO">AUGUSTO</option>
+                                    <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                    <option value="CAMILA">CAMILA</option>
+                                    <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="ELIZABETH">ELIZABETH</option>
+                                    <option value="GUILHERME">GUILHERME</option>
+                                    <option value="JULIA">JULIA</option>
+                                    <option value="MARLENE">MARLENE</option>
+                                    <option value="RAFAELA">RAFAELA</option>
+                                    <option value="SIGRID">SIGRID</option>
+                                    <option value="VALERIA">VALERIA</option>
+                                    <option value="VECLAINE">VECLAINE</option>
+                                    <option value="WESLEI">WESLEI</option>
+                                    <option value="YARA">YARA</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
                                 <select name="feito_por" required
-                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white text-sm">
                                     <option value="" disabled selected>Selecione um colaborador</option>
                                     <option value="Arthur">Arthur</option>
                                     <option value="Cristiane">Cristiane</option>
-
                                     <option value="Kamily">Kamily</option>
                                     <option value="Stefania">Stefania</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
-                            <select name="gerente" required
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
-                                <option value="" disabled selected>Selecione o gerente</option>
-                                <option value="ADM">ADM</option>
-                                <option value="ANA CAROLINA">ANA CAROLINA</option>
-                                <option value="ANA TAVARES">ANA TAVARES</option>
-                                <option value="ANTONIO">ANTONIO</option>
-                                <option value="AUGUSTO">AUGUSTO</option>
-                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
-                                <option value="BRUNO MATTOS">BRUNO MATTOS</option>
-                                <option value="CAMILA">CAMILA</option>
-                                <option value="CLAUDIA">CLAUDIA</option>
-                                <option value="ELIZABETH">ELIZABETH</option>
-                                <option value="GUILHERME">GUILHERME</option>
-                                <option value="JULIA">JULIA</option>
-                                <option value="MARLENE">MARLENE</option>
-                                <option value="RAFAELA">RAFAELA</option>
-                                <option value="SIGRID">SIGRID</option>
-                                <option value="VALERIA">VALERIA</option>
-                                <option value="VECLAINE">VECLAINE</option>
-                                <option value="WESLEI">WESLEI</option>
-                                <option value="YARA">YARA</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
-                            <input type="text" name="cedente" placeholder="Nome do cedente" required
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
-                        </div>
-
-                        <!-- Specific Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Cadastro</label>
-                                <select name="tipo_cadastro" required
-                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
-                                    <option value="" disabled selected>Selecione o tipo</option>
-                                    <option value="Renovação">Renovação</option>
-                                    <option value="Prospecção">Prospecção</option>
-                                    <option value="Renovação 10+">Renovação 10+</option>
-                                    <option value="Risco Sacado">Risco Sacado</option>
-                                    <option value="Inclusão">Inclusão</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1">Fase do Cadastro</label>
-                                <select name="fase_cadastro" required
-                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white">
-                                    <option value="" disabled selected>Selecione a fase</option>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Status</label>
+                                <select name="status" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white text-xs">
+                                    <option value="" disabled selected>Selecione o status</option>
                                     <option value="TRIAGEM DE DOCUMENTOS">TRIAGEM DE DOCUMENTOS</option>
                                     <option value="TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO">TRIAGEM
                                         FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO</option>
                                     <option value="ELABORAÇÃO DE APRESENTAÇÃO">ELABORAÇÃO DE APRESENTAÇÃO</option>
                                     <option value="APRESENTAÇÃO AGUARDANDO REVISÃO">APRESENTAÇÃO AGUARDANDO REVISÃO
                                     </option>
+                                    <option value="AGUARDANDO COMITÊ">AGUARDANDO COMITÊ</option>
                                     <option value="AGUARDANDO REVISÃO - DIRETOR COMERCIAL">AGUARDANDO REVISÃO - DIRETOR
                                         COMERCIAL</option>
-                                    <option value="AGUARDANDO COMITÊ">AGUARDANDO COMITÊ</option>
+                                    <option value="RENOVAÇÃO FINALIZADA">RENOVAÇÃO FINALIZADA</option>
                                     <option value="CADASTRO APROVADO">CADASTRO APROVADO</option>
                                     <option value="CADASTRO REPROVADO">CADASTRO REPROVADO</option>
-                                    <option value="RENOVAÇÃO FINALIZADA">RENOVAÇÃO FINALIZADA</option>
                                     <option value="INSERIDO EM STAND-BY">INSERIDO EM STAND-BY</option>
+                                    <option value="RETORNADO PELO CRÉDITO">RETORNADO PELO CRÉDITO</option>
                                 </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Grupo</label>
+                                <input type="text" name="grupo" placeholder="Nome do grupo"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Envio Cadastro</label>
+                                <input type="date" name="envio_cadastro"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data Retorno
+                                    Crédito</label>
+                                <input type="date" name="data_retorno_credito"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data Envio</label>
+                                <input type="date" name="data_envio"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data Elaboração</label>
+                                <input type="date" name="data_elaboracao"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data Comitê</label>
+                                <input type="date" name="data_comite"
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                            </div>
+
+                            <!-- Pendências Triagem Full Width -->
+                            <div class="md:col-span-2 lg:col-span-3 pb-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Pendências
+                                    Triagem</label>
+                                <div class="flex flex-wrap gap-4 text-xs font-bold text-slate-700">
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Documentos de Homologação"
+                                            class="w-4 h-4 text-blue-600"> Documentos de Homologação</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Pleito" class="w-4 h-4 text-blue-600">
+                                        Pleito</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Documentos de Análise de Crédito"
+                                            class="w-4 h-4 text-blue-600"> Documentos de Análise de Crédito</label>
+                                </div>
+                            </div>
+
+                            <!-- Pleito Gerente -->
+                            <div class="md:col-span-2 lg:col-span-3">
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Pleito do Gerente</label>
+                                <textarea name="pleito_gerente"
+                                    placeholder="Descreva os limites e taxas (Ex: Convencional R$ 1MM, Taxa 1,9%)..."
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none min-h-[80px]"></textarea>
+                            </div>
+
+                            <!-- Pendências Crédito -->
+                            <div class="md:col-span-2 lg:col-span-3">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Pendências
+                                    Crédito</label>
+                                <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold text-slate-700">
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="CURVA ABC"
+                                            class="w-4 h-4 text-blue-600"> CURVA ABC</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]"
+                                            value="FATURAMENTO ATUALIZADO" class="w-4 h-4 text-blue-600"> FATURAMENTO
+                                        ATUALIZADO</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="FATURAMENTO ANTIGO"
+                                            class="w-4 h-4 text-blue-600"> FATURAMENTO ANTIGO</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="ENDIVIDAMENTO"
+                                            class="w-4 h-4 text-blue-600"> ENDIVIDAMENTO</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="IRPF"
+                                            class="w-4 h-4 text-blue-600"> IRPF</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="DRE'S"
+                                            class="w-4 h-4 text-blue-600"> DRE'S</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="BALANÇO(S)"
+                                            class="w-4 h-4 text-blue-600"> BALANÇO(S)</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]" value="DOCUMENTOS DE RJ"
+                                            class="w-4 h-4 text-blue-600"> DOCUMENTOS DE RJ</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]"
+                                            value="ATA/CONTRATO/ESTATUTO" class="w-4 h-4 text-blue-600">
+                                        ATA/CONTRATO/ESTATUTO</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]"
+                                            value="QUESTIONAMENTO/DÚVIDA/ESCLARESCIMENTO(S)"
+                                            class="w-4 h-4 text-blue-600">
+                                        QUESTIONAMENTO/DÚVIDA/ESCLARESCIMENTO(S)</label>
+                                    <label class="flex items-center gap-2 cursor-pointer whitespace-nowrap"><input
+                                            type="checkbox" name="pendencias_credito_check[]"
+                                            value="ASSINATURA EM DOCUMENTO(S)" class="w-4 h-4 text-blue-600"> ASSINATURA
+                                        EM DOCUMENTO(S)</label>
+                                </div>
+                                <textarea name="pendencias_credito_text" placeholder="Outras informações..."
+                                    class="mt-3 w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none min-h-[60px]"></textarea>
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Grupo (Opcional)</label>
-                            <input type="text" name="grupo" placeholder="Nome do grupo"
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none">
-                        </div>
-
-                        <div class="pt-4">
+                        <div class="pt-4 mb-4">
                             <button type="submit"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center space-x-2">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Cadastro</span>
                             </button>
+                        </div>
+
+                        <div class="flex items-center gap-4 pt-2 mb-8 justify-end">
+                            <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                                <label for="export_cadastro_month" class="text-sm font-bold text-slate-700">Mês/Ano:</label>
+                                <input type="month" id="export_cadastro_month" class="px-3 py-1.5 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <button type="button" onclick="exportCadastroHtmlToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Extrair para Planilha HTML</span>
+                            </button>
+                        </div>
+
+                        <!-- Acompanhamento de Cadastros Table MOVED HERE -->
+                        <div class="mt-12 pt-8 border-t border-slate-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                    <i data-lucide="user-check" class="w-5 h-5 text-slate-500"></i> Acompanhamento de Cadastros <span id="qtde-cadastros" class="text-blue-600 ml-1">0</span>
+                                </h3>
+                                <button type="button" onclick="clearAllFilters()"
+                                    class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
+                                    <i data-lucide="filter-x" class="w-4 h-4"></i> Limpar Filtros
+                                </button>
+                            </div>
+
+                            <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8 bg-white"
+                                style="max-height: 600px;">
+                                <table class="min-w-full divide-y divide-slate-200 text-xs text-left">
+                                    <thead
+                                        class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50 uppercase tracking-wider whitespace-nowrap">
+                                        <tr>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'mes', 'Mês')">
+                                                <div class="flex items-center gap-2"><span>Recebido Em</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'cedente', 'Cedente')">
+                                                <div class="flex items-center gap-2"><span>Cedente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'tipo_cadastro', 'Tipo de Cadastro')">
+                                                <div class="flex items-center gap-2"><span>Tipo de Cadastro</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'porte', 'Porte')">
+                                                <div class="flex items-center gap-2"><span>Porte</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'gerente', 'Gerente')">
+                                                <div class="flex items-center gap-2"><span>Gerente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
+                                                <div class="flex items-center gap-2"><span>Feito Por</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'status', 'Status')">
+                                                <div class="flex items-center gap-2"><span>Status</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'grupo', 'Grupo')">
+                                                <div class="flex items-center gap-2"><span>Grupo</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'pendencias_triagem', 'Pendências Triagem')">
+                                                <div class="flex items-center gap-2"><span>Pendências Triagem</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'pleito_gerente', 'Pleito do Gerente')">
+                                                <div class="flex items-center gap-2"><span>Pleito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'envio_cadastro', 'Envio Cadastro')">
+                                                <div class="flex items-center gap-2"><span>Envio Cadastro</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'data_retorno_credito', 'Retorno Crédito')">
+                                                <div class="flex items-center gap-2"><span>Retorno Crédito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'pendencias_credito', 'Pendências Crédito')">
+                                                <div class="flex items-center gap-2"><span>Pendências Crédito</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'data_envio', 'Data Envio')">
+                                                <div class="flex items-center gap-2"><span>Data Envio</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'data_elaboracao', 'Data Elaboração')">
+                                                <div class="flex items-center gap-2"><span>Data Elaboração</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
+                                                onclick="openFilterMenu(event, 'data_comite', 'Data Comitê')">
+                                                <div class="flex items-center gap-2"><span>Data Comitê</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                            </th>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 text-center">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cadastro-table-body" class="bg-white divide-y divide-slate-100">
+                                        <!-- Rows JS dinâmicas aqui -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Tipos de Cadastro Chart MOVED HERE -->
+                        <div
+                            class="glass-card bg-slate-50/50 rounded-2xl p-4 shadow-md flex flex-col items-center h-[400px] shrink-0 mt-8 border border-slate-200">
+                            <h3
+                                class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                                <i data-lucide="file-signature" class="w-4 h-4 text-slate-500"></i> Tipos de Cadastro
+                            </h3>
+                            <div
+                                class="text-[11px] font-bold text-slate-500 bg-white shadow-sm px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                                TOTAL: <span id="total-tipo-cadastro">0</span>
+                            </div>
+                            <div class="w-full relative flex-1 flex items-center justify-center">
+                                <canvas id="tipoCadastroPieChart"></canvas>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -783,87 +1005,6 @@
                 <div class="glass-card rounded-2xl p-6 shadow-xl flex flex-col min-h-[500px] mb-8 relative">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                            <i data-lucide="user-check" class="w-5 h-5 text-slate-500"></i> Acompanhamento de Cadastros
-                        </h3>
-                        <button onclick="clearAllFilters()"
-                            class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
-                            <i data-lucide="filter-x" class="w-4 h-4"></i> Limpar Filtros
-                        </button>
-                    </div>
-
-                    <!-- Wrapper Cadastro -->
-                    <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8"
-                        style="max-height: 800px;">
-                        <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
-                            <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
-                                <tr>
-                                    <!-- Cabeçalhos Interativos -->
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'mes', 'Data')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Data</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'tipo_cadastro', 'Tipo de Cadastro')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Tipo de Cadastro</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'form_type', 'Formulário')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Formulário</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Feito Por</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'cedente', 'Cedente')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Cedente</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors border-x border-slate-200"
-                                        onclick="openFilterMenu(event, 'fase_cadastro', 'Fase')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Fase (Acompanhamento)</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                    <th class="px-4 py-3 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
-                                        onclick="openFilterMenu(event, 'gerente', 'Gerente')">
-                                        <div class="flex items-center justify-between">
-                                            <span>Gerente</span>
-                                            <i data-lucide="filter"
-                                                class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="cadastro-table-body" class="bg-white divide-y divide-slate-100">
-                                <!-- Rows JS dinâmicas aqui -->
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
                             <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico Geral de Operações
                         </h3>
                     </div>
@@ -941,20 +1082,7 @@
                         </div>
                     </div>
 
-                    <!-- Gráfico Tipo de Cadastro -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
-                        <h3
-                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
-                            <i data-lucide="file-signature" class="w-4 h-4 text-slate-500"></i> Tipos de Cadastro
-                        </h3>
-                        <div
-                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
-                            TOTAL: <span id="total-tipo-cadastro">0</span>
-                        </div>
-                        <div class="w-full relative flex-1 flex items-center justify-center">
-                            <canvas id="tipoCadastroPieChart"></canvas>
-                        </div>
-                    </div>
+
 
                     <!-- Gráfico Suporte -->
                     <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
@@ -1063,7 +1191,11 @@
             'feito_por': new Set(),
             'cedente': new Set(),
             'gerente': new Set(),
-            'fase_cadastro': new Set()
+            'fase_cadastro': new Set(),
+            'recebido_em': new Set(),
+            'porte': new Set(),
+            'status': new Set(),
+            'grupo': new Set()
         };
         let currentSort = { column: 'data', direction: 'desc' }; // default sort
 
@@ -1081,12 +1213,12 @@
                 let from = 0;
                 let to = 999;
                 const pageSize = 1000;
-                
+
                 // Loading indicativo visual básico (opcional)
                 const cloudCountObj = document.getElementById('cloud-count');
-                if(cloudCountObj) cloudCountObj.innerText = "...";
+                if (cloudCountObj) cloudCountObj.innerText = "...";
 
-                while(hasMore) {
+                while (hasMore) {
                     const { data, error } = await supabaseClient
                         .from('demandas')
                         .select('*')
@@ -1094,12 +1226,12 @@
                         .range(from, to);
 
                     if (error) throw error;
-                    
+
                     if (data && data.length > 0) {
                         allData = allData.concat(data);
                         from += pageSize;
                         to += pageSize;
-                    } 
+                    }
                     if (!data || data.length < pageSize) {
                         hasMore = false;
                     }
@@ -1114,15 +1246,15 @@
                         }
                         return { ...r, mes: mesVal };
                     });
-                    
+
                     if (typeof updateExportCount === 'function') {
                         updateExportCount();
                     } else {
                         const exportCountObj = document.getElementById('export-count');
-                        if(exportCountObj) exportCountObj.innerText = savedRecords.length;
+                        if (exportCountObj) exportCountObj.innerText = savedRecords.length;
                     }
 
-                    if(cloudCountObj) {
+                    if (cloudCountObj) {
                         cloudCountObj.innerText = savedRecords.length + " encontrados";
                     }
 
@@ -1134,10 +1266,15 @@
                     if (histSec && !histSec.classList.contains('hidden')) {
                         applyFiltersAndSort();
                     }
+                    // Se o formulário de cadastro estiver aberto, também renderiza a tabela
+                    const cadForm = document.getElementById('cadastro-form');
+                    if (cadForm && !cadForm.classList.contains('hidden')) {
+                        applyFiltersAndSort();
+                    }
                 }
             } catch (err) {
                 console.error("Erro ao buscar Supabase:", err);
-                if(document.getElementById('cloud-count')) document.getElementById('cloud-count').innerText = "Erro!";
+                if (document.getElementById('cloud-count')) document.getElementById('cloud-count').innerText = "Erro!";
             }
         }
 
@@ -1150,10 +1287,14 @@
 
         // Initial Data Setup
         window.addEventListener('DOMContentLoaded', () => {
-            // Setup Dates
+            // Setup Dates — somente nos campos que não são opcionais do cadastro
             const today = new Date().toISOString().split('T')[0];
+            const excludedDates = ['envio_cadastro', 'data_retorno_credito', 'data_envio', 'data_elaboracao', 'data_comite'];
             document.querySelectorAll('input[type="date"]').forEach(input => {
-                input.value = today;
+                if (!excludedDates.includes(input.name)) {
+                    input.value = today;
+                }
+                // Os campos excluídos permanecem em branco (mostram dd/mm/aaaa)
             });
 
             // Recupera base "na nuvem" (agora via Supabase)
@@ -1191,6 +1332,11 @@
                 targetForm.classList.remove('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+
+            // Se abriu o form de Cadastro e já temos dados, renderiza a tabela imediatamente
+            if (formId === 'cadastro-form' && savedRecords.length > 0) {
+                applyFiltersAndSort();
+            }
         }
 
         function closeForm() {
@@ -1198,13 +1344,26 @@
                 f.classList.add('hidden');
                 // Reset form inputs except date
                 const formEl = f.querySelector('form');
-                if (formEl) formEl.reset();
+                if (formEl) {
+                    formEl.reset();
+                    // Remove hidden id se houver
+                    const hiddenId = formEl.querySelector('input[name="id"]');
+                    if (hiddenId) hiddenId.remove();
+                    // Restaura botão Salvar
+                    const btnSubmit = formEl.querySelector('button[type="submit"]');
+                    if (btnSubmit) btnSubmit.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i><span>Salvar Registro</span>`;
+                }
             });
 
             // Re-apply today to dates and hide 'outros'
             const today = new Date().toISOString().split('T')[0];
+            const excludedDates = ['envio_cadastro', 'data_retorno_credito', 'data_envio', 'data_elaboracao', 'data_comite'];
             document.querySelectorAll('input[type="date"]').forEach(input => {
-                input.value = today;
+                if (!excludedDates.includes(input.name)) {
+                    input.value = today;
+                } else {
+                    input.value = '';
+                }
             });
             suporteOutrosDiv.classList.add('hidden');
             suporteOutrosInput.removeAttribute('required');
@@ -1233,13 +1392,42 @@
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
-            const dataObj = Object.fromEntries(formData.entries());
+            const dataObj = {};
+            for (let [key, value] of formData.entries()) {
+                if (key.endsWith('[]')) {
+                    const cleanKey = key.slice(0, -2);
+                    if (!dataObj[cleanKey]) dataObj[cleanKey] = [];
+                    dataObj[cleanKey].push(value);
+                } else {
+                    dataObj[key] = value;
+                }
+            }
 
             // Format Timestamp
             dataObj['registrado_em'] = new Date().toISOString();
-            // no banco, esse valor deve ser text, ou timestamptz. usaremos timestamptz
 
-            // Converter números para number (valores zero ou vazios viram null)
+            // Retro-compatibilidade do Cadastro
+            if (dataObj['recebido_em']) {
+                dataObj['data'] = dataObj['recebido_em'];
+                if (dataObj['recebido_em'].includes('-')) {
+                    dataObj['mes'] = dataObj['recebido_em'].substring(0, 7); // Extract YYYY-MM
+                }
+            }
+            if (dataObj['status']) {
+                dataObj['fase_cadastro'] = dataObj['status'];
+            }
+            if (dataObj['form_type'] === 'CADASTRO') {
+                if (!dataObj['pendencias_triagem']) dataObj['pendencias_triagem'] = [];
+                dataObj['pendencias_triagem'] = dataObj['pendencias_triagem'].join(', ');
+                if (!dataObj['pendencias_credito_check']) dataObj['pendencias_credito_check'] = [];
+                dataObj['pendencias_credito'] = dataObj['pendencias_credito_check'].join(', ');
+                if (dataObj['pendencias_credito_text']) {
+                    dataObj['pendencias_credito'] += (dataObj['pendencias_credito'] ? " - " : "") + dataObj['pendencias_credito_text'];
+                }
+                delete dataObj['pendencias_credito_check'];
+                delete dataObj['pendencias_credito_text'];
+            }
+
             if (dataObj['quantidade'] !== undefined) dataObj['quantidade'] = parseInt(dataObj['quantidade']) || null;
             if (dataObj['nota_servico'] !== undefined) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']) || null;
             if (dataObj['cheque'] !== undefined) dataObj['cheque'] = parseInt(dataObj['cheque']) || null;
@@ -1259,9 +1447,17 @@
             lucide.createIcons();
 
             try {
-                // Inserir no Supabase
-                const { error } = await supabaseClient.from('demandas').insert([dataObj]);
-                if (error) throw error;
+                let saveError;
+                if (dataObj.id) {
+                    dataObj.id = parseInt(dataObj.id);
+                    const { error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', dataObj.id);
+                    saveError = updateError;
+                } else {
+                    const { error: insertError } = await supabaseClient.from('demandas').insert([dataObj]);
+                    saveError = insertError;
+                }
+                
+                if (saveError) throw saveError;
 
                 // Fetch atualizado
                 await fetchRecords();
@@ -1314,7 +1510,7 @@
         }
 
         function resetFilters() {
-            const columns = ['mes', 'tipo_cadastro', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente'];
+            const columns = ['mes', 'tipo_cadastro', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente', 'recebido_em', 'porte', 'status', 'grupo', 'pendencias_triagem', 'pleito_gerente', 'envio_cadastro', 'data_retorno_credito', 'pendencias_credito', 'data_envio', 'data_elaboracao', 'data_comite'];
             columns.forEach(col => {
                 activeFilters[col] = new Set(savedRecords.map(r => formatDataForDisplay(r[col], col)));
             });
@@ -1322,7 +1518,9 @@
 
         // Helper para formatar data DD/MM/YYYY ou retornar texto puro
         function formatDataForDisplay(value, col) {
-            if (!value) return '-';
+            if (!value || (Array.isArray(value) && value.length === 0)) return '-';
+            if (Array.isArray(value)) return value.join(', ');
+
             if (col === 'data' && value.includes('-')) {
                 const p = value.split('-');
                 if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
@@ -1497,13 +1695,39 @@
                 const fase = formatDataForDisplay(r.fase_cadastro, 'fase_cadastro');
                 const gerente = formatDataForDisplay(r.gerente, 'gerente');
 
+                const rec = formatDataForDisplay(r.recebido_em, 'recebido_em');
+                const porte = formatDataForDisplay(r.porte, 'porte');
+                const status = formatDataForDisplay(r.status, 'status');
+                const grupo = formatDataForDisplay(r.grupo, 'grupo');
+                
+                const pt = formatDataForDisplay(r.pendencias_triagem, 'pendencias_triagem');
+                const pl = formatDataForDisplay(r.pleito_gerente, 'pleito_gerente');
+                const ec = formatDataForDisplay(r.envio_cadastro, 'envio_cadastro');
+                const drc = formatDataForDisplay(r.data_retorno_credito, 'data_retorno_credito');
+                const pc = formatDataForDisplay(r.pendencias_credito, 'pendencias_credito');
+                const de = formatDataForDisplay(r.data_envio, 'data_envio');
+                const del = formatDataForDisplay(r.data_elaboracao, 'data_elaboracao');
+                const dc = formatDataForDisplay(r.data_comite, 'data_comite');
+
                 return activeFilters['mes'].has(mesStr) &&
                     activeFilters['tipo_cadastro'].has(tipoCadastro) &&
                     activeFilters['form_type'].has(formType) &&
                     activeFilters['feito_por'].has(feitoPor) &&
                     activeFilters['cedente'].has(cedente) &&
                     activeFilters['fase_cadastro'].has(fase) &&
-                    activeFilters['gerente'].has(gerente);
+                    activeFilters['gerente'].has(gerente) &&
+                    activeFilters['recebido_em'].has(rec) &&
+                    activeFilters['porte'].has(porte) &&
+                    activeFilters['status'].has(status) &&
+                    activeFilters['grupo'].has(grupo) &&
+                    activeFilters['pendencias_triagem'].has(pt) &&
+                    activeFilters['pleito_gerente'].has(pl) &&
+                    activeFilters['envio_cadastro'].has(ec) &&
+                    activeFilters['data_retorno_credito'].has(drc) &&
+                    activeFilters['pendencias_credito'].has(pc) &&
+                    activeFilters['data_envio'].has(de) &&
+                    activeFilters['data_elaboracao'].has(del) &&
+                    activeFilters['data_comite'].has(dc);
             });
 
             // 2. Sort
@@ -1555,35 +1779,45 @@
             if (tbodyGeral) tbodyGeral.innerHTML = '';
 
             const cadastroRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
-            const geralRecords = processedRecords.filter(r => r.form_type !== 'CADASTRO');
+            const geralRecords = processedRecords; // Mistura TUDO no histórico
 
             if (tbodyCadastro) {
                 if (cadastroRecords.length === 0) {
                     tbodyCadastro.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500">Nenhum cadastro corresponde aos filtros.</td></tr>`;
                 } else {
+                    document.getElementById('qtde-cadastros').textContent = cadastroRecords.length;
                     cadastroRecords.forEach(record => {
-                        const dataExibicao = formatDataForDisplay(record.data, 'data');
-                        const faseExibicao = record.fase_cadastro || '-';
-                        const tipoCadastroExibicao = record.tipo_cadastro || '-';
+                        const recebidoEmExibicao = formatDataForDisplay(record.recebido_em || record.data, 'data');
+                        const pendTriagemText = Array.isArray(record.pendencias_triagem) ? record.pendencias_triagem.join(', ') : (record.pendencias_triagem || '');
 
                         const tr = document.createElement('tr');
-                        tr.className = 'hover:bg-slate-50 transition-colors';
+                        tr.className = 'hover:bg-slate-50 transition-colors whitespace-nowrap text-slate-700';
                         tr.innerHTML = `
-                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-500 font-medium">${dataExibicao}</td>
-                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700 font-medium">${tipoCadastroExibicao}</td>
-                            <td class="px-4 py-2.5 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-[11px] leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 truncate max-w-[140px]" title="CADASTRO">
-                                    CADASTRO
+                            <td class="px-3 py-2 font-medium">${recebidoEmExibicao}</td>
+                            <td class="px-3 py-2 truncate max-w-[120px]" title="${record.cedente}">${record.cedente || '-'}</td>
+                            <td class="px-3 py-2">${record.tipo_cadastro || '-'}</td>
+                            <td class="px-3 py-2">${record.porte || '-'}</td>
+                            <td class="px-3 py-2">${record.gerente || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${record.feito_por || '-'}</td>
+                            <td class="px-3 py-2">
+                                <span class="bg-blue-50 text-blue-800 text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-blue-200">
+                                    ${record.status || record.fase_cadastro || '-'}
                                 </span>
                             </td>
-                            <td class="px-4 py-2.5 whitespace-nowrap font-medium text-slate-900">${record.feito_por || '-'}</td>
-                            <td class="px-4 py-2.5 text-slate-700 truncate max-w-[150px]" title="${record.cedente}">${record.cedente || '-'}</td>
-                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700 bg-blue-50/50">
-                                <select onchange="changeFaseDireto('${record.id}', this.value)" class="text-[10px] font-bold text-slate-700 bg-white border border-blue-200 rounded py-1 px-2 w-[260px] cursor-pointer outline-none focus:ring-1 focus:ring-blue-500 shadow-sm leading-tight uppercase">
-                                    ${FASES_CADASTRO_ORDER.map(fase => `<option value="${fase}" ${fase === record.fase_cadastro ? 'selected' : ''}>${fase}</option>`).join('')}
-                                </select>
+                            <td class="px-3 py-2">${record.grupo || '-'}</td>
+                            <td class="px-3 py-2 truncate max-w-[120px]" title="${pendTriagemText}">${pendTriagemText || '-'}</td>
+                            <td class="px-3 py-2 truncate max-w-[120px]" title="${record.pleito_gerente}">${record.pleito_gerente || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.envio_cadastro, 'data')}</td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_retorno_credito, 'data')}</td>
+                            <td class="px-3 py-2 truncate max-w-[120px]" title="${record.pendencias_credito}">${record.pendencias_credito || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_envio, 'data')}</td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_elaboracao, 'data')}</td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_comite, 'data')}</td>
+                            <td class="px-3 py-2 border-l border-slate-100 bg-slate-50">
+                                <button type="button" onclick="editCadastroRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors" title="Editar Cadastro">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
                             </td>
-                            <td class="px-4 py-2.5 whitespace-nowrap text-slate-700">${record.gerente || '-'}</td>
                         `;
                         tbodyCadastro.appendChild(tr);
                     });
@@ -1601,8 +1835,9 @@
                         if (record.form_type === 'DEMANDAS') typeColor = 'bg-purple-100 text-purple-800';
                         if (record.form_type === 'AJUSTE DE OPERAÇÃO') typeColor = 'bg-indigo-100 text-indigo-800';
                         if (record.form_type === 'DEFESAS') typeColor = 'bg-rose-100 text-rose-800';
+                        if (record.form_type === 'CADASTRO') typeColor = 'bg-blue-100 text-blue-800';
 
-                        const dataExibicao = formatDataForDisplay(record.data, 'data');
+                        const dataExibicao = formatDataForDisplay(record.data || record.recebido_em, 'data');
 
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-slate-50 transition-colors';
@@ -1916,7 +2151,126 @@
             }
         }
 
-        // Toast Notification System
+        // Função de Exportar Acompanhamento de Cadastro para HTML (Excel)
+        function exportCadastroHtmlToExcel() {
+            let dataRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
+            const moSelector = document.getElementById('export_cadastro_month');
+            const monthVal = moSelector ? moSelector.value : ''; // YYYY-MM
+            if (monthVal) {
+                dataRecords = dataRecords.filter(r => r.mes === monthVal);
+            }
+            if (dataRecords.length === 0) {
+                showToast("Nenhum cadastro encontrado para exportar.", "warning");
+                return;
+            }
+            
+            let htmlTable = `<meta charset="UTF-8"><table><thead><tr>
+                <th>RECEBIDO EM:</th><th>CEDENTE</th><th>TIPO DE CADASTRO</th><th>PORTE</th>
+                <th>GERENTE</th><th>FEITO POR</th><th>STATUS</th><th>GRUPO</th>
+                <th>PENDÊNCIAS TRIAGEM</th><th>PLEITO DO GERENTE</th><th>ENVIO PARA O CADASTRO</th>
+                <th>DATA RETORNO CRÉDITO</th><th>PENDÊNCIAS CRÉDITO</th><th>DATA ENVIO</th>
+                <th>DATA ELABORAÇÃO</th><th>DATA COMITÊ</th>
+            </tr></thead><tbody>`;
+
+            dataRecords.forEach(r => {
+                htmlTable += `<tr>
+                    <td>${formatDataForDisplay(r.recebido_em, 'data')}</td><td>${r.cedente || ''}</td><td>${r.tipo_cadastro || ''}</td><td>${r.porte || ''}</td>
+                    <td>${r.gerente || ''}</td><td>${r.feito_por || ''}</td><td>${r.status || r.fase_cadastro || ''}</td><td>${r.grupo || ''}</td>
+                    <td>${r.pendencias_triagem || ''}</td><td>${r.pleito_gerente || ''}</td><td>${formatDataForDisplay(r.envio_cadastro, 'data')}</td>
+                    <td>${formatDataForDisplay(r.data_retorno_credito, 'data')}</td><td>${r.pendencias_credito || ''}</td><td>${formatDataForDisplay(r.data_envio, 'data')}</td>
+                    <td>${formatDataForDisplay(r.data_elaboracao, 'data')}</td><td>${formatDataForDisplay(r.data_comite, 'data')}</td>
+                </tr>`;
+            });
+            htmlTable += "</tbody></table>";
+
+            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            let filename = `Acompanhamento_Cadastros_${new Date().getTime()}.xls`;
+            if (monthVal) {
+                filename = `Acompanhamento_Cadastros_${monthVal.replace('-', '_')}.xls`;
+            }
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Planilha HTML gerada com sucesso!', 'success');
+        }
+
+        // Função para carregar os dados de volta para o form de cadastro
+        // Função para carregar os dados de volta para o form de cadastro
+        async function editCadastroRecord(id) {
+            const record = savedRecords.find(r => String(r.id) === String(id));
+            if (!record) {
+                console.error("Record não encontrado para edição:", id);
+                return;
+            }
+
+            openForm('cadastro-form');
+            const form = document.getElementById('form-cadastro');
+            
+            // Atribuir campos nativos
+            // "Recebido Em" usa a coluna recebido_em; fallback para "data" (usada pelos outros formulários)
+            form.elements['recebido_em'].value = record.recebido_em || record.data || '';
+            form.elements['cedente'].value = record.cedente || '';
+            form.elements['tipo_cadastro'].value = record.tipo_cadastro || '';
+            form.elements['porte'].value = record.porte || '';
+            form.elements['gerente'].value = record.gerente || '';
+            form.elements['feito_por'].value = record.feito_por || '';
+            form.elements['status'].value = record.status || record.fase_cadastro || '';
+            form.elements['grupo'].value = record.grupo || '';
+            form.elements['pleito_gerente'].value = record.pleito_gerente || '';
+            form.elements['envio_cadastro'].value = record.envio_cadastro || '';
+            form.elements['data_retorno_credito'].value = record.data_retorno_credito || '';
+            form.elements['pendencias_credito_text'].value = record.pendencias_credito_text || '';
+            form.elements['data_envio'].value = record.data_envio || '';
+            form.elements['data_elaboracao'].value = record.data_elaboracao || '';
+            form.elements['data_comite'].value = record.data_comite || '';
+
+            // Limpa triagem
+            const triagemInputs = form.elements['pendencias_triagem[]'];
+            if (triagemInputs) {
+                const arr = (triagemInputs.length !== undefined) ? Array.from(triagemInputs) : [triagemInputs];
+                arr.forEach(cb => cb.checked = false);
+                const valDB = Array.isArray(record.pendencias_triagem) ? record.pendencias_triagem : (record.pendencias_triagem ? String(record.pendencias_triagem).split(', ') : []);
+                arr.forEach(cb => { 
+                    if (valDB.includes(cb.value)) cb.checked = true;
+                });
+            }
+
+            // Limpa credito
+            const creditoInputs = form.elements['pendencias_credito_check[]'];
+            if (creditoInputs) {
+                const arr = (creditoInputs.length !== undefined) ? Array.from(creditoInputs) : [creditoInputs];
+                arr.forEach(cb => cb.checked = false);
+                const valDB = Array.isArray(record.pendencias_credito_check) ? record.pendencias_credito_check : (record.pendencias_credito_check ? String(record.pendencias_credito_check).split(', ') : []);
+                arr.forEach(cb => { 
+                    if (valDB.includes(cb.value)) cb.checked = true;
+                });
+            }
+
+            // Para atualizar (upsert) precisamos injetar o ID global do supabase se houver suporte para update.
+            // Para não quebrar o fluxo original, injetaremos um hidden ID (a API supabase permite usar upsert ou precisará de um update explicito)
+            // Criar hidden input se não existir
+            let hiddenId = form.querySelector('input[name="id"]');
+            if (!hiddenId) {
+                hiddenId = document.createElement('input');
+                hiddenId.type = 'hidden';
+                hiddenId.name = 'id';
+                form.appendChild(hiddenId);
+            }
+            hiddenId.value = record.id;
+            
+            // Atualiza Botão Salvar
+            const btnSubmit = form.querySelector('button[type="submit"]');
+            btnSubmit.innerHTML = `<i data-lucide="edit-3" class="w-5 h-5"></i><span>Atualizar Cadastro</span>`;
+            lucide.createIcons();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('Modo de edição ativado', 'info');
+        }
+
+        // --- DASHBOARD: Histórico e Gráfico ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
