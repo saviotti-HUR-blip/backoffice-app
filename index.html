@@ -17,23 +17,114 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf8 25%, #f5f0ff 50%, #eef2ff 75%, #f0f7ff 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(226, 232, 240, 1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.06);
         }
 
         .nav-button {
-            transition: all 0.2s ease-in-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
         }
 
         .nav-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.5) inset;
+        }
+
+        .nav-button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* Gradient icon backgrounds */
+        .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8); }
+        .icon-orange { background: linear-gradient(135deg, #fb923c, #ea580c, #c2410c); }
+        .icon-emerald { background: linear-gradient(135deg, #34d399, #10b981, #059669); }
+        .icon-purple { background: linear-gradient(135deg, #a78bfa, #8b5cf6, #7c3aed); }
+        .icon-indigo { background: linear-gradient(135deg, #818cf8, #6366f1, #4f46e5); }
+        .icon-rose { background: linear-gradient(135deg, #fb7185, #f43f5e, #e11d48); }
+
+        /* Entrance animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-fade-in-scale {
+            opacity: 0;
+            animation: fadeInScale 0.5s ease forwards;
+        }
+
+        /* Stagger delays for nav cards */
+        .stagger-1 { animation-delay: 0.05s; }
+        .stagger-2 { animation-delay: 0.1s; }
+        .stagger-3 { animation-delay: 0.15s; }
+        .stagger-4 { animation-delay: 0.2s; }
+        .stagger-5 { animation-delay: 0.25s; }
+        .stagger-6 { animation-delay: 0.3s; }
+
+        /* Gradient text */
+        .gradient-heading {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 40%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Pulse dot indicator */
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse-dot 2s ease infinite;
+            display: inline-block;
         }
 
         #toast-container {
@@ -46,6 +137,241 @@
         .hidden {
             display: none !important;
         }
+
+        /* Improved scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* ===== FORM STYLES ===== */
+        .form-header-banner {
+            border-radius: 16px 16px 0 0;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: -32px -32px 28px -32px;
+        }
+        .form-header-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        .form-header-banner .banner-icon {
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-header-banner p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.78rem;
+            margin: 2px 0 0 0;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #64748b;
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background: #f1f5f9;
+            color: #334155;
+            transform: translateX(-2px);
+        }
+
+        /* Form field label */
+        .field-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        /* Premium input fields */
+        .field-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 0.88rem;
+            color: #1e293b;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        .field-input:focus {
+            border-color: var(--form-accent, #3b82f6);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+        .field-input::placeholder { color: #94a3b8; }
+
+        /* Section divider inside form */
+        .form-section-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .form-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        /* Gradient submit buttons */
+        .btn-submit {
+            width: 100%;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px var(--btn-shadow, rgba(59,130,246,0.35));
+        }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-blue   { background: linear-gradient(135deg, #3b82f6, #2563eb); --btn-shadow: rgba(37,99,235,0.4); }
+        .btn-orange { background: linear-gradient(135deg, #f97316, #ea580c); --btn-shadow: rgba(234,88,12,0.4); }
+        .btn-emerald{ background: linear-gradient(135deg, #10b981, #059669); --btn-shadow: rgba(5,150,105,0.4); }
+        .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); --btn-shadow: rgba(124,58,237,0.4); }
+        .btn-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); --btn-shadow: rgba(79,70,229,0.4); }
+        .btn-rose   { background: linear-gradient(135deg, #f43f5e, #e11d48); --btn-shadow: rgba(225,29,72,0.4); }
+
+        /* Table improvements */
+        .premium-table tbody tr {
+            transition: background 0.15s ease;
+        }
+        .premium-table tbody tr:nth-child(even) { background: #f8fafc; }
+        .premium-table tbody tr:hover { background: #eff6ff !important; }
+        .premium-table thead th {
+            background: linear-gradient(180deg, #f1f5f9, #e8edf5);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #475569;
+            font-weight: 700;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* Chart card accent bar */
+        .chart-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            border: 1px solid rgba(226,232,240,0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 480px;
+        }
+        .chart-card-header {
+            width: 100%;
+            padding: 16px 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .chart-card-body {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .chart-accent-bar {
+            width: 100%;
+            height: 4px;
+            border-radius: 4px 4px 0 0;
+        }
+        .chart-total-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        /* Dashboard header strip */
+        .dashboard-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a5f 100%);
+            border-radius: 20px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px rgba(15,23,42,0.3);
+        }
+
+        /* Checkbox pill style */
+        .checkbox-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 0.77rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+        .checkbox-pill:has(input:checked) {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            color: #1d4ed8;
+        }
+        .checkbox-pill input { width: 14px; height: 14px; accent-color: #3b82f6; }
     </style>
 </head>
 
@@ -56,91 +382,103 @@
 
     <!-- Main Container -->
     <div class="max-w-6xl mx-auto px-4 py-12">
-        <header class="mb-12 text-center">
-            <!-- Novo Logo -->
+        <header class="mb-12 text-center animate-fade-in-up">
+            <!-- Novo Logo com glow -->
             <div class="flex justify-center mb-6">
-                <img src="https://www.lsinterbank.com.br/storage/settings/footer/01JF0S1DVXJBF1WYM31A9351AN.png"
-                    alt="LS Inter Bank" class="h-20 object-contain drop-shadow-md">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-400/20 blur-2xl rounded-full scale-150"></div>
+                    <img src="https://www.lsinterbank.com.br/storage/settings/footer/01JF0S1DVXJBF1WYM31A9351AN.png"
+                        alt="LS Inter Bank" class="h-20 object-contain drop-shadow-lg relative z-10">
+                </div>
             </div>
 
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-2">Backoffice Controle</h1>
-            <p class="text-slate-500 mb-6">Gestão de Demandas e Ajustes de Operação</p>
+            <h1 class="text-4xl md:text-5xl font-extrabold gradient-heading mb-3 tracking-tight">Backoffice Controle</h1>
+            <p class="text-slate-500 mb-8 text-lg font-light">Gestão de Demandas e Ajustes de Operação</p>
 
             <div
-                class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/50 p-4 rounded-2xl max-w-lg mx-auto shadow-sm border border-slate-200">
+                class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/70 backdrop-blur-md p-5 rounded-2xl max-w-lg mx-auto shadow-lg shadow-slate-200/50 border border-white/60">
                 <div class="flex items-center space-x-2">
                     <label for="export-month" class="text-sm font-semibold text-slate-700">Filtrar Mês:</label>
                     <input type="month" id="export-month"
-                        class="px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-700 font-medium"
+                        class="px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-700 font-medium bg-white/80"
                         onchange="updateExportCount()">
                 </div>
                 <button onclick="exportToExcel()"
-                    class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors">
+                    class="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-emerald-200/50 transition-all hover:-translate-y-0.5 hover:shadow-xl">
                     <i data-lucide="download" class="w-5 h-5"></i>
                     <span>Exportar Excel (<span id="export-count">0</span>)</span>
                 </button>
             </div>
-            <div class="mt-3 text-xs text-slate-400 font-medium tracking-wide w-full text-center">Total Geral na Nuvem
-                (Ilimitado): <span id="cloud-count">0</span></div>
+            <div class="mt-4 text-xs text-slate-400 font-medium tracking-wide w-full text-center flex items-center justify-center gap-2">
+                <span class="pulse-dot"></span>
+                Total Geral na Nuvem (Ilimitado): <span id="cloud-count" class="font-bold text-slate-600">0</span>
+            </div>
         </header>
 
-        <!-- Navigation Grid Section (Colorizado com Bordas) -->
+        <!-- Navigation Grid Section -->
         <section id="nav-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <button onclick="openForm('cadastro-form')"
-                class="nav-button border-2 border-blue-500 bg-blue-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-blue-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-1 border border-blue-200/80 bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-blue-100/50">
+                <div class="icon-blue p-4 rounded-2xl text-white shadow-lg shadow-blue-300/40">
                     <i data-lucide="user-plus" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-blue-700">CADASTRO</span>
+                <span class="text-xs text-blue-400 font-medium -mt-2">Prospecção e Renovação</span>
             </button>
 
             <button onclick="openForm('suporte-form')"
-                class="nav-button border-2 border-orange-500 bg-orange-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-orange-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-2 border border-orange-200/80 bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-orange-100/50">
+                <div class="icon-orange p-4 rounded-2xl text-white shadow-lg shadow-orange-300/40">
                     <i data-lucide="life-buoy" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-orange-700">SUPORTE</span>
+                <span class="text-xs text-orange-400 font-medium -mt-2">Atendimento ao Cliente</span>
             </button>
 
             <button onclick="openForm('imp-operacoes-form')"
-                class="nav-button border-2 border-emerald-500 bg-emerald-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-emerald-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-3 border border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-emerald-100/50">
+                <div class="icon-emerald p-4 rounded-2xl text-white shadow-lg shadow-emerald-300/40">
                     <i data-lucide="import" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-emerald-700">IMP DE OPERAÇÕES</span>
+                <span class="text-xs text-emerald-400 font-medium -mt-2">Importação e Notas</span>
             </button>
 
             <button onclick="openForm('demandas-form')"
-                class="nav-button border-2 border-purple-500 bg-purple-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-purple-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-4 border border-purple-200/80 bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-purple-100/50">
+                <div class="icon-purple p-4 rounded-2xl text-white shadow-lg shadow-purple-300/40">
                     <i data-lucide="layout-list" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-purple-700">DEMANDAS</span>
+                <span class="text-xs text-purple-400 font-medium -mt-2">Atas e Diagnósticos</span>
             </button>
 
             <button onclick="openForm('ajuste-form')"
-                class="nav-button border-2 border-indigo-500 bg-indigo-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-indigo-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-5 border border-indigo-200/80 bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-indigo-100/50">
+                <div class="icon-indigo p-4 rounded-2xl text-white shadow-lg shadow-indigo-300/40">
                     <i data-lucide="settings-2" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-indigo-700">AJUSTE DE OPERAÇÕES</span>
+                <span class="text-xs text-indigo-400 font-medium -mt-2">Rótulos e Vencimentos</span>
             </button>
 
             <button onclick="openForm('defesas-form')"
-                class="nav-button border-2 border-rose-500 bg-rose-50 p-8 rounded-2xl flex flex-col items-center justify-center space-y-4">
-                <div class="bg-rose-600 p-4 rounded-full text-white">
+                class="nav-button animate-fade-in-scale stagger-6 border border-rose-200/80 bg-gradient-to-br from-rose-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-rose-100/50">
+                <div class="icon-rose p-4 rounded-2xl text-white shadow-lg shadow-rose-300/40">
                     <i data-lucide="shield" class="w-8 h-8"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wide text-rose-700">DEFESAS</span>
+                <span class="text-xs text-rose-400 font-medium -mt-2">Defesas e Pleitos</span>
             </button>
         </section>
 
         <!-- Botão Abrir Histórico -->
-        <div id="historico-btn-container" class="mt-12 text-center">
+        <div id="historico-btn-container" class="mt-12 text-center animate-fade-in-up" style="animation-delay: 0.4s;">
             <button onclick="openHistorico()"
-                class="inline-flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white font-medium py-3 px-8 rounded-xl shadow-lg transition-all hover:-translate-y-1">
-                <i data-lucide="line-chart" class="w-5 h-5"></i>
+                class="group inline-flex items-center space-x-3 bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 hover:from-slate-900 hover:to-slate-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-xl shadow-slate-300/30 transition-all hover:-translate-y-1 hover:shadow-2xl">
+                <i data-lucide="line-chart" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
                 <span>Ver Histórico & Gráficos</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
             </button>
         </div>
 
@@ -152,14 +490,17 @@
         <!-- 1. CADASTRO Form -->
         <section id="cadastro-form" class="form-section hidden">
             <div class="max-w-[1240px] w-full mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-500 pl-3">Novo Cadastro</h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #3b82f6;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #2563eb, #1d4ed8, #1e40af);">
+                        <div class="banner-icon"><i data-lucide="user-plus" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Novo Cadastro</h2>
+                            <p>Prospecção, Renovação e Inclusão</p>
+                        </div>
+                    </div>
                     <form id="form-cadastro" class="space-y-6 text-left">
                         <input type="hidden" name="form_type" value="CADASTRO">
 
@@ -359,8 +700,7 @@
                         </div>
 
                         <div class="pt-4 mb-4">
-                            <button type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center space-x-2">
+                            <button type="submit" class="btn-submit btn-blue">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Cadastro</span>
                             </button>
                         </div>
@@ -387,9 +727,9 @@
                                 </button>
                             </div>
 
-                            <div class="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 relative mb-8 bg-white"
+                            <div class="overflow-x-auto overflow-y-auto rounded-xl border border-slate-200 relative mb-8 bg-white shadow-sm"
                                 style="max-height: 600px;">
-                                <table class="min-w-full divide-y divide-slate-200 text-xs text-left">
+                                <table class="premium-table min-w-full divide-y divide-slate-200 text-xs text-left">
                                     <thead
                                         class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50 uppercase tracking-wider whitespace-nowrap">
                                         <tr>
@@ -490,14 +830,17 @@
         <!-- 2. SUPORTE Form -->
         <section id="suporte-form" class="form-section hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-orange-500 pl-3">Novo Suporte</h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #f97316;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #ea580c, #c2410c, #9a3412);">
+                        <div class="banner-icon"><i data-lucide="life-buoy" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Novo Suporte</h2>
+                            <p>Atendimento e assistência ao cliente</p>
+                        </div>
+                    </div>
                     <form id="form-suporte" class="space-y-6">
                         <input type="hidden" name="form_type" value="SUPORTE">
 
@@ -588,9 +931,8 @@
                                 class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
                         </div>
 
-                        <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-orange-200 transition-all flex items-center justify-center space-x-2">
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit btn-orange">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Suporte</span>
                             </button>
                         </div>
@@ -602,15 +944,17 @@
         <!-- 3. IMP DE OPERAÇÕES Form -->
         <section id="imp-operacoes-form" class="form-section hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-emerald-500 pl-3">Importação de
-                        Operações</h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #10b981;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #059669, #047857, #065f46);">
+                        <div class="banner-icon"><i data-lucide="import" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Importação de Operações</h2>
+                            <p>Registro de notas, cheques e volumes</p>
+                        </div>
+                    </div>
                     <form id="form-imp" class="space-y-6">
                         <input type="hidden" name="form_type" value="IMP DE OPERAÇÕES">
 
@@ -718,9 +1062,8 @@
                             </div>
                         </div>
 
-                        <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-emerald-200 transition-all flex items-center justify-center space-x-2">
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit btn-emerald">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Importação</span>
                             </button>
                         </div>
@@ -732,14 +1075,17 @@
         <!-- 4. DEMANDAS Form (Antigo Cheques) -->
         <section id="demandas-form" class="form-section hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-purple-500 pl-3">Nova Demanda</h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #8b5cf6;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6);">
+                        <div class="banner-icon"><i data-lucide="layout-list" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Nova Demanda</h2>
+                            <p>Atas, diagnósticos e tranches</p>
+                        </div>
+                    </div>
                     <form id="form-demandas" class="space-y-6">
                         <input type="hidden" name="form_type" value="DEMANDAS">
 
@@ -793,9 +1139,8 @@
                             </div>
                         </div>
 
-                        <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-purple-200 transition-all flex items-center justify-center space-x-2">
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit btn-purple">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Demanda</span>
                             </button>
                         </div>
@@ -807,15 +1152,17 @@
         <!-- 5. AJUSTE DE OPERAÇÕES Form -->
         <section id="ajuste-form" class="form-section hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-500 pl-3">Ajuste de Operação
-                    </h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #6366f1;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #4f46e5, #4338ca, #3730a3);">
+                        <div class="banner-icon"><i data-lucide="settings-2" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Ajuste de Operação</h2>
+                            <p>Rótulos, valores e vencimentos</p>
+                        </div>
+                    </div>
                     <form id="form-ajuste" class="space-y-6">
                         <input type="hidden" name="form_type" value="AJUSTE DE OPERAÇÃO">
 
@@ -890,9 +1237,8 @@
                             </select>
                         </div>
 
-                        <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-2">
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit btn-indigo">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Ajuste</span>
                             </button>
                         </div>
@@ -904,14 +1250,17 @@
         <!-- 6. DEFESAS Form -->
         <section id="defesas-form" class="form-section hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-rose-500 pl-3">Nova Defesa</h2>
-                </div>
-                <div class="glass-card rounded-2xl p-8 shadow-xl">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #f43f5e;">
+                    <div class="form-header-banner" style="background: linear-gradient(135deg, #e11d48, #be185d, #9d174d);">
+                        <div class="banner-icon"><i data-lucide="shield" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Nova Defesa</h2>
+                            <p>Defesas em tela e pleitos de operação</p>
+                        </div>
+                    </div>
                     <form id="form-defesas" class="space-y-6">
                         <input type="hidden" name="form_type" value="DEFESAS">
 
@@ -979,9 +1328,8 @@
                             </select>
                         </div>
 
-                        <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-rose-200 transition-all flex items-center justify-center space-x-2">
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit btn-rose">
                                 <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Defesa</span>
                             </button>
                         </div>
@@ -993,26 +1341,37 @@
         <!-- 7. HISTÓRICO & GRÁFICOS (DASHBOARD) -->
         <section id="historico-section" class="form-section hidden">
             <div class="w-full mx-auto">
-                <div class="mb-6 flex items-center">
-                    <button type="button" onclick="closeForm()"
-                        class="mr-4 p-2 hover:bg-slate-200 rounded-full transition-colors">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-3xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3">Dashboard Analítico
-                    </h2>
+
+                <!-- Dashboard Header Strip -->
+                <div class="dashboard-header mb-8">
+                    <div class="flex items-center gap-4">
+                        <button type="button" onclick="closeForm()"
+                            class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">Dashboard Analítico</h2>
+                            <p class="text-slate-400 text-sm mt-0.5">Histórico de operações e indicadores</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="pulse-dot"></span>
+                        <span class="text-slate-300 text-sm font-medium">Dados em tempo real</span>
+                    </div>
                 </div>
 
                 <div class="glass-card rounded-2xl p-6 shadow-xl flex flex-col min-h-[500px] mb-8 relative">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                            <i data-lucide="table" class="w-5 h-5 text-slate-500"></i> Histórico Geral de Operações
+                    <div class="flex justify-between items-center mb-5">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="table-2" class="w-5 h-5 text-blue-500"></i>
+                            Histórico Geral de Operações
                         </h3>
                     </div>
 
                     <!-- Wrapper Histórico Geral -->
-                    <div class="overflow-x-auto overflow-y-auto flex-1 rounded-lg border border-slate-200 relative mb-4"
+                    <div class="overflow-x-auto overflow-y-auto flex-1 rounded-xl border border-slate-200 relative mb-4"
                         style="max-height: 800px;">
-                        <table class="min-w-full divide-y divide-slate-200 text-sm text-left">
+                        <table class="premium-table min-w-full divide-y divide-slate-200 text-sm text-left">
                             <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50">
                                 <tr>
                                     <!-- Cabeçalhos Interativos -->
@@ -1065,69 +1424,61 @@
                     </div>
                 </div>
 
-                <!-- Gráficos (Abaixo da Tabela, 1 Coluna) -->
-                <div class="grid grid-cols-1 gap-8 mb-8">
-                    <!-- Gráfico Demandas -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
-                        <h3
-                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
-                            <i data-lucide="pie-chart" class="w-4 h-4 text-slate-500"></i> Controles
-                        </h3>
-                        <div
-                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
-                            TOTAL: <span id="total-demandas">0</span>
+                <!-- Gráficos (grid 2 colunas) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+                    <!-- Gráfico Controles -->
+                    <div class="chart-card">
+                        <div class="chart-accent-bar" style="background: linear-gradient(90deg,#3b82f6,#6366f1);"></div>
+                        <div class="chart-card-header">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 rounded-lg" style="background:#eff6ff;"><i data-lucide="pie-chart" class="w-4 h-4 text-blue-600"></i></div>
+                                <span class="font-bold text-slate-800 text-sm">Distribuição por Tipo</span>
+                            </div>
+                            <div class="chart-total-badge">TOTAL <span id="total-demandas" class="text-slate-800 font-extrabold">0</span></div>
                         </div>
-                        <div class="w-full relative flex-1 flex items-center justify-center">
-                            <canvas id="demandPieChart"></canvas>
-                        </div>
+                        <div class="chart-card-body"><canvas id="demandPieChart"></canvas></div>
                     </div>
 
-
-
                     <!-- Gráfico Suporte -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
-                        <h3
-                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
-                            <i data-lucide="life-buoy" class="w-4 h-4 text-slate-500"></i> Tipos de Suporte
-                        </h3>
-                        <div
-                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
-                            TOTAL: <span id="total-suporte">0</span>
+                    <div class="chart-card">
+                        <div class="chart-accent-bar" style="background: linear-gradient(90deg,#f97316,#ef4444);"></div>
+                        <div class="chart-card-header">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 rounded-lg" style="background:#fff7ed;"><i data-lucide="life-buoy" class="w-4 h-4 text-orange-600"></i></div>
+                                <span class="font-bold text-slate-800 text-sm">Tipos de Suporte</span>
+                            </div>
+                            <div class="chart-total-badge">TOTAL <span id="total-suporte" class="text-slate-800 font-extrabold">0</span></div>
                         </div>
-                        <div class="w-full relative flex-1 flex items-center justify-center">
-                            <canvas id="suportePieChart"></canvas>
-                        </div>
+                        <div class="chart-card-body"><canvas id="suportePieChart"></canvas></div>
                     </div>
 
                     <!-- Gráfico Gerentes -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
-                        <h3
-                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
-                            <i data-lucide="users" class="w-4 h-4 text-slate-500"></i> Gerentes
-                        </h3>
-                        <div
-                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
-                            TOTAL: <span id="total-gerentes">0</span>
+                    <div class="chart-card">
+                        <div class="chart-accent-bar" style="background: linear-gradient(90deg,#10b981,#06b6d4);"></div>
+                        <div class="chart-card-header">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 rounded-lg" style="background:#ecfdf5;"><i data-lucide="users" class="w-4 h-4 text-emerald-600"></i></div>
+                                <span class="font-bold text-slate-800 text-sm">Gerentes</span>
+                            </div>
+                            <div class="chart-total-badge">TOTAL <span id="total-gerentes" class="text-slate-800 font-extrabold">0</span></div>
                         </div>
-                        <div class="w-full relative flex-1 flex items-center justify-center">
-                            <canvas id="gerentesPieChart"></canvas>
-                        </div>
+                        <div class="chart-card-body"><canvas id="gerentesPieChart"></canvas></div>
                     </div>
 
                     <!-- Gráfico Colaboradores -->
-                    <div class="glass-card rounded-2xl p-4 shadow-xl flex flex-col items-center h-[500px] shrink-0">
-                        <h3
-                            class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
-                            <i data-lucide="user-check" class="w-4 h-4 text-slate-500"></i> Feito Por
-                        </h3>
-                        <div
-                            class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
-                            TOTAL: <span id="total-colaboradores">0</span>
+                    <div class="chart-card">
+                        <div class="chart-accent-bar" style="background: linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
+                        <div class="chart-card-header">
+                            <div class="flex items-center gap-2">
+                                <div class="p-1.5 rounded-lg" style="background:#faf5ff;"><i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i></div>
+                                <span class="font-bold text-slate-800 text-sm">Feito Por</span>
+                            </div>
+                            <div class="chart-total-badge">TOTAL <span id="total-colaboradores" class="text-slate-800 font-extrabold">0</span></div>
                         </div>
-                        <div class="w-full relative flex-1 flex items-center justify-center">
-                            <canvas id="colaboradoresPieChart"></canvas>
-                        </div>
+                        <div class="chart-card-body"><canvas id="colaboradoresPieChart"></canvas></div>
                     </div>
+
                 </div>
             </div>
 
