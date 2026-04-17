@@ -425,7 +425,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 480px;
+            min-height: 480px;
+            height: auto;
         }
 
         .chart-card-header {
@@ -771,11 +772,21 @@
                                             name="pendencias_triagem[]" value="Documentos de Homologação"
                                             class="w-4 h-4 text-blue-600"> Documentos de Homologação</label>
                                     <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
-                                            name="pendencias_triagem[]" value="Pleito" class="w-4 h-4 text-blue-600">
-                                        Pleito</label>
+                                            name="pendencias_triagem[]" value="Pleito" class="w-4 h-4 text-blue-600"> Pleito</label>
                                     <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
-                                            name="pendencias_triagem[]" value="Documentos de Análise de Crédito"
-                                            class="w-4 h-4 text-blue-600"> Documentos de Análise de Crédito</label>
+                                            name="pendencias_triagem[]" value="Faturamento" class="w-4 h-4 text-blue-600"> Faturamento</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Endividamento" class="w-4 h-4 text-blue-600"> Endividamento</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="IRPF" class="w-4 h-4 text-blue-600"> IRPF</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Balanço" class="w-4 h-4 text-blue-600"> Balanço</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Balancete" class="w-4 h-4 text-blue-600"> Balancete</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="DRE" class="w-4 h-4 text-blue-600"> DRE</label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox"
+                                            name="pendencias_triagem[]" value="Curva ABC" class="w-4 h-4 text-blue-600"> Curva ABC</label>
                                 </div>
                             </div>
 
@@ -875,6 +886,7 @@
                                     <thead
                                         class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50 uppercase tracking-wider whitespace-nowrap">
                                         <tr>
+                                            <th class="px-3 py-2 font-semibold text-slate-600 text-center sticky left-0 bg-slate-50 z-20 shadow-[1px_0_0_0_#e2e8f0]">Ação</th>
                                             <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors"
                                                 onclick="openFilterMenu(event, 'mes', 'Mês')">
                                                 <div class="flex items-center gap-2"><span>Recebido Em</span><i
@@ -987,7 +999,6 @@
                                                         class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i>
                                                 </div>
                                             </th>
-                                            <th class="px-3 py-2 font-semibold text-slate-600 text-center">Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody id="cadastro-table-body" class="bg-white divide-y divide-slate-100">
@@ -1619,8 +1630,8 @@
                     </div>
                 </div>
 
-                <!-- Gráficos (grid 2 colunas) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Gráficos (um abaixo do outro) -->
+                <div class="grid grid-cols-1 gap-8 mb-8 max-w-4xl mx-auto">
 
                     <!-- Gráfico Controles -->
                     <div class="chart-card">
@@ -1998,7 +2009,11 @@
                 let saveError;
                 if (dataObj.id) {
                     const idParaUpdate = dataObj.id;
-                    const { error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', idParaUpdate);
+                    delete dataObj.id; // Evita atualizar a primary key
+                    const { data: updateData, error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', idParaUpdate).select();
+                    if (!updateError && (!updateData || updateData.length === 0)) {
+                        throw new Error("Nenhum registro atualizado. O ID pode estar incorreto ou não existe, ou você não tem permissão.");
+                    }
                     saveError = updateError;
                 } else {
                     const { error: insertError } = await supabaseClient.from('demandas').insert([dataObj]);
@@ -2341,6 +2356,11 @@
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-slate-50 transition-colors whitespace-nowrap text-slate-700';
                         tr.innerHTML = `
+                            <td class="px-3 py-2 border-r border-slate-100 bg-white sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0] opacity-95 group-hover:bg-slate-50 transition-colors">
+                                <button type="button" onclick="editCadastroRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors w-full" title="Editar Cadastro">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                            </td>
                             <td class="px-3 py-2 font-medium">${recebidoEmExibicao}</td>
                             <td class="px-3 py-2 truncate max-w-[120px]" title="${record.cedente}">${record.cedente || '-'}</td>
                             <td class="px-3 py-2">${record.tipo_cadastro || '-'}</td>
@@ -2361,11 +2381,6 @@
                             <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_envio, 'data')}</td>
                             <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_elaboracao, 'data')}</td>
                             <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data_comite, 'data')}</td>
-                            <td class="px-3 py-2 border-l border-slate-100 bg-slate-50">
-                                <button type="button" onclick="editCadastroRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors" title="Editar Cadastro">
-                                    <i data-lucide="edit" class="w-4 h-4"></i>
-                                </button>
-                            </td>
                         `;
                         tbodyCadastro.appendChild(tr);
                     });
@@ -2523,123 +2538,202 @@
             if (gerentesChartInstance) gerentesChartInstance.destroy();
             if (colaboradoresChartInstance) colaboradoresChartInstance.destroy();
 
-            // Limit chart size with flex grid container adjustments
-            // Configuração para Rótulos (DataLabels) no LADO DE FORA
-            const datalabelsConfig = {
-                color: '#334155', // Tema escuro para fundo branco
-                anchor: 'end',
-                align: 'end',
-                offset: 2,
-                font: { weight: 'bold', size: 10, family: "'Inter', sans-serif" },
-                formatter: (value, ctx) => {
-                    let sum = 0;
-                    let dataArr = ctx.chart.data.datasets[0].data;
-                    dataArr.map(data => { sum += Number(data); });
-                    if (sum === 0 || value === 0) return null; // Esconde se for 0
-                    let percentage = (value * 100 / sum).toFixed(0) + "%";
-                    return percentage;
+            // ─── HELPER: Empty State ───────────────────────────────────────────
+            const showEmptyState = (canvasId) => {
+                const canvas = document.getElementById(canvasId);
+                const parent = canvas.parentElement;
+                canvas.style.display = 'none';
+                if (!parent.querySelector('.empty-chart-state')) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-chart-state flex flex-col items-center justify-center h-full w-full text-slate-400 space-y-2 opacity-0 transition-opacity duration-500';
+                    emptyDiv.innerHTML = `<i data-lucide="pie-chart" class="w-8 h-8 opacity-20"></i><span class="text-xs font-semibold">Sem dados no período</span>`;
+                    parent.appendChild(emptyDiv);
+                    requestAnimationFrame(() => { emptyDiv.classList.remove('opacity-0'); });
                 }
+                if (window.lucide) lucide.createIcons();
+            };
+            const hideEmptyState = (canvasId) => {
+                const canvas = document.getElementById(canvasId);
+                canvas.style.display = 'block';
+                const parent = canvas.parentElement;
+                const emptyDiv = parent.querySelector('.empty-chart-state');
+                if (emptyDiv) emptyDiv.remove();
+            };
+
+            // ─── CONFIGURAÇÕES PREMIUM GLOBAIS ──────────────────────────────
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            const premiumTooltip = {
+                backgroundColor: '#0f172a', titleColor: '#f1f5f9', bodyColor: '#94a3b8',
+                borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, padding: 12, cornerRadius: 10,
+                titleFont: { family: "'Inter', sans-serif", weight: '700', size: 12 },
+                bodyFont: { family: "'Inter', sans-serif", size: 11 }, usePointStyle: true, boxPadding: 6
             };
 
             const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        top: 20, bottom: 20, left: 30, right: 30 // Espaço para rótulos externos
+                responsive: true, maintainAspectRatio: false,
+                animation: { animateScale: true, animateRotate: true, duration: 800, easing: 'easeInOutQuart' },
+                cutout: '60%', layout: { padding: { top: 15, bottom: 15, left: 30, right: 30 } },
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 11, weight: '500' } } },
+                    tooltip: premiumTooltip,
+                    datalabels: {
+                        color: '#ffffff',
+                        anchor: 'center',
+                        align: 'center',
+                        font: { weight: 'bold', size: 9, family: "'Inter', sans-serif" },
+                        formatter: (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.forEach(data => { sum += Number(data); });
+                            if (sum === 0 || value === 0) return null;
+                            let perc = (value * 100 / sum);
+                            return perc.toFixed(0) + "%";
+                        }
+                    }
+                }
+            };
+            
+            const commonBarOptions = {
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                animation: { duration: 800, easing: 'easeInOutQuart' },
+                layout: { padding: { top: 8, bottom: 8, left: 12, right: 36 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a', titleColor: '#f1f5f9', bodyColor: '#94a3b8',
+                        borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, padding: 12, cornerRadius: 10,
+                        titleFont: { family: "'Inter', sans-serif", weight: '700', size: 12 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 11 },
+                        callbacks: { label: function(ctx) { return '  ' + ctx.parsed.x + ' registros'; } }
+                    },
+                    datalabels: {
+                        anchor: 'end', align: 'end', offset: 4,
+                        font: { weight: '700', size: 12, family: "'Inter', sans-serif" },
+                        color: '#334155', formatter: (v) => v > 0 ? v : null
                     }
                 },
-                plugins: {
-                    legend: {
-                        position: 'left',
-                        labels: { font: { family: "'Inter', sans-serif", size: 9 }, color: '#475569', boxWidth: 10, padding: 8 }
-                    },
-                    datalabels: datalabelsConfig
+                scales: {
+                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 10 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
+                    y: { grid: { display: false }, ticks: { font: { family: "'Inter', sans-serif", weight: '600', size: 12 }, color: '#334155' }, border: { display: false } }
                 }
             };
 
             // ---- GRÁFICO DEMANDAS ----
-            const demandasData = [
+            const demandasDataArray = [
                 { label: 'SUPORTE', value: countsDemandas['SUPORTE'] || 0, color: '#ea580c' },
                 { label: 'IMP DE OPERAÇÕES', value: countsDemandas['IMP DE OPERAÇÕES'] || 0, color: '#059669' },
                 { label: 'AJUSTE DE OPERAÇÃO', value: countsDemandas['AJUSTE DE OPERAÇÃO'] || 0, color: '#4f46e5' },
                 { label: 'CADASTRO', value: countsDemandas['CADASTRO'] || 0, color: '#2563eb' },
                 { label: 'DEFESAS', value: countsDemandas['DEFESAS'] || 0, color: '#e11d48' },
                 { label: 'DEMANDAS', value: countsDemandas['DEMANDAS'] || 0, color: '#9333ea' }
-            ].sort((a, b) => b.value - a.value);
+            ].sort((a, b) => b.value - a.value).filter(d => d.value > 0);
 
-            const labelsDemandas = demandasData.map(d => d.label);
-            const dataDemandas = demandasData.map(d => d.value);
-            const colorsDemandas = demandasData.map(d => d.color);
-
-            demandChartInstance = new Chart(ctxDemandas, {
-                type: 'pie',
-                data: {
-                    labels: labelsDemandas,
-                    datasets: [{ data: dataDemandas, backgroundColor: colorsDemandas, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
-                },
-                options: commonOptions
-            });
+            if (demandasDataArray.length === 0) { showEmptyState('demandPieChart'); }
+            else {
+                hideEmptyState('demandPieChart');
+                demandChartInstance = new Chart(ctxDemandas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: demandasDataArray.map(d => d.label),
+                        datasets: [{ data: demandasDataArray.map(d => d.value), backgroundColor: demandasDataArray.map(d => d.color), borderWidth: 2, borderColor: '#ffffff', hoverOffset: 10 }]
+                    },
+                    options: commonOptions
+                });
+            }
 
             // ---- GRÁFICO TIPO DE CADASTRO ----
-            const tipoCadastroOrdenados = Object.entries(countsTipoCadastro).sort((a, b) => b[1] - a[1]);
-            const labelsTipoCadastro = tipoCadastroOrdenados.map(s => s[0]);
-            const dataTipoCadastro = tipoCadastroOrdenados.map(s => s[1]);
-            const colorsTipoCadastro = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444', '#14b8a6', '#64748b'];
+            const tipoCadastroOrdenados = Object.entries(countsTipoCadastro).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+            if (tipoCadastroOrdenados.length === 0) { showEmptyState('tipoCadastroPieChart'); }
+            else {
+                hideEmptyState('tipoCadastroPieChart');
+                const colorsTipoCadastro = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444', '#14b8a6', '#64748b'];
+                tipoCadastroChartInstance = new Chart(ctxTipoCadastro, {
+                    type: 'doughnut',
+                    data: {
+                        labels: tipoCadastroOrdenados.map(s => s[0]),
+                        datasets: [{ data: tipoCadastroOrdenados.map(s => s[1]), backgroundColor: colorsTipoCadastro, borderWidth: 2, borderColor: '#ffffff', hoverOffset: 10 }]
+                    },
+                    options: commonOptions
+                });
+            }
 
-            tipoCadastroChartInstance = new Chart(ctxTipoCadastro, {
-                type: 'pie',
-                data: {
-                    labels: labelsTipoCadastro,
-                    datasets: [{ data: dataTipoCadastro, backgroundColor: colorsTipoCadastro, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
-                },
-                options: commonOptions
-            });
+            // ---- GRÁFICO SUPORTE (BARRA HORIZONTAL devido a muitos itens) ----
+            const suporteOrdenados = Object.entries(countsSuporte).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+            if (suporteOrdenados.length === 0) { showEmptyState('suportePieChart'); }
+            else {
+                hideEmptyState('suportePieChart');
+                document.getElementById('suportePieChart').parentElement.style.minHeight = Math.max(300, suporteOrdenados.length * 36) + 'px';
+                const colorsSuporte = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef', '#6366f1', '#eab308'];
+                suporteChartInstance = new Chart(ctxSuporte, {
+                    type: 'bar',
+                    data: {
+                        labels: suporteOrdenados.map(s => s[0]),
+                        datasets: [{ 
+                            label: 'Registros', data: suporteOrdenados.map(s => s[1]), 
+                            backgroundColor: colorsSuporte.slice(0, suporteOrdenados.length).map(c => c + 'cc'), 
+                            borderColor: colorsSuporte.slice(0, suporteOrdenados.length), 
+                            borderWidth: 2, borderRadius: 8 
+                        }]
+                    },
+                    options: commonBarOptions
+                });
+            }
 
-            // ---- GRÁFICO SUPORTE ----
-            const suporteOrdenados = Object.entries(countsSuporte).sort((a, b) => b[1] - a[1]);
-            const labelsSuporte = suporteOrdenados.map(s => s[0]);
-            const dataSuporte = suporteOrdenados.map(s => s[1]);
-            const colorsSuporte = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef', '#6366f1', '#eab308'];
+            // ---- GRÁFICO GERENTES (BARRA HORIZONTAL devido a muitos itens) ----
+            const gerentesOrdenados = Object.entries(countsGerentes).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+            
+            if (gerentesOrdenados.length === 0) { showEmptyState('gerentesPieChart'); }
+            else {
+                hideEmptyState('gerentesPieChart');
+                // Altura mais contida para o quadro não expandir exageradamente, mas ainda permitir scroll interno se necessário
+                document.getElementById('gerentesPieChart').parentElement.style.minHeight = Math.max(300, gerentesOrdenados.length * 28) + 'px';
+                
+                // Opções exclusivas para Gerentes (Fonte menor, menos espaçamento para não cortar o eixo X)
+                const gerentesBarOptions = JSON.parse(JSON.stringify(commonBarOptions));
+                gerentesBarOptions.scales.y.ticks.font.size = 10;
+                gerentesBarOptions.layout.padding = { top: 4, bottom: 4, left: 4, right: 36 };
 
-            suporteChartInstance = new Chart(ctxSuporte, {
-                type: 'pie',
-                data: {
-                    labels: labelsSuporte,
-                    datasets: [{ data: dataSuporte, backgroundColor: colorsSuporte, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
-                },
-                options: commonOptions
-            });
+                const colorsGerentes = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef'];
+                gerentesChartInstance = new Chart(ctxGerentes, {
+                    type: 'bar',
+                    data: { 
+                        labels: gerentesOrdenados.map(g => g[0]), 
+                        datasets: [{ 
+                            label: 'Registros', data: gerentesOrdenados.map(g => g[1]), 
+                            backgroundColor: colorsGerentes.slice(0, gerentesOrdenados.length).map(c => c + 'cc'), 
+                            borderColor: colorsGerentes.slice(0, gerentesOrdenados.length), 
+                            borderWidth: 2, borderRadius: 6,
+                            barPercentage: 0.85, categoryPercentage: 0.9 // Barras mais coladas pra economizar espaço vertical
+                        }] 
+                    },
+                    options: gerentesBarOptions
+                });
+            }
 
-            // ---- GRÁFICO GERENTES ----
-            // Ordenar para ficar mais bonito no gráfico as maiores fatias
-            const gerentesOrdenados = Object.entries(countsGerentes).sort((a, b) => b[1] - a[1]);
-            const labelsGerentes = gerentesOrdenados.map(g => g[0]);
-            const dataGerentes = gerentesOrdenados.map(g => g[1]);
-            const colorsGerentes = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef'];
+            // ---- GRÁFICO COLABORADORES ("FEITO POR" em BARRA HORIZONTAL Premium) ----
+            const colabEntries = Object.entries(countsColaboradores).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
 
-            gerentesChartInstance = new Chart(ctxGerentes, {
-                type: 'pie',
-                data: {
-                    labels: labelsGerentes,
-                    datasets: [{ data: dataGerentes, backgroundColor: colorsGerentes, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
-                },
-                options: commonOptions
-            });
-
-            // ---- GRÁFICO COLABORADORES ----
-            const labelsColaboradores = Object.keys(countsColaboradores);
-            const dataColaboradores = Object.values(countsColaboradores);
-            const colorsColaboradores = ['#0ea5e9', '#d946ef', '#f97316', '#22c55e', '#6366f1', '#eab308'];
-
-            colaboradoresChartInstance = new Chart(ctxColaboradores, {
-                type: 'pie',
-                data: {
-                    labels: labelsColaboradores,
-                    datasets: [{ data: dataColaboradores, backgroundColor: colorsColaboradores, borderWidth: 1, borderColor: '#ffffff', hoverOffset: 8 }]
-                },
-                options: commonOptions
-            });
+            if (colabEntries.length === 0) { showEmptyState('colaboradoresPieChart'); }
+            else {
+                hideEmptyState('colaboradoresPieChart');
+                document.getElementById('colaboradoresPieChart').parentElement.style.minHeight = Math.max(250, colabEntries.length * 36) + 'px';
+                const colorsColaboradores = ['#0ea5e9', '#d946ef', '#f97316', '#22c55e', '#6366f1', '#eab308'];
+                colaboradoresChartInstance = new Chart(ctxColaboradores, {
+                    type: 'bar',
+                    data: {
+                        labels: colabEntries.map(([k]) => k),
+                        datasets: [{
+                            label: 'Registros', data: colabEntries.map(([, v]) => v),
+                            backgroundColor: colorsColaboradores.slice(0, colabEntries.length).map(c => c + 'cc'),
+                            borderColor: colorsColaboradores.slice(0, colabEntries.length),
+                            borderWidth: 2, borderRadius: 8
+                        }]
+                    },
+                    options: commonBarOptions
+                });
+            }
         }
 
         // Helper to update the button count
