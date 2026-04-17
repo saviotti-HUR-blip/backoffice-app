@@ -1963,12 +1963,6 @@
             // Retro-compatibilidade do Cadastro
             if (dataObj['recebido_em']) {
                 dataObj['data'] = dataObj['recebido_em'];
-                if (dataObj['recebido_em'].includes('-')) {
-                    dataObj['mes'] = dataObj['recebido_em'].substring(0, 7); // Extract YYYY-MM
-                }
-            }
-            if (dataObj['status']) {
-                dataObj['fase_cadastro'] = dataObj['status'];
             }
             if (dataObj['form_type'] === 'CADASTRO') {
                 if (!dataObj['pendencias_triagem']) dataObj['pendencias_triagem'] = [];
@@ -2003,8 +1997,8 @@
             try {
                 let saveError;
                 if (dataObj.id) {
-                    dataObj.id = parseInt(dataObj.id);
-                    const { error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', dataObj.id);
+                    const idParaUpdate = dataObj.id;
+                    const { error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', idParaUpdate);
                     saveError = updateError;
                 } else {
                     const { error: insertError } = await supabaseClient.from('demandas').insert([dataObj]);
@@ -2430,18 +2424,18 @@
             const record = savedRecords.find(r => r.id === recordId || r.id == recordId);
             if (!record) return;
 
-            const prevFase = record.fase_cadastro;
+            const prevFase = record.status;
             if (prevFase === newFase) return;
 
             // UI update (otimista)
-            record.fase_cadastro = newFase;
+            record.status = newFase;
             applyFiltersAndSort();
 
             try {
                 // Supabase UPDATE
                 const { error } = await supabaseClient
                     .from('demandas')
-                    .update({ fase_cadastro: newFase })
+                    .update({ status: newFase })
                     .eq('id', record.id);
 
                 if (error) {
@@ -2449,7 +2443,7 @@
                 }
             } catch (err) {
                 console.error("Erro ao alterar fase do kanban:", err);
-                record.fase_cadastro = prevFase; // revert fallback
+                record.status = prevFase; // revert fallback
                 applyFiltersAndSort();
                 alert('Ocorreu um erro ao alterar a fase do cadastro no servidor.');
             }
