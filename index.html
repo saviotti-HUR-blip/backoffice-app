@@ -507,6 +507,154 @@
             height: 14px;
             accent-color: #3b82f6;
         }
+
+        /* ----- DASHBOARD SPA CSS ----- */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .kpi-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .kpi-title {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #334155;
+        }
+        .kpi-value.badge-warning { color: #b45309; }
+        .kpi-value.badge-success { color: #047857; }
+        .kpi-value.badge-primary { color: #1d4ed8; }
+        
+        .dash-charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .dash-charts-grid { grid-template-columns: 1fr; }
+        }
+        .dash-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .dash-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #334155;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .dash-table-container {
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        .dash-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .dash-table th, .dash-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            line-height: 1.4;
+            font-size: 0.85rem;
+        }
+        .dash-table th {
+            color: #64748b;
+            font-size: 0.80rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #f8fafc;
+        }
+        .dash-table tr:hover { background: #f1f5f9; }
+        .dash-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .dash-badge-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .dash-badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .dash-badge-success { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
+        .dash-badge-primary { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+
+        .dash-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .dash-modal-content {
+            background-color: #ffffff;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1100px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .dash-close-btn {
+            color: #64748b;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            margin-top: -5px;
+        }
+        .dash-close-btn:hover { color: #ef4444; }
+        .dash-modal-content h2 {
+            margin-bottom: 25px;
+            color: #334155;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            font-weight: bold;
+        }
+        #kpi-media-dias-card { cursor: default; }
+        #kpi-media-dias-card:hover { transform: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-color: #e2e8f0; }
     </style>
 </head>
 
@@ -695,6 +843,7 @@
                                     <option value="SIGRID">SIGRID</option>
                                     <option value="VALERIA">VALERIA</option>
                                     <option value="VECLAINE">VECLAINE</option>
+                                    <option value="VRDE BANK">VRDE BANK</option>
                                     <option value="WESLEI">WESLEI</option>
                                     <option value="YARA">YARA</option>
                                 </select>
@@ -864,6 +1013,10 @@
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
                                 <i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Extrair para Planilha
                                     HTML</span>
+                            </button>
+                            <button type="button" onclick="generateDashboard()"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
+                                <i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Gerar Dashboard</span>
                             </button>
                         </div>
 
@@ -1089,6 +1242,7 @@
                                 <option value="SIGRID">SIGRID</option>
                                 <option value="VALERIA">VALERIA</option>
                                 <option value="VECLAINE">VECLAINE</option>
+                                <option value="VRDE BANK">VRDE BANK</option>
                                 <option value="WESLEI">WESLEI</option>
                                 <option value="YARA">YARA</option>
                             </select>
@@ -1203,6 +1357,7 @@
                                 <option value="SIGRID">SIGRID</option>
                                 <option value="VALERIA">VALERIA</option>
                                 <option value="VECLAINE">VECLAINE</option>
+                                <option value="VRDE BANK">VRDE BANK</option>
                                 <option value="WESLEI">WESLEI</option>
                                 <option value="YARA">YARA</option>
                             </select>
@@ -1413,6 +1568,7 @@
                                 <option value="SIGRID">SIGRID</option>
                                 <option value="VALERIA">VALERIA</option>
                                 <option value="VECLAINE">VECLAINE</option>
+                                <option value="VRDE BANK">VRDE BANK</option>
                                 <option value="WESLEI">WESLEI</option>
                                 <option value="YARA">YARA</option>
                             </select>
@@ -1512,6 +1668,7 @@
                                 <option value="SIGRID">SIGRID</option>
                                 <option value="VALERIA">VALERIA</option>
                                 <option value="VECLAINE">VECLAINE</option>
+                                <option value="VRDE BANK">VRDE BANK</option>
                                 <option value="WESLEI">WESLEI</option>
                                 <option value="YARA">YARA</option>
                             </select>
@@ -1700,6 +1857,119 @@
     </div>
     </div>
     </section>
+    </div>
+    </div>
+
+    <!-- DASHBOARD SECTION (SPA) -->
+    <section id="dashboard-section" class="form-section hidden animate-fade-in-up mt-8">
+        <div class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-white p-8">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-200 pb-4">
+                <h2 id="dash-header-title" class="text-3xl font-extrabold text-slate-800">Painel de Análise de Triagem</h2>
+                <button type="button" onclick="closeForm()"
+                    class="p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors" title="Voltar ao início">
+                    <i data-lucide="x" class="w-6 h-6 text-slate-600"></i>
+                </button>
+            </div>
+
+            <div class="kpi-container">
+                <div class="kpi-card" id="kpi-total-card" title="Clique para ver os casos">
+                    <div class="kpi-title">Total Processado</div>
+                    <div class="kpi-value" id="kpi-total">0</div>
+                </div>
+                <div class="kpi-card" id="kpi-triagem-card" title="Clique para ver os casos">
+                    <div class="kpi-title">Em Triagem</div>
+                    <div class="kpi-value badge-primary" id="kpi-triagem">0</div>
+                </div>
+                <div class="kpi-card" id="kpi-pend-credito-card" title="Clique para ver os casos">
+                    <div class="kpi-title">Pendências Crédito</div>
+                    <div class="kpi-value badge-warning" id="kpi-pend-credito">0</div>
+                </div>
+                <div class="kpi-card" id="kpi-nao-iniciados-card" title="Clique para ver os casos">
+                    <div class="kpi-title">Finalizadas Sem Início</div>
+                    <div class="kpi-value badge-success" id="kpi-nao-iniciados">0</div>
+                </div>
+                <div class="kpi-card" id="kpi-media-dias-card">
+                    <div class="kpi-title">Média Triagem (Dias)</div>
+                    <div class="kpi-value" id="kpi-media-dias">0.0</div>
+                </div>
+            </div>
+
+            <div class="dash-charts-grid">
+                <div class="dash-box">
+                    <h3>Distribuição por Status</h3>
+                    <canvas id="dashStatusChart"></canvas>
+                </div>
+                <div class="dash-box">
+                    <h3>Casos em Triagem (Por Gerente)</h3>
+                    <canvas id="dashGerentesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="dash-table-container dash-box">
+                <h3>Casos Retornados do Crédito com Pendências (Atenção)</h3>
+                <table id="dash-table-retornados" class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Razão Social</th>
+                            <th>Cadastro</th>
+                            <th>Porte</th>
+                            <th>Gerente</th>
+                            <th>Status</th>
+                            <th>Recebido Em</th>
+                            <th>Triagem Finalizada</th>
+                            <th>Data Retorno Crédito</th>
+                            <th>Pleito</th>
+                            <th>Pendências</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="dash-table-container dash-box">
+                <h3>Casos com mais de 10 Dias em Triagem</h3>
+                <table id="dash-table-atrasados" class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Razão Social</th>
+                            <th>Cadastro</th>
+                            <th>Porte</th>
+                            <th>Gerente</th>
+                            <th>Pleito</th>
+                            <th>Recebido Em</th>
+                            <th>Triagem Finalizada</th>
+                            <th>Dias Corridos</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para Detalhes dos KPIs do Dashboard SPA -->
+    <div id="dashKpiModal" class="dash-modal">
+        <div class="dash-modal-content">
+            <span class="dash-close-btn">&times;</span>
+            <h2 id="dashModalTitle">Detalhes</h2>
+            <div class="dash-table-container">
+                <table id="dashModalTable" class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Razão Social</th>
+                            <th>Cadastro</th>
+                            <th>Porte</th>
+                            <th>Gerente</th>
+                            <th>Status</th>
+                            <th>Recebido Em</th>
+                            <th>Pleito</th>
+                            <th>Pendências</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- Filter Menu (Sobreposto) -->
@@ -2029,7 +2299,33 @@
                 showToast(`${formTypeStr} salvo com sucesso!`, 'success');
 
                 setTimeout(() => {
-                    closeForm();
+                    if (dataObj['form_type'] === 'CADASTRO') {
+                        // Ao atualizar ou salvar um cadastro, mantém na mesma página
+                        if (btnSubmit) {
+                            btnSubmit.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i><span>Salvar Registro</span>`;
+                            btnSubmit.disabled = false;
+                        }
+                        lucide.createIcons();
+                        
+                        // Limpa o form para o próximo input
+                        form.reset();
+                        const hiddenId = form.querySelector('input[name="id"]');
+                        if (hiddenId) hiddenId.remove();
+                        
+                        // Recolocar datas padrões
+                        const today = new Date().toISOString().split('T')[0];
+                        const excludedDates = ['envio_cadastro', 'data_retorno_credito', 'data_envio', 'data_elaboracao', 'data_comite'];
+                        form.querySelectorAll('input[type="date"]').forEach(input => {
+                            if (!excludedDates.includes(input.name)) input.value = today;
+                            else input.value = '';
+                        });
+                        
+                        // Renderizar tabela novamente para mostrar as atualizações
+                        applyFiltersAndSort();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        closeForm();
+                    }
                 }, 800);
 
             } catch (error) {
@@ -2720,6 +3016,36 @@
                 hideEmptyState('colaboradoresPieChart');
                 document.getElementById('colaboradoresPieChart').parentElement.style.minHeight = Math.max(250, colabEntries.length * 36) + 'px';
                 const colorsColaboradores = ['#0ea5e9', '#d946ef', '#f97316', '#22c55e', '#6366f1', '#eab308'];
+                
+                const colabOptions = JSON.parse(JSON.stringify(commonBarOptions));
+                colabOptions.plugins.datalabels = {
+                    labels: {
+                        originalValue: {
+                            anchor: 'end',
+                            align: 'end',
+                            offset: 4,
+                            color: '#334155',
+                            font: { weight: '700', size: 12, family: "'Inter', sans-serif" },
+                            formatter: (value) => value > 0 ? value : null
+                        },
+                        percentageValue: {
+                            anchor: 'center',
+                            align: 'center',
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 11, family: "'Inter', sans-serif" },
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                ctx.chart.data.datasets[0].data.forEach(d => { sum += d; });
+                                if (sum === 0) return null;
+                                const pct = (value * 100 / sum);
+                                // Esconde a porcentagem se a barra for muito pequena para caber o texto
+                                if (pct < 4 || value === 0) return null;
+                                return pct.toFixed(1) + "%";
+                            }
+                        }
+                    }
+                };
+
                 colaboradoresChartInstance = new Chart(ctxColaboradores, {
                     type: 'bar',
                     data: {
@@ -2731,7 +3057,7 @@
                             borderWidth: 2, borderRadius: 8
                         }]
                     },
-                    options: commonBarOptions
+                    options: colabOptions
                 });
             }
         }
@@ -2837,6 +3163,294 @@
             a.click();
             URL.revokeObjectURL(url);
             showToast('Planilha HTML gerada com sucesso!', 'success');
+        }
+
+        // Variáveis para guardar instâncias dos gráficos do Dashboard SPA
+        let dashStatusChartInst = null;
+        let dashGerentesChartInst = null;
+
+        // Função para gerar o painel (Dashboard) de CADASTROS dinamicamente na SPA
+        function generateDashboard() {
+            let dataRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
+            const moSelector = document.getElementById('export_cadastro_month');
+            const monthVal = moSelector ? moSelector.value : ''; // YYYY-MM
+            
+            if (!monthVal) {
+                showToast("Por favor, selecione um Mês/Ano (filtro logo ao lado do botão) para gerar o dashboard.", "warning");
+                return;
+            }
+
+            // Aplicar filtros estritos (Mês e Tipo Cadastro)
+            dataRecords = dataRecords.filter(r => r.mes === monthVal);
+            dataRecords = dataRecords.filter(r => {
+                const tipo = (r.tipo_cadastro || "").toUpperCase();
+                return tipo.includes('PROSPECÇÃO') || tipo.includes('PROSPECCAO') || tipo.includes('RISCO SACADO');
+            });
+
+            if (dataRecords.length === 0) {
+                showToast("Nenhum cadastro de Prospecção/Risco Sacado encontrado para este mês.", "warning");
+                return;
+            }
+
+            // Transformar monthVal YYYY-MM em MM/YYYY para a UI do Dashboard
+            const parts = monthVal.split('-');
+            const displayMonth = `${parts[1]}/${parts[0]}`;
+            
+            document.getElementById('dash-header-title').textContent = `Painel de Análise de Triagem - ${displayMonth}`;
+
+            // Utilitários de Data
+            const toBRDate = (isoStr) => {
+                if (!isoStr || !isoStr.includes('-')) return isoStr || '-';
+                const p = isoStr.split('-');
+                if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
+                return isoStr;
+            };
+
+            const parseDate = (isoStr) => {
+                if (!isoStr || !isoStr.includes('-')) return null;
+                const p = isoStr.split('-');
+                return new Date(p[0], p[1] - 1, p[2]);
+            };
+
+            const getDaysDiff = (d1, d2) => {
+                const diffTime = Math.abs(d2 - d1);
+                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            };
+
+            // Processamento Principal
+            const total = dataRecords.length;
+            const emTriagem = [];
+            const finalizadosNaoIniciados = [];
+            const retornadosCredito = [];
+            
+            let totalDays = 0;
+            let validDatesCount = 0;
+            const casosAtrasados = [];
+            const statusCounts = {};
+            const gerentesCount = {};
+
+            dataRecords.forEach(item => {
+                const statusStr = (item.fase_cadastro || item.status || "INDEFINIDO").trim();
+                
+                // Distribuição por Status (Pizza) - Utiliza EXATAMENTE a nomenclatura do BD
+                statusCounts[statusStr] = (statusCounts[statusStr] || 0) + 1;
+
+                // Regra: Em Triagem
+                if (statusStr === "TRIAGEM DE DOCUMENTOS") {
+                    emTriagem.push(item);
+                    gerentesCount[item.gerente || 'Não Informado'] = (gerentesCount[item.gerente || 'Não Informado'] || 0) + 1;
+                }
+
+                // Regra: Finalizadas Sem Início
+                if (statusStr === "TRIAGEM FINALIZADA E AINDA CONSTA NESSA ETAPA PELO CADASTRO") {
+                    finalizadosNaoIniciados.push(item);
+                }
+
+                // Regra: Pendências Crédito (Qualquer caso que tenha alguma pendência escrita pelo crédito)
+                if (item.pendencias_credito && item.pendencias_credito.trim() !== '') {
+                    retornadosCredito.push(item);
+                }
+
+                // Média de Dias e Casos > 10 Dias
+                if (item.recebido_em && item.envio_cadastro) {
+                    const dtRec = parseDate(item.recebido_em);
+                    const dtTri = parseDate(item.envio_cadastro);
+                    if (dtRec && dtTri && dtTri >= dtRec) {
+                        const days = getDaysDiff(dtRec, dtTri);
+                        totalDays += days;
+                        validDatesCount++;
+
+                        if (days > 10) {
+                            casosAtrasados.push({
+                                Razao: item.cedente,
+                                Cadastro: item.tipo_cadastro,
+                                Porte: item.porte,
+                                Gerente: item.gerente,
+                                Pleito: item.pleito_gerente,
+                                Recebido: toBRDate(item.recebido_em),
+                                Triagem: toBRDate(item.envio_cadastro),
+                                Dias: days
+                            });
+                        }
+                    }
+                }
+            });
+
+            const mediaDias = validDatesCount > 0 ? (totalDays / validDatesCount).toFixed(1) : "0.0";
+
+            // Atualiza Interface de KPIs
+            document.getElementById('kpi-total').textContent = total;
+            document.getElementById('kpi-triagem').textContent = emTriagem.length;
+            document.getElementById('kpi-pend-credito').textContent = retornadosCredito.length;
+            document.getElementById('kpi-nao-iniciados').textContent = finalizadosNaoIniciados.length;
+            document.getElementById('kpi-media-dias').textContent = mediaDias;
+
+            // Renderizar Gráficos
+            if (dashStatusChartInst) dashStatusChartInst.destroy();
+            if (dashGerentesChartInst) dashGerentesChartInst.destroy();
+
+            const sortedStatus = Object.entries(statusCounts).sort((a, b) => a[1] - b[1]);
+            const statusCtx = document.getElementById('dashStatusChart').getContext('2d');
+            dashStatusChartInst = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: sortedStatus.map(s => s[0]),
+                    datasets: [{
+                        data: sortedStatus.map(s => s[1]),
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316', '#14b8a6', '#6366f1'],
+                        borderWidth: 2, borderColor: '#ffffff', hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                ctx.chart.data.datasets[0].data.map(d => { sum += d; });
+                                return (value * 100 / sum).toFixed(0) + "%";
+                            },
+                            color: '#fff', font: { weight: 'bold', size: 13 },
+                            display: function (context) { return context.dataset.data[context.dataIndex] >= (total * 0.05); }
+                        }
+                    }
+                }
+            });
+
+            const sortedGerentes = Object.entries(gerentesCount).sort((a, b) => b[1] - a[1]);
+            const gerenteCtx = document.getElementById('dashGerentesChart').getContext('2d');
+            dashGerentesChartInst = new Chart(gerenteCtx, {
+                type: 'bar',
+                data: {
+                    labels: sortedGerentes.map(g => g[0]),
+                    datasets: [{
+                        label: 'Casos em Triagem',
+                        data: sortedGerentes.map(g => g[1]),
+                        backgroundColor: '#3b82f6', borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#e2e8f0' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: { anchor: 'end', align: 'bottom', color: '#fff', font: { weight: 'bold', size: 12 } }
+                    }
+                }
+            });
+
+            // Preencher Tabelas
+            const tbodyRetornados = document.querySelector('#dash-table-retornados tbody');
+            tbodyRetornados.innerHTML = '';
+            if (retornadosCredito.length === 0) {
+                tbodyRetornados.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#64748b;">Nenhum caso retornado com pendência de crédito.</td></tr>';
+            } else {
+                retornadosCredito.forEach(item => {
+                    const statusStr = item.fase_cadastro || item.status || "INDEFINIDO";
+                    tbodyRetornados.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td><strong>${item.cedente || '-'}</strong></td>
+                            <td>${item.tipo_cadastro || '-'}</td>
+                            <td>${item.porte || '-'}</td>
+                            <td>${item.gerente || '-'}</td>
+                            <td><span class="dash-badge dash-badge-warning">${statusStr}</span></td>
+                            <td>${toBRDate(item.recebido_em)}</td>
+                            <td>${toBRDate(item.envio_cadastro)}</td>
+                            <td>${toBRDate(item.data_retorno_credito)}</td>
+                            <td>${item.pleito_gerente || '-'}</td>
+                            <td>${item.pendencias_credito || '-'}</td>
+                        </tr>
+                    `);
+                });
+            }
+
+            const tbodyAtrasados = document.querySelector('#dash-table-atrasados tbody');
+            tbodyAtrasados.innerHTML = '';
+            if (casosAtrasados.length === 0) {
+                tbodyAtrasados.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#64748b;">Nenhum caso com mais de 10 dias em triagem.</td></tr>';
+            } else {
+                casosAtrasados.sort((a, b) => b.Dias - a.Dias).forEach(item => {
+                    tbodyAtrasados.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td><strong>${item.Razao || '-'}</strong></td>
+                            <td>${item.Cadastro || '-'}</td>
+                            <td>${item.Porte || '-'}</td>
+                            <td>${item.Gerente || '-'}</td>
+                            <td>${item.Pleito || '-'}</td>
+                            <td>${item.Recebido}</td>
+                            <td>${item.Triagem}</td>
+                            <td><span class="dash-badge dash-badge-danger">${item.Dias} dias</span></td>
+                        </tr>
+                    `);
+                });
+            }
+
+            // Configurar Modal KPIs
+            const modal = document.getElementById("dashKpiModal");
+            const spanClose = modal.querySelector(".dash-close-btn");
+            const modalTitle = document.getElementById("dashModalTitle");
+            const modalTbody = document.querySelector("#dashModalTable tbody");
+
+            spanClose.onclick = () => modal.style.display = "none";
+            window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = "none"; });
+
+            const openKpiModal = (title, items) => {
+                modalTitle.textContent = title;
+                modalTbody.innerHTML = '';
+                if (items.length === 0) {
+                    modalTbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#64748b">Nenhum registro encontrado.</td></tr>';
+                } else {
+                    items.forEach(item => {
+                        const statusStr = item.fase_cadastro || item.status || "INDEFINIDO";
+                        let badgeClass = 'dash-badge-warning';
+                        if (statusStr.includes('FINALIZADA')) badgeClass = 'dash-badge-success';
+                        else if (statusStr.includes('TRIAGEM')) badgeClass = 'dash-badge-primary';
+                        
+                        let pends = "";
+                        if(item.pendencias_triagem) pends += "Triagem: " + item.pendencias_triagem + ". ";
+                        if(item.pendencias_credito) pends += "Crédito: " + item.pendencias_credito;
+
+                        modalTbody.insertAdjacentHTML('beforeend', `
+                            <tr>
+                                <td><strong>${item.cedente || '-'}</strong></td>
+                                <td>${item.tipo_cadastro || '-'}</td>
+                                <td>${item.porte || '-'}</td>
+                                <td>${item.gerente || '-'}</td>
+                                <td><span class="dash-badge ${badgeClass}">${statusStr}</span></td>
+                                <td>${toBRDate(item.recebido_em)}</td>
+                                <td>${item.pleito_gerente || '-'}</td>
+                                <td>${pends || 'Nenhuma'}</td>
+                            </tr>
+                        `);
+                    });
+                }
+                modal.style.display = "block";
+            };
+
+            // Desvincular eventos antigos para evitar múltiplas execuções se gerar várias vezes
+            const newTotalCard = document.getElementById('kpi-total-card').cloneNode(true);
+            document.getElementById('kpi-total-card').parentNode.replaceChild(newTotalCard, document.getElementById('kpi-total-card'));
+            
+            const newTriagemCard = document.getElementById('kpi-triagem-card').cloneNode(true);
+            document.getElementById('kpi-triagem-card').parentNode.replaceChild(newTriagemCard, document.getElementById('kpi-triagem-card'));
+
+            const newPendCreditoCard = document.getElementById('kpi-pend-credito-card').cloneNode(true);
+            document.getElementById('kpi-pend-credito-card').parentNode.replaceChild(newPendCreditoCard, document.getElementById('kpi-pend-credito-card'));
+
+            const newNaoInicCard = document.getElementById('kpi-nao-iniciados-card').cloneNode(true);
+            document.getElementById('kpi-nao-iniciados-card').parentNode.replaceChild(newNaoInicCard, document.getElementById('kpi-nao-iniciados-card'));
+
+            document.getElementById('kpi-total-card').addEventListener('click', () => openKpiModal('Total Processado', dataRecords));
+            document.getElementById('kpi-triagem-card').addEventListener('click', () => openKpiModal('Casos em Triagem', emTriagem));
+            document.getElementById('kpi-pend-credito-card').addEventListener('click', () => openKpiModal('Pendências Retornadas do Crédito', retornadosCredito));
+            document.getElementById('kpi-nao-iniciados-card').addEventListener('click', () => openKpiModal('Triagens Finalizadas sem Início', finalizadosNaoIniciados));
+
+            // Transição visual para a tela do Dashboard (SPA)
+            openForm('dashboard-section');
         }
 
         // Função para carregar os dados de volta para o form de cadastro
