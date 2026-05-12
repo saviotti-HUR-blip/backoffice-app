@@ -1175,6 +1175,36 @@
                                 <canvas id="tipoCadastroPieChart"></canvas>
                             </div>
                         </div>
+
+                        <!-- NEW: Evolução Geral de Prospecção (Linhas) -->
+                        <div class="glass-card bg-slate-50/50 rounded-2xl p-4 shadow-md flex flex-col items-center h-[400px] shrink-0 mt-8 border border-slate-200">
+                            <h3 class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                                <i data-lucide="trending-up" class="w-4 h-4 text-slate-500"></i> Evolução de Prospecção (Mensal)
+                            </h3>
+                            <div class="w-full relative flex-1 flex items-center justify-center">
+                                <canvas id="evolucaoGeralChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- NEW: Grid for SMALL and MIDDLE/CORP -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                            <div class="glass-card bg-slate-50/50 rounded-2xl p-4 shadow-md flex flex-col items-center min-h-[400px] shrink-0 border border-slate-200 w-full overflow-hidden">
+                                <h3 class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-500"></i> Evolução SMALL (Gerentes)
+                                </h3>
+                                <div class="w-full relative flex-1 flex items-center justify-center">
+                                    <canvas id="evolucaoSmallChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="glass-card bg-slate-50/50 rounded-2xl p-4 shadow-md flex flex-col items-center min-h-[400px] shrink-0 border border-slate-200 w-full overflow-hidden">
+                                <h3 class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-500"></i> Evolução MIDDLE/CORP (Gerentes)
+                                </h3>
+                                <div class="w-full relative flex-1 flex items-center justify-center">
+                                    <canvas id="evolucaoMiddleChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -1253,37 +1283,46 @@
                                 class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
                         </div>
 
-                        <!-- Specific Field -->
+                        <!-- Tipo de Suporte: Categorias + Checkboxes condicionais -->
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Tipo de Suporte</label>
-                            <select id="tipo-suporte-sel" name="tipo_suporte" required
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none bg-white">
-                                <option value="" disabled selected>Selecione o tipo</option>
-                                <optgroup label="Categorias">
-                                    <option value="Assinatura da Operação">Assinatura da Operação</option>
-                                    <option value="Desbloqueio de Login">Desbloqueio de Login</option>
-                                    <option value="Suporte Importação">Suporte Importação</option>
-                                    <option value="Suporte Primeira Operação">Suporte Primeira Operação</option>
-                                    <option value="Suporte QProf">Suporte QProf</option>
-                                    <option value="Carta de Circularização">Carta de Circularização</option>
-                                    <option value="Envio de Boleto">Envio de Boleto</option>
-                                    <option value="Envio de Comprovante">Envio de Comprovante</option>
-                                    <option value="Envio de Canhoto">Envio de Canhoto</option>
-                                    <option value="Validação de Operação">Validação de Operação</option>
-                                    <option value="Envio do Recibo de Recompra">Envio do Recibo de Recompra</option>
-                                    <option value="Envio de Demonstrativo">Envio de Demonstrativo</option>
-                                    <option value="Suporte de Assinatura">Suporte de Assinatura</option>
-                                    <option value="Outros">Outros</option>
-                                </optgroup>
-                            </select>
-                        </div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Suporte</label>
+                            <!-- Hidden input que guardará o valor final para submissão -->
+                            <input type="hidden" id="tipo-suporte-sel" name="tipo_suporte" required>
 
-                        <!-- Extra Field For 'Outros' -->
-                        <div id="suporte-outros-div" class="hidden">
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Qual?</label>
-                            <input type="text" id="suporte-outros-input" name="detalhe_outro"
-                                placeholder="Descreva brevemente..."
-                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none">
+                            <!-- Botões de Categoria -->
+                            <div class="grid grid-cols-5 gap-2 mb-4" id="suporte-categorias">
+                                <button type="button" data-cat="CLIENTE"
+                                    onclick="selectSuporteCategoria('CLIENTE')"
+                                    class="suporte-cat-btn px-2 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-600 hover:border-orange-400 hover:bg-orange-50 transition-all">
+                                    CLIENTE
+                                </button>
+                                <button type="button" data-cat="CADASTRO"
+                                    onclick="selectSuporteCategoria('CADASTRO')"
+                                    class="suporte-cat-btn px-2 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-600 hover:border-orange-400 hover:bg-orange-50 transition-all">
+                                    CADASTRO
+                                </button>
+                                <button type="button" data-cat="CHECAGEM"
+                                    onclick="selectSuporteCategoria('CHECAGEM')"
+                                    class="suporte-cat-btn px-2 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-600 hover:border-orange-400 hover:bg-orange-50 transition-all">
+                                    CHECAGEM
+                                </button>
+                                <button type="button" data-cat="COBRANÇA"
+                                    onclick="selectSuporteCategoria('COBRANÇA')"
+                                    class="suporte-cat-btn px-2 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-600 hover:border-orange-400 hover:bg-orange-50 transition-all">
+                                    COBRANÇA
+                                </button>
+                                <button type="button" data-cat="OPERAÇÃO"
+                                    onclick="selectSuporteCategoria('OPERAÇÃO')"
+                                    class="suporte-cat-btn px-2 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-600 hover:border-orange-400 hover:bg-orange-50 transition-all">
+                                    OPERAÇÃO
+                                </button>
+                            </div>
+
+                            <!-- Checkboxes condicionais por categoria (apenas 1 seleção obrigatória) -->
+                            <div id="suporte-checkboxes-container" class="hidden">
+                                <p class="text-xs text-slate-500 mb-2 font-medium">Selecione exatamente 1 opção:</p>
+                                <div id="suporte-checkboxes-list" class="flex flex-wrap gap-2"></div>
+                            </div>
                         </div>
 
                         <div class="pt-6">
@@ -2013,6 +2052,122 @@
         // Register DataLabels plugin globally
         Chart.register(ChartDataLabels);
 
+        // ---- SUPORTE FORM: Checkboxes por Categoria ----
+        const suporteCategoriaMap = {
+            'CLIENTE': [
+                'DESBLOQUEIO DE LOGIN',
+                'ENVIO DO E-MAIL DE ACESSO LIBERADO',
+                'SUPORTE ASSINATURA',
+                'SUPORTE QITECH',
+                'SUPORTE Q\'PROF',
+                'SUPORTE IMPORTAÇÃO',
+                'SUPORTE PRIMEIRA OPERAÇÃO',
+                'COBRANÇA DE DOCUMENTOS DE RENOVAÇÃO',
+                'ENVIO DE LIMITE DISPONÍVEL'
+            ],
+            'CADASTRO': [
+                'ALTERAÇÃO DE ASSINANTE',
+                'ATUALIZAÇÃO DE DADOS DE PESSOA (E-MAIL, NOME, ENDEREÇO)',
+                'CADASTRAR CONTA',
+                'CRIAÇÃO DE LOGIN LS',
+                'ASSINATURA DE CONTRATO',
+                'ASSINATURA DE NP',
+                'INSERIR PROSPECT VISITA'
+            ],
+            'CHECAGEM': [
+                'ENVIO DE CANHOTO',
+                'ENVIO DE CARTA DE CESSÃO',
+                'ENVIO DE TRANCHE',
+                'SOLICITAÇÃO DE CONTATOS'
+            ],
+            'COBRANÇA': [
+                'CARTA DE CIRCULARIZAÇÃO',
+                'ENVIO DE BOLETO',
+                'ENVIO DE COMPROVANTE',
+                'ENVIO DE LIQUIDADOS',
+                'ENVIO DE TÍTULOS EM ABERTO',
+                'ENVIO DE PROTOCOLO DE CUSTÓDIA'
+            ],
+            'OPERAÇÃO': [
+                'ASSINATURA DE OPERAÇÃO',
+                'ENVIO DE DEMONSTRATIVO',
+                'ENVIO DE DADOS BANCÁRIOS',
+                'ENVIO DE RECIBO DE RECOMPRA',
+                'ENVIO DO VALOR LÍQUIDO',
+                'VALIDAÇÃO DE OPERAÇÃO'
+            ]
+        };
+
+        let selectedSuporteCategoria = null;
+
+        function selectSuporteCategoria(cat) {
+            selectedSuporteCategoria = cat;
+
+            // Highlight the selected button
+            document.querySelectorAll('.suporte-cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
+                    btn.classList.add('border-orange-500', 'bg-orange-500', 'text-white');
+                } else {
+                    btn.classList.remove('border-orange-500', 'bg-orange-500', 'text-white');
+                    btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+                }
+            });
+
+            // Clear the hidden input and render checkboxes
+            const hiddenInput = document.getElementById('tipo-suporte-sel');
+            hiddenInput.value = '';
+
+            const container = document.getElementById('suporte-checkboxes-container');
+            const list = document.getElementById('suporte-checkboxes-list');
+            container.classList.remove('hidden');
+            list.innerHTML = '';
+
+            const options = suporteCategoriaMap[cat] || [];
+            options.forEach(opt => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700 hover:border-orange-400 hover:bg-orange-50 transition-all suporte-opt-label';
+                label.innerHTML = `<input type="checkbox" class="suporte-opt-cb w-4 h-4 accent-orange-500" value="${opt}"> ${opt}`;
+                list.appendChild(label);
+
+                const cb = label.querySelector('input');
+                cb.addEventListener('change', () => {
+                    if (cb.checked) {
+                        // Uncheck all others (radio behaviour)
+                        list.querySelectorAll('.suporte-opt-cb').forEach(other => {
+                            if (other !== cb) {
+                                other.checked = false;
+                                other.closest('.suporte-opt-label').classList.remove('border-orange-500', 'bg-orange-100', 'text-orange-700');
+                                other.closest('.suporte-opt-label').classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                            }
+                        });
+                        label.classList.add('border-orange-500', 'bg-orange-100', 'text-orange-700');
+                        label.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                        hiddenInput.value = opt;
+                    } else {
+                        label.classList.remove('border-orange-500', 'bg-orange-100', 'text-orange-700');
+                        label.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                        hiddenInput.value = '';
+                    }
+                });
+            });
+        }
+
+        function resetSuporteForm() {
+            selectedSuporteCategoria = null;
+            document.querySelectorAll('.suporte-cat-btn').forEach(btn => {
+                btn.classList.remove('border-orange-500', 'bg-orange-500', 'text-white');
+                btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+            });
+            const hiddenInput = document.getElementById('tipo-suporte-sel');
+            if (hiddenInput) hiddenInput.value = '';
+            const container = document.getElementById('suporte-checkboxes-container');
+            if (container) container.classList.add('hidden');
+            const list = document.getElementById('suporte-checkboxes-list');
+            if (list) list.innerHTML = '';
+        }
+        // ---- FIM SUPORTE FORM ----
+
         // Application State
         let savedRecords = []; // Raw data
         let processedRecords = []; // Data after filters and sorting
@@ -2038,9 +2193,12 @@
         let suporteChartInstance = null;
         let gerentesChartInstance = null;
         let colaboradoresChartInstance = null;
+        let evolucaoGeralChartInstance = null;
+        let evolucaoSmallChartInstance = null;
+        let evolucaoMiddleChartInstance = null;
 
         // Fetch do Supabase (com paginação para ilimitados)
-        async function fetchRecords() {
+        async function fetchRecords(shouldResetFilters = true) {
             try {
                 let allData = [];
                 let hasMore = true;
@@ -2093,7 +2251,9 @@
                     }
 
                     // Initialize all filters with all unique values across the dataset
-                    resetFilters();
+                    if (shouldResetFilters) {
+                        resetFilters();
+                    }
 
                     // Se o histórico estiver aberto, re-renderiza
                     const histSec = document.getElementById('historico-section');
@@ -2116,8 +2276,6 @@
         const historicoBtnContainer = document.getElementById('historico-btn-container');
         const allForms = document.querySelectorAll('.form-section');
         const exportCount = document.getElementById('export-count');
-        const suporteOutrosDiv = document.getElementById('suporte-outros-div');
-        const suporteOutrosInput = document.getElementById('suporte-outros-input');
 
         // Initial Data Setup
         window.addEventListener('DOMContentLoaded', () => {
@@ -2138,21 +2296,6 @@
             document.querySelectorAll('form').forEach(form => {
                 form.addEventListener('submit', handleFormSubmit);
             });
-
-            // Logic for 'Outros' in Suporte Form
-            const supSelect = document.getElementById('tipo-suporte-sel');
-            if (supSelect) {
-                supSelect.addEventListener('change', (e) => {
-                    if (e.target.value === 'Outros') {
-                        suporteOutrosDiv.classList.remove('hidden');
-                        suporteOutrosInput.setAttribute('required', 'true');
-                    } else {
-                        suporteOutrosDiv.classList.add('hidden');
-                        suporteOutrosInput.removeAttribute('required');
-                        suporteOutrosInput.value = '';
-                    }
-                });
-            }
         });
 
         // Navigation Functions
@@ -2170,6 +2313,11 @@
             // Se abriu o form de Cadastro e já temos dados, renderiza a tabela imediatamente
             if (formId === 'cadastro-form' && savedRecords.length > 0) {
                 applyFiltersAndSort();
+            }
+
+            // Reseta o formulário de Suporte ao abrir
+            if (formId === 'suporte-form') {
+                resetSuporteForm();
             }
         }
 
@@ -2199,8 +2347,7 @@
                     input.value = '';
                 }
             });
-            suporteOutrosDiv.classList.add('hidden');
-            suporteOutrosInput.removeAttribute('required');
+            resetSuporteForm();
 
             navGrid.classList.remove('hidden');
             historicoBtnContainer.classList.remove('hidden');
@@ -2254,18 +2401,27 @@
                 }
                 delete dataObj['pendencias_credito_check'];
                 delete dataObj['pendencias_credito_text'];
+
+                // Validação Customizada: Se for Prospecção e a Data Envio Cadastro estiver preenchida, o Pleito é obrigatório
+                if (dataObj['tipo_cadastro'] === 'Prospecção') {
+                    if (dataObj['envio_cadastro'] && (!dataObj['pleito_gerente'] || dataObj['pleito_gerente'].trim() === '')) {
+                        showToast("O 'Pleito do Gerente' é obrigatório quando a Data de Envio de Cadastro está preenchida.", "error");
+                        return; // Aborta o salvamento
+                    }
+                }
             }
 
             if (dataObj['quantidade'] !== undefined && dataObj['quantidade'] !== null) dataObj['quantidade'] = parseInt(dataObj['quantidade']);
             if (dataObj['nota_servico'] !== undefined && dataObj['nota_servico'] !== null) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']);
             if (dataObj['cheque'] !== undefined && dataObj['cheque'] !== null) dataObj['cheque'] = parseInt(dataObj['cheque']);
 
-            // Reconcile 'Outros' se for do Suporte
-            if (dataObj['tipo_suporte'] === 'Outros' && dataObj['detalhe_outro']) {
-                dataObj['tipo_suporte'] = `Outros: ${dataObj['detalhe_outro']}`;
+            // Validação: tipo_suporte é obrigatório no Suporte
+            if (dataObj['form_type'] === 'SUPORTE') {
+                if (!dataObj['tipo_suporte'] || dataObj['tipo_suporte'].trim() === '') {
+                    showToast("Selecione uma categoria e opção de Tipo de Suporte antes de salvar.", "error");
+                    return;
+                }
             }
-            // Retirar detalhe_outro puro pra não sujar o DB
-            delete dataObj['detalhe_outro'];
 
             // Botão de loading na UI
             const btnSubmit = form.querySelector('button[type="submit"]');
@@ -2291,8 +2447,8 @@
 
                 if (saveError) throw saveError;
 
-                // Fetch atualizado
-                await fetchRecords();
+                // Fetch atualizado sem limpar filtros
+                await fetchRecords(false);
 
                 const formTypeStr = dataObj['form_type'] || 'Registro';
                 showToast(`${formTypeStr} salvo com sucesso!`, 'success');
@@ -2832,6 +2988,9 @@
             if (suporteChartInstance) suporteChartInstance.destroy();
             if (gerentesChartInstance) gerentesChartInstance.destroy();
             if (colaboradoresChartInstance) colaboradoresChartInstance.destroy();
+            if (evolucaoGeralChartInstance) evolucaoGeralChartInstance.destroy();
+            if (evolucaoSmallChartInstance) evolucaoSmallChartInstance.destroy();
+            if (evolucaoMiddleChartInstance) evolucaoMiddleChartInstance.destroy();
 
             // ─── HELPER: Empty State ───────────────────────────────────────────
             const showEmptyState = (canvasId) => {
@@ -3057,6 +3216,225 @@
                         }]
                     },
                     options: colabOptions
+                });
+            }
+
+            // ---- NOVOS GRÁFICOS DE EVOLUÇÃO DE PROSPECÇÃO ----
+            const ctxEvolucaoGeral = document.getElementById('evolucaoGeralChart').getContext('2d');
+            const ctxEvolucaoSmall = document.getElementById('evolucaoSmallChart').getContext('2d');
+            const ctxEvolucaoMiddle = document.getElementById('evolucaoMiddleChart').getContext('2d');
+
+            const evolucaoMesesSet = new Set();
+            const gerentesSmallSet = new Set();
+            const gerentesMiddleSet = new Set();
+
+            const evolucaoGeralMap = {};
+            const evolucaoSmallMap = {};
+            const evolucaoMiddleMap = {};
+
+            activeRecords.forEach(r => {
+                if (r.form_type === 'CADASTRO' && r.tipo_cadastro === 'Prospecção') {
+                    let m = r.mes;
+                    if (!m || m === '-') m = 'Sem Data';
+                    evolucaoMesesSet.add(m);
+                    
+                    evolucaoGeralMap[m] = (evolucaoGeralMap[m] || 0) + 1;
+
+                    let g = r.gerente || 'Sem Gerente';
+                    let p = r.porte || '';
+
+                    if (p === 'SMALL') {
+                        gerentesSmallSet.add(g);
+                        if (!evolucaoSmallMap[m]) evolucaoSmallMap[m] = {};
+                        evolucaoSmallMap[m][g] = (evolucaoSmallMap[m][g] || 0) + 1;
+                    } else if (p === 'MIDDLE' || p === 'CORPORATE') {
+                        gerentesMiddleSet.add(g);
+                        if (!evolucaoMiddleMap[m]) evolucaoMiddleMap[m] = {};
+                        evolucaoMiddleMap[m][g] = (evolucaoMiddleMap[m][g] || 0) + 1;
+                    }
+                }
+            });
+
+            // Ordenar meses cronologicamente (ex: 2026-04, 2026-05)
+            const mesesOrdenados = Array.from(evolucaoMesesSet).sort((a, b) => {
+                if (a === 'Sem Data') return 1;
+                if (b === 'Sem Data') return -1;
+                return a.localeCompare(b);
+            });
+
+            // Formatador de meses para exibição (YYYY-MM -> MM/YYYY)
+            const formatMonth = (m) => {
+                if (m === 'Sem Data') return m;
+                const p = m.split('-');
+                if (p.length === 2) return `${p[1]}/${p[0]}`;
+                return m;
+            };
+            const labelsMeses = mesesOrdenados.map(formatMonth);
+
+            // Gerador de paleta de cores para Gerentes
+            const baseColors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef', '#0ea5e9', '#22c55e', '#eab308'];
+            let colorIndex = 0;
+            const gerenteColors = {};
+            const getGerenteColor = (g) => {
+                if (!gerenteColors[g]) {
+                    gerenteColors[g] = baseColors[colorIndex % baseColors.length];
+                    colorIndex++;
+                }
+                return gerenteColors[g];
+            };
+
+            // 1. Gráfico Geral
+            if (mesesOrdenados.length === 0) { showEmptyState('evolucaoGeralChart'); }
+            else {
+                hideEmptyState('evolucaoGeralChart');
+                const dataGeral = mesesOrdenados.map(m => evolucaoGeralMap[m] || 0);
+                
+                const mixedOptions = JSON.parse(JSON.stringify(commonOptions));
+                mixedOptions.scales = {
+                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b' }, border: { display: false } },
+                    y: { grace: '15%', grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b', stepSize: 1 }, border: { display: false }, beginAtZero: true }
+                };
+                mixedOptions.plugins.legend = { display: false };
+                mixedOptions.plugins.datalabels = {
+                    display: function(context) { return context.dataset.type === 'line'; },
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 6,
+                    color: '#334155',
+                    font: { weight: 'bold', size: 12, family: "'Inter', sans-serif" },
+                    formatter: Math.round
+                };
+                
+                evolucaoGeralChartInstance = new Chart(ctxEvolucaoGeral, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsMeses,
+                        datasets: [
+                            {
+                                type: 'line',
+                                label: 'Tendência',
+                                data: dataGeral,
+                                borderColor: '#0ea5e9',
+                                borderWidth: 3,
+                                fill: false,
+                                tension: 0.4,
+                                pointBackgroundColor: '#ffffff',
+                                pointBorderColor: '#0ea5e9',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 6
+                            },
+                            {
+                                type: 'bar',
+                                label: 'Prospecções',
+                                data: dataGeral,
+                                backgroundColor: '#3b82f6',
+                                borderColor: '#2563eb',
+                                borderWidth: 1,
+                                borderRadius: 6
+                            }
+                        ]
+                    },
+                    options: mixedOptions
+                });
+            }
+
+            const stackedBarOptions = {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 800, easing: 'easeInOutQuart' },
+                layout: { padding: { top: 4, bottom: 4, left: 4, right: 56 } },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: { padding: 12, usePointStyle: true, pointStyle: 'circle', font: { size: 10, weight: '500' } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0f172a', titleColor: '#f1f5f9', bodyColor: '#94a3b8',
+                        borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, padding: 12, cornerRadius: 10,
+                        titleFont: { family: "'Inter', sans-serif", weight: '700', size: 12 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 11 },
+                        callbacks: { label: function(ctx) { return '  ' + ctx.dataset.label + ': ' + ctx.parsed.x; } }
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: '#ffffff',
+                        font: { weight: 'bold', size: 10, family: "'Inter', sans-serif" },
+                        formatter: (v) => v > 0 ? v : null
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false },
+                        ticks: { font: { family: "'Inter', sans-serif", size: 10 }, color: '#94a3b8', stepSize: 1 },
+                        border: { display: false }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { font: { family: "'Inter', sans-serif", weight: '600', size: 11 }, color: '#334155' },
+                        border: { display: false }
+                    }
+                }
+            };
+
+            // 2. Gráfico SMALL (Barras Empilhadas)
+            if (gerentesSmallSet.size === 0 || mesesOrdenados.length === 0) { showEmptyState('evolucaoSmallChart'); }
+            else {
+                hideEmptyState('evolucaoSmallChart');
+                const gerentesArray = Array.from(gerentesSmallSet).sort();
+                document.getElementById('evolucaoSmallChart').parentElement.style.minHeight = Math.max(300, gerentesArray.length * 36 + 80) + 'px';
+
+                const datasetsSmall = mesesOrdenados.map((m, i) => {
+                    const color = baseColors[i % baseColors.length];
+                    return {
+                        label: formatMonth(m),
+                        data: gerentesArray.map(g => (evolucaoSmallMap[m] && evolucaoSmallMap[m][g]) ? evolucaoSmallMap[m][g] : 0),
+                        backgroundColor: color + 'cc',
+                        borderColor: color,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.75,
+                        categoryPercentage: 0.9
+                    };
+                });
+
+                evolucaoSmallChartInstance = new Chart(ctxEvolucaoSmall, {
+                    type: 'bar',
+                    data: { labels: gerentesArray, datasets: datasetsSmall },
+                    options: stackedBarOptions
+                });
+            }
+
+            // 3. Gráfico MIDDLE/CORPORATE (Barras Empilhadas)
+            if (gerentesMiddleSet.size === 0 || mesesOrdenados.length === 0) { showEmptyState('evolucaoMiddleChart'); }
+            else {
+                hideEmptyState('evolucaoMiddleChart');
+                const gerentesArray = Array.from(gerentesMiddleSet).sort();
+                document.getElementById('evolucaoMiddleChart').parentElement.style.minHeight = Math.max(300, gerentesArray.length * 36 + 80) + 'px';
+
+                const datasetsMiddle = mesesOrdenados.map((m, i) => {
+                    const color = baseColors[i % baseColors.length];
+                    return {
+                        label: formatMonth(m),
+                        data: gerentesArray.map(g => (evolucaoMiddleMap[m] && evolucaoMiddleMap[m][g]) ? evolucaoMiddleMap[m][g] : 0),
+                        backgroundColor: color + 'cc',
+                        borderColor: color,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.75,
+                        categoryPercentage: 0.9
+                    };
+                });
+
+                evolucaoMiddleChartInstance = new Chart(ctxEvolucaoMiddle, {
+                    type: 'bar',
+                    data: { labels: gerentesArray, datasets: datasetsMiddle },
+                    options: stackedBarOptions
                 });
             }
         }
