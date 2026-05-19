@@ -1284,6 +1284,7 @@
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Suporte</label>
                             <!-- Hidden input que guardará o valor final para submissão -->
                             <input type="hidden" id="tipo-suporte-sel" name="tipo_suporte" required>
+                            <input type="hidden" id="tipo-opcao-suporte-sel" name="tipo_opcao_suporte" required>
 
                             <!-- Botões de Categoria -->
                             <div class="grid grid-cols-5 gap-2 mb-4" id="suporte-categorias">
@@ -2107,6 +2108,9 @@
             // Clear the hidden input and render checkboxes
             const hiddenInput = document.getElementById('tipo-suporte-sel');
             hiddenInput.value = '';
+            
+            const hiddenOpcaoInput = document.getElementById('tipo-opcao-suporte-sel');
+            if (hiddenOpcaoInput) hiddenOpcaoInput.value = cat;
 
             const container = document.getElementById('suporte-checkboxes-container');
             const list = document.getElementById('suporte-checkboxes-list');
@@ -2151,6 +2155,10 @@
             });
             const hiddenInput = document.getElementById('tipo-suporte-sel');
             if (hiddenInput) hiddenInput.value = '';
+            
+            const hiddenOpcaoInput = document.getElementById('tipo-opcao-suporte-sel');
+            if (hiddenOpcaoInput) hiddenOpcaoInput.value = '';
+            
             const container = document.getElementById('suporte-checkboxes-container');
             if (container) container.classList.add('hidden');
             const list = document.getElementById('suporte-checkboxes-list');
