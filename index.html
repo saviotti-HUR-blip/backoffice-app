@@ -1905,6 +1905,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal Drill-down Demandas (overlay fullscreen) -->
+                <div id="demanda-drilldown-modal" class="fixed inset-0 z-[999] hidden">
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDemandaDrilldown()"></div>
+                    <div class="absolute inset-4 md:inset-8 lg:inset-12 bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in-up">
+                        <div class="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-indigo-50 to-blue-50">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 rounded-lg bg-indigo-100"><i data-lucide="settings" class="w-5 h-5 text-indigo-600"></i></div>
+                                <h3 id="demanda-drilldown-title" class="text-lg font-extrabold text-slate-800 tracking-wide uppercase">Detalhes</h3>
+                            </div>
+                            <button type="button" onclick="closeDemandaDrilldown()" class="p-2 text-slate-400 hover:text-red-500 rounded-xl hover:bg-red-50 transition-all">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div class="flex-1 p-6 overflow-auto">
+                            <div class="relative w-full h-full" style="min-height: 300px;">
+                                <canvas id="demandaDrilldownChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
@@ -2224,6 +2245,86 @@
         let evolucaoGeralChartInstance = null;
         let evolucaoSmallChartInstance = null;
         let evolucaoMiddleChartInstance = null;
+
+        let demandaDrilldownChartInstance = null;
+
+        // ---- DRILLDOWN DEMANDA GLOBAL LOGIC (MODAL) ----
+        window.closeDemandaDrilldown = function() {
+            const modal = document.getElementById('demanda-drilldown-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        };
+
+        window.renderDemandaDrilldown = function(formType, records, commonBarOptions) {
+            const modal = document.getElementById('demanda-drilldown-modal');
+            const title = document.getElementById('demanda-drilldown-title');
+            const ctx = document.getElementById('demandaDrilldownChart').getContext('2d');
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            title.innerText = 'Detalhes de: ' + formType;
+
+            // Filter records by form_type and count by tipo_ajuste
+            const filtered = records.filter(r => r.form_type === formType);
+            const countsDetalhe = {};
+            filtered.forEach(r => {
+                const campo = r.tipo_ajuste || r.tipo_defesa || r.tipo_suporte || 'Sem tipo';
+                countsDetalhe[campo] = (countsDetalhe[campo] || 0) + 1;
+            });
+
+            const ordenados = Object.entries(countsDetalhe).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+            
+            if (demandaDrilldownChartInstance) demandaDrilldownChartInstance.destroy();
+            
+            if (ordenados.length === 0) {
+                document.getElementById('demandaDrilldownChart').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('demandaDrilldownChart').style.display = 'block';
+            const chartHeight = Math.max(300, ordenados.length * 45) + 'px';
+            document.getElementById('demandaDrilldownChart').parentElement.style.height = chartHeight;
+            document.getElementById('demandaDrilldownChart').parentElement.style.minHeight = chartHeight;
+            
+            const colors = ['#4f46e5', '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16', '#06b6d4', '#64748b', '#d946ef', '#eab308'];
+            
+            const modalBarOptions = {
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                animation: { duration: 2500, easing: 'easeOutQuart' },
+                layout: { padding: { top: 8, bottom: 8, right: 60 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonBarOptions.plugins.tooltip,
+                    datalabels: {
+                        anchor: 'end', align: 'end', offset: 6,
+                        font: { weight: '600', size: 14, family: "'Inter', sans-serif" },
+                        color: '#334155', formatter: (v) => v > 0 ? v : null
+                    }
+                },
+                scales: {
+                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
+                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = Math.min(340, Math.max(200, ordenados.reduce((max, [l]) => l.length > max ? l.length : max, 0) * 8)); }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 12 }, color: '#334155', autoSkip: false }, border: { display: false } }
+                }
+            };
+
+            demandaDrilldownChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ordenados.map(s => s[0]),
+                    datasets: [{ 
+                        label: 'Registros', data: ordenados.map(s => s[1]), 
+                        backgroundColor: colors.slice(0, ordenados.length).map(c => c + 'cc'), 
+                        borderColor: colors.slice(0, ordenados.length), 
+                        borderWidth: 2, borderRadius: 8, barThickness: 18
+                    }]
+                },
+                options: modalBarOptions
+            });
+            
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        };
 
         // ---- DRILLDOWN SUPORTE GLOBAL LOGIC (MODAL) ----
         window.closeSuporteDrilldown = function() {
@@ -3207,13 +3308,31 @@
             if (demandasDataArray.length === 0) { showEmptyState('demandPieChart'); }
             else {
                 hideEmptyState('demandPieChart');
+                const demandaOptions = JSON.parse(JSON.stringify(commonOptions));
+                demandaOptions.plugins.datalabels.formatter = commonOptions.plugins.datalabels.formatter;
+                demandaOptions.plugins.legend.onClick = function(e, legendItem, legend) {
+                    const label = legendItem.text;
+                    if (label === 'AJUSTE DE OPERAÇÃO') {
+                        window.renderDemandaDrilldown(label, activeRecords, commonBarOptions);
+                    }
+                };
+                demandaOptions.onClick = function(e, activeElements) {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const label = this.data.labels[index];
+                        if (label === 'AJUSTE DE OPERAÇÃO') {
+                            window.renderDemandaDrilldown(label, activeRecords, commonBarOptions);
+                        }
+                    }
+                };
+
                 demandChartInstance = new Chart(ctxDemandas, {
                     type: 'doughnut',
                     data: {
                         labels: demandasDataArray.map(d => d.label),
                         datasets: [{ data: demandasDataArray.map(d => d.value), backgroundColor: demandasDataArray.map(d => d.color), borderWidth: 2, borderColor: '#ffffff', hoverOffset: 10 }]
                     },
-                    options: commonOptions
+                    options: demandaOptions
                 });
             }
 
