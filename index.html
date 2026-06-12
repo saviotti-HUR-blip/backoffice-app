@@ -1010,7 +1010,7 @@
                             <button type="button" onclick="exportCadastroHtmlToExcel()"
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
                                 <i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Extrair para Planilha
-                                    HTML</span>
+                                    XLSX</span>
                             </button>
                             <button type="button" onclick="generateDashboard()"
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2">
@@ -2121,7 +2121,8 @@
                 'ASSINATURA DE CONTRATO',
                 'ASSINATURA DE NP',
                 'INSERIR PROSPECT VISITA',
-                'AJUSTE DE PARÂMETROS'
+                'AJUSTE DE PARÂMETROS',
+                'SUPORTE CNAB'
             ],
             'CHECAGEM': [
                 'ENVIO DE CANHOTO',
@@ -2654,8 +2655,14 @@
             }
 
             if (dataObj['quantidade'] !== undefined && dataObj['quantidade'] !== null) dataObj['quantidade'] = parseInt(dataObj['quantidade']);
-            if (dataObj['nota_servico'] !== undefined && dataObj['nota_servico'] !== null) dataObj['nota_servico'] = parseInt(dataObj['nota_servico']);
-            if (dataObj['cheque'] !== undefined && dataObj['cheque'] !== null) dataObj['cheque'] = parseInt(dataObj['cheque']);
+            if (dataObj['nota_servico'] !== undefined && dataObj['nota_servico'] !== null) {
+                dataObj['nota_servico'] = parseInt(dataObj['nota_servico']);
+                if (dataObj['nota_servico'] === 0) dataObj['nota_servico'] = null;
+            }
+            if (dataObj['cheque'] !== undefined && dataObj['cheque'] !== null) {
+                dataObj['cheque'] = parseInt(dataObj['cheque']);
+                if (dataObj['cheque'] === 0) dataObj['cheque'] = null;
+            }
 
             // Validação: tipo_suporte é obrigatório no Suporte
             if (dataObj['form_type'] === 'SUPORTE') {
@@ -3774,7 +3781,7 @@
             }
         }
 
-        // Função de Exportar Acompanhamento de Cadastro para HTML (Excel)
+        // Função de Exportar Acompanhamento de Cadastro para XLSX (SheetJS)
         function exportCadastroHtmlToExcel() {
             let dataRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
             const moSelector = document.getElementById('export_cadastro_month');
@@ -3787,37 +3794,47 @@
                 return;
             }
 
-            let htmlTable = `<meta charset="UTF-8"><table><thead><tr>
-                <th>RECEBIDO EM:</th><th>CEDENTE</th><th>TIPO DE CADASTRO</th><th>PORTE</th>
-                <th>GERENTE</th><th>FEITO POR</th><th>STATUS</th><th>GRUPO</th>
-                <th>PENDÊNCIAS TRIAGEM</th><th>PLEITO DO GERENTE</th><th>ENVIO PARA O CADASTRO</th>
-                <th>DATA RETORNO CRÉDITO</th><th>PENDÊNCIAS CRÉDITO</th><th>DATA ENVIO</th>
-                <th>DATA ELABORAÇÃO</th><th>DATA COMITÊ</th>
-            </tr></thead><tbody>`;
+            try {
+                const exportData = dataRecords.map(r => ({
+                    'RECEBIDO EM': formatDataForDisplay(r.recebido_em, 'data'),
+                    'CEDENTE': r.cedente || '',
+                    'TIPO DE CADASTRO': r.tipo_cadastro || '',
+                    'PORTE': r.porte || '',
+                    'GERENTE': r.gerente || '',
+                    'FEITO POR': r.feito_por || '',
+                    'STATUS': r.status || r.fase_cadastro || '',
+                    'GRUPO': r.grupo || '',
+                    'PENDÊNCIAS TRIAGEM': r.pendencias_triagem || '',
+                    'PLEITO DO GERENTE': r.pleito_gerente || '',
+                    'ENVIO PARA O CADASTRO': formatDataForDisplay(r.envio_cadastro, 'data'),
+                    'DATA RETORNO CRÉDITO': formatDataForDisplay(r.data_retorno_credito, 'data'),
+                    'PENDÊNCIAS CRÉDITO': r.pendencias_credito || '',
+                    'DATA ENVIO': formatDataForDisplay(r.data_envio, 'data'),
+                    'DATA ELABORAÇÃO': formatDataForDisplay(r.data_elaboracao, 'data'),
+                    'DATA COMITÊ': formatDataForDisplay(r.data_comite, 'data')
+                }));
 
-            dataRecords.forEach(r => {
-                htmlTable += `<tr>
-                    <td>${formatDataForDisplay(r.recebido_em, 'data')}</td><td>${r.cedente || ''}</td><td>${r.tipo_cadastro || ''}</td><td>${r.porte || ''}</td>
-                    <td>${r.gerente || ''}</td><td>${r.feito_por || ''}</td><td>${r.status || r.fase_cadastro || ''}</td><td>${r.grupo || ''}</td>
-                    <td>${r.pendencias_triagem || ''}</td><td>${r.pleito_gerente || ''}</td><td>${formatDataForDisplay(r.envio_cadastro, 'data')}</td>
-                    <td>${formatDataForDisplay(r.data_retorno_credito, 'data')}</td><td>${r.pendencias_credito || ''}</td><td>${formatDataForDisplay(r.data_envio, 'data')}</td>
-                    <td>${formatDataForDisplay(r.data_elaboracao, 'data')}</td><td>${formatDataForDisplay(r.data_comite, 'data')}</td>
-                </tr>`;
-            });
-            htmlTable += "</tbody></table>";
+                const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            let filename = `Acompanhamento_Cadastros_${new Date().getTime()}.xls`;
-            if (monthVal) {
-                filename = `Acompanhamento_Cadastros_${monthVal.replace('-', '_')}.xls`;
+                // Ajustar largura das colunas automaticamente
+                const colWidths = Object.keys(exportData[0]).map(key => ({
+                    wch: Math.max(key.length, ...exportData.map(row => (row[key] || '').toString().length)) + 2
+                }));
+                worksheet['!cols'] = colWidths;
+
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Cadastros');
+
+                let filename = `Acompanhamento_Cadastros_${new Date().getTime()}.xlsx`;
+                if (monthVal) {
+                    filename = `Acompanhamento_Cadastros_${monthVal.replace('-', '_')}.xlsx`;
+                }
+                XLSX.writeFile(workbook, filename);
+                showToast(`Planilha XLSX gerada com sucesso! (${dataRecords.length} registros)`, 'success');
+            } catch (err) {
+                console.error('Erro ao exportar XLSX de cadastros:', err);
+                showToast('Erro ao exportar os dados. Verifique o console.', 'error');
             }
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('Planilha HTML gerada com sucesso!', 'success');
         }
 
         // Variáveis para guardar instâncias dos gráficos do Dashboard SPA
