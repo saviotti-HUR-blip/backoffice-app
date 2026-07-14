@@ -757,12 +757,20 @@
         </section>
 
         <!-- Botão Abrir Histórico -->
-        <div id="historico-btn-container" class="mt-12 text-center animate-fade-in-up" style="animation-delay: 0.4s;">
+        <div id="historico-btn-container" class="mt-12 text-center flex flex-col items-center gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
             <button onclick="openHistorico()"
                 class="group inline-flex items-center space-x-3 bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 hover:from-slate-900 hover:to-slate-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-xl shadow-slate-300/30 transition-all hover:-translate-y-1 hover:shadow-2xl">
                 <i data-lucide="line-chart" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
                 <span>Ver Histórico & Gráficos</span>
                 <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+            </button>
+            <button onclick="openForm('campanha-form')"
+                class="group flex flex-col items-center bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-600 hover:to-orange-600 text-white py-3 px-12 rounded-2xl shadow-xl shadow-orange-300/30 transition-all hover:-translate-y-1 hover:shadow-2xl mt-4">
+                <div class="flex items-center space-x-2 font-bold text-lg tracking-wide">
+                    <i data-lucide="plane" class="w-5 h-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"></i>
+                    <span>CAMPANHA</span>
+                </div>
+                <span class="text-xs font-medium text-amber-100 mt-1">Acompanhamento Voo 135</span>
             </button>
         </div>
 
@@ -2084,6 +2092,148 @@
                 class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium shadow-sm transition-colors">OK</button>
         </div>
     </div>
+
+    <!-- CAMPANHA Form -->
+    <section id="campanha-form" class="form-section hidden">
+        <div class="max-w-[1240px] w-full mx-auto">
+            <button type="button" onclick="closeForm()" class="back-btn mb-6 flex items-center text-slate-500 hover:text-slate-800 transition-colors">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Voltar ao Menu
+            </button>
+            <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #f59e0b;">
+                <div class="form-header-banner" style="background: linear-gradient(135deg, #f59e0b, #ea580c, #c2410c); padding: 2rem; border-radius: 1rem; color: white; display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                    <div class="banner-icon bg-white/20 p-3 rounded-xl backdrop-blur-sm"><i data-lucide="plane" class="w-8 h-8 text-white"></i></div>
+                    <div>
+                        <h2 class="text-2xl font-bold">Acompanhamento Voo 135</h2>
+                        <p class="text-orange-100 font-medium">Campanha Exclusiva</p>
+                    </div>
+                </div>
+                <form id="form-campanha" class="space-y-6 text-left">
+                    <input type="hidden" name="campanha_id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                            <input type="date" name="data_campanha" id="data_campanha" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Status</label>
+                            <select name="status_campanha" id="status_campanha" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none bg-white text-sm">
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Ativação">Ativação</option>
+                                <option value="Reativação">Reativação</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                            <input type="text" name="cedente_campanha" id="cedente_campanha" placeholder="Nome do cedente" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Código</label>
+                            <input type="number" name="codigo_campanha" id="codigo_campanha" placeholder="Código" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente_campanha" id="gerente_campanha" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none bg-white text-sm">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="RAFAELA XAVIER">RAFAELA XAVIER</option>
+                                <option value="RENAN">RENAN</option>
+                                <option value="RICARDO">RICARDO</option>
+                                <option value="ROBSON">ROBSON</option>
+                                <option value="SEBASTIAO">SEBASTIAO</option>
+                                <option value="TAISSA">TAISSA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="VITOR HUGO">VITOR HUGO</option>
+                                <option value="VITOR SANTANA">VITOR SANTANA</option>
+                                <option value="WESLEI">WESLEI</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Porte</label>
+                            <select name="porte_campanha" id="porte_campanha" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none bg-white text-sm">
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="SMALL">SMALL</option>
+                                <option value="MIDDLE">MIDDLE</option>
+                                <option value="CORPORATE">CORPORATE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Volume Operado (VOP - R$)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-medium">R$</span>
+                                <input type="text" name="vop_campanha" id="vop_campanha" placeholder="0,00" required class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none money-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Elegível</label>
+                            <input type="text" name="elegivel_campanha" id="elegivel_campanha" readonly value="-" class="w-full px-4 py-2 rounded-lg border border-slate-200 bg-slate-50 font-bold text-center transition-all outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Origem</label>
+                            <select name="origem_campanha" id="origem_campanha" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none bg-white text-sm">
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="PROSPECÇÃO PRÓPRIA">PROSPECÇÃO PRÓPRIA</option>
+                                <option value="INDICAÇÃO">INDICAÇÃO</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nome do Aliado</label>
+                            <input type="text" name="nome_aliado_campanha" id="nome_aliado_campanha" placeholder="Nome do aliado" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 transition-all outline-none uppercase">
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-6 border-t border-slate-100">
+                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-300/50 transition-all hover:-translate-y-1 hover:shadow-xl flex items-center space-x-2">
+                            <i data-lucide="save" class="w-5 h-5"></i>
+                            <span>Salvar Registro</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Campanha History Table -->
+            <div class="mt-12 glass-card rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="list" class="w-5 h-5 text-orange-500"></i> Registros da Campanha
+                    </h3>
+                    <button type="button" onclick="exportarCampanha()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow-md shadow-green-200 transition-all flex items-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i> Exportar XLSX
+                    </button>
+                </div>
+                <div class="overflow-x-auto w-full custom-scrollbar rounded-xl border border-slate-200">
+                    <table class="w-full text-left border-collapse text-sm whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-xs">
+                                <th class="px-4 py-3 font-semibold">Status</th>
+                                <th class="px-4 py-3 font-semibold">Data</th>
+                                <th class="px-4 py-3 font-semibold">Código</th>
+                                <th class="px-4 py-3 font-semibold">Porte</th>
+                                <th class="px-4 py-3 font-semibold">Gerente</th>
+                                <th class="px-4 py-3 font-semibold">Cedente</th>
+                                <th class="px-4 py-3 font-semibold">VOP</th>
+                                <th class="px-4 py-3 font-semibold">Origem</th>
+                                <th class="px-4 py-3 font-semibold">Nome Aliado</th>
+                                <th class="px-4 py-3 font-semibold">Elegível</th>
+                                <th class="px-4 py-3 font-semibold text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-campanha-body" class="bg-white divide-y divide-slate-100 text-slate-700">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
         // Init Lucide Icons
@@ -4228,6 +4378,179 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+        // --- INÍCIO LÓGICA DA CAMPANHA ---
+        const formCampanha = document.getElementById('form-campanha');
+        const porteCampanha = document.getElementById('porte_campanha');
+        const vopCampanha = document.getElementById('vop_campanha');
+        const elegivelCampanha = document.getElementById('elegivel_campanha');
+        const tabelaCampanhaBody = document.getElementById('tabela-campanha-body');
+        
+        let campanhaRecords = JSON.parse(localStorage.getItem('campanha_voo135_records') || '[]');
+
+        function calcularElegibilidade() {
+            const porte = porteCampanha.value;
+            let vopText = vopCampanha.value.replace(/\./g, '').replace(',', '.');
+            let vop = parseFloat(vopText) || 0;
+            
+            let isElegivel = false;
+            if (porte === 'SMALL' && vop >= 30000) isElegivel = true;
+            else if (porte === 'MIDDLE' && vop >= 100000) isElegivel = true;
+            else if (porte === 'CORPORATE' && vop >= 1000000) isElegivel = true;
+            
+            if (!porte || !vopCampanha.value) {
+                elegivelCampanha.value = '-';
+                elegivelCampanha.className = 'w-full px-4 py-2 rounded-lg border border-slate-200 bg-slate-50 font-bold text-center transition-all outline-none';
+                return;
+            }
+
+            if (isElegivel) {
+                elegivelCampanha.value = 'SIM';
+                elegivelCampanha.className = 'w-full px-4 py-2 rounded-lg border-2 border-green-500 bg-green-50 text-green-700 font-bold text-center transition-all outline-none';
+            } else {
+                elegivelCampanha.value = 'NÃO';
+                elegivelCampanha.className = 'w-full px-4 py-2 rounded-lg border-2 border-red-500 bg-red-50 text-red-700 font-bold text-center transition-all outline-none';
+            }
+        }
+
+        if (porteCampanha) porteCampanha.addEventListener('change', calcularElegibilidade);
+        if (vopCampanha) vopCampanha.addEventListener('input', calcularElegibilidade);
+
+        function renderizarTabelaCampanha() {
+            tabelaCampanhaBody.innerHTML = '';
+            if (campanhaRecords.length === 0) {
+                tabelaCampanhaBody.innerHTML = '<tr><td colspan="11" class="px-4 py-8 text-center text-slate-500 italic">Nenhum registro encontrado para esta campanha.</td></tr>';
+                return;
+            }
+
+            campanhaRecords.forEach(record => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
+                
+                let elegivelBadge = record.elegivel === 'SIM' 
+                    ? '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">SIM</span>'
+                    : '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">NÃO</span>';
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3">${record.status}</td>
+                    <td class="px-4 py-3">${new Date(record.data + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+                    <td class="px-4 py-3">${record.codigo}</td>
+                    <td class="px-4 py-3">${record.porte}</td>
+                    <td class="px-4 py-3">${record.gerente}</td>
+                    <td class="px-4 py-3 font-medium text-slate-900 uppercase">${record.cedente}</td>
+                    <td class="px-4 py-3 font-semibold">R$ ${record.vop}</td>
+                    <td class="px-4 py-3">${record.origem}</td>
+                    <td class="px-4 py-3 uppercase">${record.nome_aliado || '-'}</td>
+                    <td class="px-4 py-3">${elegivelBadge}</td>
+                    <td class="px-4 py-3 text-center">
+                        <div class="flex items-center justify-center space-x-2">
+                            <button type="button" onclick="editarCampanha('${record.id}')" class="text-blue-600 hover:text-blue-800 p-1 bg-blue-50 hover:bg-blue-100 rounded transition-colors" title="Editar">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button type="button" onclick="deletarCampanha('${record.id}')" class="text-red-600 hover:text-red-800 p-1 bg-red-50 hover:bg-red-100 rounded transition-colors" title="Excluir">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tabelaCampanhaBody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function salvarCampanha(e) {
+            e.preventDefault();
+            const idInput = formCampanha.elements['campanha_id'].value;
+            
+            const novoRegistro = {
+                id: idInput || Date.now().toString(),
+                data: formCampanha.elements['data_campanha'].value,
+                status: formCampanha.elements['status_campanha'].value,
+                cedente: formCampanha.elements['cedente_campanha'].value.toUpperCase(),
+                codigo: formCampanha.elements['codigo_campanha'].value,
+                gerente: formCampanha.elements['gerente_campanha'].value,
+                porte: formCampanha.elements['porte_campanha'].value,
+                vop: formCampanha.elements['vop_campanha'].value,
+                elegivel: formCampanha.elements['elegivel_campanha'].value,
+                origem: formCampanha.elements['origem_campanha'].value,
+                nome_aliado: formCampanha.elements['nome_aliado_campanha'].value.toUpperCase()
+            };
+
+            if (idInput) {
+                const index = campanhaRecords.findIndex(r => r.id === idInput);
+                if (index > -1) campanhaRecords[index] = novoRegistro;
+                showToast('Registro editado com sucesso', 'check-circle', 'bg-blue-600');
+            } else {
+                campanhaRecords.push(novoRegistro);
+                showToast('Registro salvo com sucesso', 'check-circle', 'bg-green-600');
+            }
+
+            localStorage.setItem('campanha_voo135_records', JSON.stringify(campanhaRecords));
+            formCampanha.reset();
+            formCampanha.elements['campanha_id'].value = '';
+            calcularElegibilidade();
+            renderizarTabelaCampanha();
+        }
+
+        if (formCampanha) formCampanha.addEventListener('submit', salvarCampanha);
+
+        function editarCampanha(id) {
+            const record = campanhaRecords.find(r => r.id === id);
+            if (!record) return;
+
+            formCampanha.elements['campanha_id'].value = record.id;
+            formCampanha.elements['data_campanha'].value = record.data;
+            formCampanha.elements['status_campanha'].value = record.status;
+            formCampanha.elements['cedente_campanha'].value = record.cedente;
+            formCampanha.elements['codigo_campanha'].value = record.codigo;
+            formCampanha.elements['gerente_campanha'].value = record.gerente;
+            formCampanha.elements['porte_campanha'].value = record.porte;
+            formCampanha.elements['vop_campanha'].value = record.vop;
+            formCampanha.elements['origem_campanha'].value = record.origem;
+            formCampanha.elements['nome_aliado_campanha'].value = record.nome_aliado;
+            
+            calcularElegibilidade();
+            window.scrollTo({ top: formCampanha.offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function deletarCampanha(id) {
+            if (confirm('Tem certeza que deseja excluir este registro da Campanha?')) {
+                campanhaRecords = campanhaRecords.filter(r => r.id !== id);
+                localStorage.setItem('campanha_voo135_records', JSON.stringify(campanhaRecords));
+                renderizarTabelaCampanha();
+                showToast('Registro excluído', 'trash-2', 'bg-red-600');
+            }
+        }
+
+        function exportarCampanha() {
+            if (campanhaRecords.length === 0) {
+                alert('Não há dados para exportar.');
+                return;
+            }
+
+            const rows = campanhaRecords.map(r => ({
+                'STATUS': r.status,
+                'DATA': new Date(r.data + 'T00:00:00').toLocaleDateString('pt-BR'),
+                'Código': r.codigo,
+                'PORTE': r.porte,
+                'Gerente': r.gerente,
+                'Cedente': r.cedente,
+                'Volume operado mês': r.vop,
+                'INDICAÇÃO/OU PROSPECÇÃO PRÓPRIA': r.origem,
+                'NOME ALIADO': r.nome_aliado,
+                'ELEGÍVEL': r.elegivel
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Campanha_Voo135");
+            XLSX.writeFile(workbook, "Campanha_Voo135.xlsx");
+        }
+
+        // Render on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarTabelaCampanha();
+        });
+        // --- FIM LÓGICA DA CAMPANHA ---
     </script>
 </body>
 
