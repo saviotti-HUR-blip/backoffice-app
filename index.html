@@ -666,8 +666,8 @@
         html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155 !important; }
     </style>
     <script>
-        // Init dark mode immediately (FORCED AS DEFAULT)
-        if (localStorage.getItem('theme') !== 'light') {
+        // Padrão é Claro, Escuro apenas se o usuário tiver clicado antes
+        if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
