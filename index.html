@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backoffice Controle LS</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -653,14 +658,17 @@
             font-weight: bold;
         }
         /* Dark Mode Theme Overrides */
-        html.dark, html.dark body { background-color: #0f172a; color: #f1f5f9; }
-        html.dark .bg-slate-50, html.dark .bg-slate-100, html.dark .bg-white, html.dark .glass-card, html.dark .dashboard-header { background-color: #1e293b !important; color: #f1f5f9 !important; border-color: #334155 !important; }
+        html.dark, html.dark body { background-color: #0f172a !important; background-image: none !important; color: #f1f5f9; }
+        html.dark .bg-slate-50, html.dark .bg-slate-50\/50, html.dark .bg-slate-100, html.dark .bg-white, html.dark .glass-card, html.dark .dashboard-header, html.dark .chart-card { background-color: #1e293b !important; color: #f1f5f9 !important; border-color: #334155 !important; }
         html.dark .text-slate-800, html.dark .text-slate-700, html.dark .text-slate-600, html.dark .text-slate-500 { color: #cbd5e1 !important; }
         html.dark input, html.dark select, html.dark textarea { background-color: #0f172a !important; color: #f1f5f9 !important; border-color: #334155 !important; }
         html.dark .shadow-xl, html.dark .shadow-lg, html.dark .shadow-md { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5) !important; }
-        html.dark table thead tr { background-color: #0f172a !important; border-bottom-color: #334155 !important; }
-        html.dark table tbody tr { border-bottom-color: #334155 !important; }
-        html.dark table tbody tr:hover { background-color: #334155 !important; }
+        html.dark table thead tr, html.dark table thead th, html.dark .premium-table thead th { background: #0f172a !important; color: #f1f5f9 !important; border-bottom-color: #334155 !important; }
+        html.dark table tbody tr, html.dark .premium-table tbody tr { background: #1e293b !important; border-bottom-color: #334155 !important; }
+        html.dark table tbody tr:nth-child(even), html.dark .premium-table tbody tr:nth-child(even) { background: #0f172a !important; }
+        html.dark table tbody tr:hover, html.dark .premium-table tbody tr:hover { background: #334155 !important; }
+        html.dark .chart-total-badge { background-color: #334155 !important; border-color: #475569 !important; color: #f8fafc !important; }
+        html.dark .chart-total-badge span { color: #93c5fd !important; }
         html.dark .text-slate-900 { color: #ffffff !important; }
         html.dark .border-slate-200, html.dark .border-slate-100, html.dark .border-slate-300 { border-color: #334155 !important; }
         html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155 !important; }
@@ -690,6 +698,13 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
             document.getElementById('theme-icon-moon').classList.toggle('hidden', isDark);
             document.getElementById('theme-icon-sun').classList.toggle('hidden', !isDark);
+            
+            if (window.Chart) {
+                Chart.defaults.color = isDark ? '#cbd5e1' : '#64748b';
+                for (let id in Chart.instances) {
+                    Chart.instances[id].update();
+                }
+            }
         }
         document.addEventListener('DOMContentLoaded', () => {
             const isDark = document.documentElement.classList.contains('dark');
@@ -718,7 +733,7 @@
             <p class="text-slate-500 mb-8 text-lg font-light">Gestão de Demandas e Ajustes de Operação</p>
 
             <div
-                class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/70 backdrop-blur-md p-5 rounded-2xl max-w-lg mx-auto shadow-lg shadow-slate-200/50 border border-white/60">
+                class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white/70 backdrop-blur-md p-5 rounded-2xl max-w-lg mx-auto shadow-lg shadow-slate-200/50 border border-white/60 dark:bg-slate-800/80 dark:border-slate-700 dark:shadow-slate-900/50">
                 <div class="flex items-center space-x-2">
                     <label for="export-month" class="text-sm font-semibold text-slate-700">Filtrar Mês:</label>
                     <input type="month" id="export-month"
@@ -741,57 +756,57 @@
         <!-- Navigation Grid Section -->
         <section id="nav-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <button onclick="openForm('cadastro-form')"
-                class="nav-button animate-fade-in-scale stagger-1 border border-blue-200/80 bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-blue-100/50">
-                <div class="icon-blue p-4 rounded-2xl text-white shadow-lg shadow-blue-300/40">
+                class="nav-button animate-fade-in-scale stagger-1 border border-blue-200/80 bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-blue-100/50 dark:from-blue-900/40 dark:to-blue-950/80 dark:border-blue-800/50 dark:shadow-none">
+                <div class="icon-blue p-4 rounded-2xl text-white shadow-lg shadow-blue-300/40 dark:shadow-none">
                     <i data-lucide="user-plus" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-blue-700">CADASTRO</span>
-                <span class="text-xs text-blue-400 font-medium -mt-2">Prospecção e Renovação</span>
+                <span class="font-bold text-lg tracking-wide text-blue-700 dark:text-blue-300">CADASTRO</span>
+                <span class="text-xs text-blue-400 font-medium -mt-2 dark:text-blue-200">Prospecção e Renovação</span>
             </button>
 
             <button onclick="openForm('suporte-form')"
-                class="nav-button animate-fade-in-scale stagger-2 border border-orange-200/80 bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-orange-100/50">
-                <div class="icon-orange p-4 rounded-2xl text-white shadow-lg shadow-orange-300/40">
+                class="nav-button animate-fade-in-scale stagger-2 border border-orange-200/80 bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-orange-100/50 dark:from-orange-900/40 dark:to-orange-950/80 dark:border-orange-800/50 dark:shadow-none">
+                <div class="icon-orange p-4 rounded-2xl text-white shadow-lg shadow-orange-300/40 dark:shadow-none">
                     <i data-lucide="life-buoy" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-orange-700">SUPORTE</span>
-                <span class="text-xs text-orange-400 font-medium -mt-2">Atendimento ao Cliente</span>
+                <span class="font-bold text-lg tracking-wide text-orange-700 dark:text-orange-300">SUPORTE</span>
+                <span class="text-xs text-orange-400 font-medium -mt-2 dark:text-orange-200">Atendimento ao Cliente</span>
             </button>
 
             <button onclick="openForm('imp-operacoes-form')"
-                class="nav-button animate-fade-in-scale stagger-3 border border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-emerald-100/50">
-                <div class="icon-emerald p-4 rounded-2xl text-white shadow-lg shadow-emerald-300/40">
+                class="nav-button animate-fade-in-scale stagger-3 border border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-emerald-100/50 dark:from-emerald-900/40 dark:to-emerald-950/80 dark:border-emerald-800/50 dark:shadow-none">
+                <div class="icon-emerald p-4 rounded-2xl text-white shadow-lg shadow-emerald-300/40 dark:shadow-none">
                     <i data-lucide="import" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-emerald-700">IMP DE OPERAÇÕES</span>
-                <span class="text-xs text-emerald-400 font-medium -mt-2">Importação e Notas</span>
+                <span class="font-bold text-lg tracking-wide text-emerald-700 dark:text-emerald-300">IMP DE OPERAÇÕES</span>
+                <span class="text-xs text-emerald-400 font-medium -mt-2 dark:text-emerald-200">Importação e Notas</span>
             </button>
 
             <button onclick="openForm('demandas-form')"
-                class="nav-button animate-fade-in-scale stagger-4 border border-purple-200/80 bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-purple-100/50">
-                <div class="icon-purple p-4 rounded-2xl text-white shadow-lg shadow-purple-300/40">
+                class="nav-button animate-fade-in-scale stagger-4 border border-purple-200/80 bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-purple-100/50 dark:from-purple-900/40 dark:to-purple-950/80 dark:border-purple-800/50 dark:shadow-none">
+                <div class="icon-purple p-4 rounded-2xl text-white shadow-lg shadow-purple-300/40 dark:shadow-none">
                     <i data-lucide="layout-list" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-purple-700">DEMANDAS</span>
-                <span class="text-xs text-purple-400 font-medium -mt-2">Atas e Diagnósticos</span>
+                <span class="font-bold text-lg tracking-wide text-purple-700 dark:text-purple-300">DEMANDAS</span>
+                <span class="text-xs text-purple-400 font-medium -mt-2 dark:text-purple-200">Atas e Diagnósticos</span>
             </button>
 
             <button onclick="openForm('ajuste-form')"
-                class="nav-button animate-fade-in-scale stagger-5 border border-indigo-200/80 bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-indigo-100/50">
-                <div class="icon-indigo p-4 rounded-2xl text-white shadow-lg shadow-indigo-300/40">
+                class="nav-button animate-fade-in-scale stagger-5 border border-indigo-200/80 bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-indigo-100/50 dark:from-indigo-900/40 dark:to-indigo-950/80 dark:border-indigo-800/50 dark:shadow-none">
+                <div class="icon-indigo p-4 rounded-2xl text-white shadow-lg shadow-indigo-300/40 dark:shadow-none">
                     <i data-lucide="settings-2" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-indigo-700">AJUSTE DE OPERAÇÕES</span>
-                <span class="text-xs text-indigo-400 font-medium -mt-2">Rótulos e Vencimentos</span>
+                <span class="font-bold text-lg tracking-wide text-indigo-700 dark:text-indigo-300">AJUSTE DE OPERAÇÕES</span>
+                <span class="text-xs text-indigo-400 font-medium -mt-2 dark:text-indigo-200">Rótulos e Vencimentos</span>
             </button>
 
             <button onclick="openForm('defesas-form')"
-                class="nav-button animate-fade-in-scale stagger-6 border border-rose-200/80 bg-gradient-to-br from-rose-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-rose-100/50">
-                <div class="icon-rose p-4 rounded-2xl text-white shadow-lg shadow-rose-300/40">
+                class="nav-button animate-fade-in-scale stagger-6 border border-rose-200/80 bg-gradient-to-br from-rose-50 to-white p-8 rounded-2xl flex flex-col items-center justify-center space-y-4 shadow-md shadow-rose-100/50 dark:from-rose-900/40 dark:to-rose-950/80 dark:border-rose-800/50 dark:shadow-none">
+                <div class="icon-rose p-4 rounded-2xl text-white shadow-lg shadow-rose-300/40 dark:shadow-none">
                     <i data-lucide="shield" class="w-8 h-8"></i>
                 </div>
-                <span class="font-bold text-lg tracking-wide text-rose-700">DEFESAS</span>
-                <span class="text-xs text-rose-400 font-medium -mt-2">Defesas e Pleitos</span>
+                <span class="font-bold text-lg tracking-wide text-rose-700 dark:text-rose-300">DEFESAS</span>
+                <span class="text-xs text-rose-400 font-medium -mt-2 dark:text-rose-200">Defesas e Pleitos</span>
             </button>
         </section>
 
@@ -855,7 +870,9 @@
                                     <option value="Prospecção">Prospecção</option>
                                     <option value="Renovação">Renovação</option>
                                     <option value="Inclusão">Inclusão</option>
-                                    <option value="Risco Sacado">Risco Sacado</option>
+                                    <option value="Reativação">Reativação</option>
+                                    <option value="Risco Sacado (Sacado)">Risco Sacado (Sacado)</option>
+                                    <option value="Risco Sacado (Fornecedor)">Risco Sacado (Fornecedor)</option>
                                 </select>
                             </div>
                             <div>
@@ -1048,7 +1065,7 @@
                         </div>
 
                         <div class="flex items-center gap-4 pt-2 mb-8 justify-end">
-                            <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                            <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700">
                                 <label for="export_cadastro_month"
                                     class="text-sm font-bold text-slate-700">Mês/Ano:</label>
                                 <input type="month" id="export_cadastro_month"
@@ -2177,23 +2194,15 @@
                                 <option value="ANA CAROLINA">ANA CAROLINA</option>
                                 <option value="ANA TAVARES">ANA TAVARES</option>
                                 <option value="ANTONIO">ANTONIO</option>
-                                <option value="AUGUSTO">AUGUSTO</option>
                                 <option value="BRUNO MACEDO">BRUNO MACEDO</option>
                                 <option value="CLAUDIA">CLAUDIA</option>
-                                <option value="ELIZABETH">ELIZABETH</option>
                                 <option value="GUILHERME">GUILHERME</option>
-                                <option value="JULIA">JULIA</option>
                                 <option value="MARLENE">MARLENE</option>
                                 <option value="RAFAELA">RAFAELA</option>
-                                <option value="RAFAELA XAVIER">RAFAELA XAVIER</option>
-                                <option value="RENAN">RENAN</option>
                                 <option value="RICARDO">RICARDO</option>
-                                <option value="ROBSON">ROBSON</option>
-                                <option value="SEBASTIAO">SEBASTIAO</option>
-                                <option value="TAISSA">TAISSA</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
                                 <option value="VECLAINE">VECLAINE</option>
-                                <option value="VITOR HUGO">VITOR HUGO</option>
-                                <option value="VITOR SANTANA">VITOR SANTANA</option>
                                 <option value="WESLEI">WESLEI</option>
                             </select>
                         </div>
@@ -2522,12 +2531,12 @@
                     datalabels: {
                         anchor: 'end', align: 'end', offset: 6,
                         font: { weight: '600', size: 14, family: "'Inter', sans-serif" },
-                        color: '#334155', formatter: (v) => v > 0 ? v : null
+                        color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', formatter: (v) => v > 0 ? v : null
                     }
                 },
                 scales: {
-                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
-                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = Math.min(340, Math.max(200, ordenados.reduce((max, [l]) => l.length > max ? l.length : max, 0) * 8)); }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 12 }, color: '#334155', autoSkip: false }, border: { display: false } }
+                    x: { grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
+                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = Math.min(340, Math.max(200, ordenados.reduce((max, [l]) => l.length > max ? l.length : max, 0) * 8)); }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 12 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', autoSkip: false }, border: { display: false } }
                 }
             };
 
@@ -2605,12 +2614,12 @@
                     datalabels: {
                         anchor: 'end', align: 'end', offset: 6,
                         font: { weight: '600', size: 14, family: "'Inter', sans-serif" },
-                        color: '#334155', formatter: (v) => v > 0 ? v : null
+                        color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', formatter: (v) => v > 0 ? v : null
                     }
                 },
                 scales: {
-                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
-                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = Math.min(340, Math.max(200, suporteOrdenados.reduce((max, [l]) => l.length > max ? l.length : max, 0) * 8)); }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 12 }, color: '#334155', autoSkip: false }, border: { display: false } }
+                    x: { grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
+                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = Math.min(340, Math.max(200, suporteOrdenados.reduce((max, [l]) => l.length > max ? l.length : max, 0) * 8)); }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 12 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', autoSkip: false }, border: { display: false } }
                 }
             };
 
@@ -3535,12 +3544,12 @@
                     datalabels: {
                         anchor: 'end', align: 'end', offset: 4,
                         font: { weight: '500', size: 12, family: "'Inter', sans-serif" },
-                        color: '#334155', formatter: (v) => v > 0 ? v : null
+                        color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', formatter: (v) => v > 0 ? v : null
                     }
                 },
                 scales: {
-                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 10 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
-                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = 200; }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 10 }, color: '#334155', autoSkip: false }, border: { display: false } }
+                    x: { grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 10 }, color: '#94a3b8', stepSize: 1 }, border: { display: false } },
+                    y: { grid: { display: false }, afterFit: (axis) => { axis.width = 200; }, ticks: { font: { family: "'Inter', sans-serif", weight: '500', size: 10 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#', autoSkip: false }, border: { display: false } }
                 }
             };
 
@@ -3680,7 +3689,7 @@
                             anchor: 'end',
                             align: 'end',
                             offset: 4,
-                            color: '#334155',
+                            color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#',
                             font: { weight: '700', size: 12, family: "'Inter', sans-serif" },
                             formatter: (value) => value > 0 ? value : null
                         },
@@ -3789,8 +3798,8 @@
                 
                 const mixedOptions = JSON.parse(JSON.stringify(commonOptions));
                 mixedOptions.scales = {
-                    x: { grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b' }, border: { display: false } },
-                    y: { grace: '15%', grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: '#64748b', stepSize: 1 }, border: { display: false }, beginAtZero: true }
+                    x: { grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#94a3b8' : '#' }, border: { display: false } },
+                    y: { grace: '15%', grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false }, ticks: { font: { family: "'Inter', sans-serif", size: 11 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#94a3b8' : '#', stepSize: 1 }, border: { display: false }, beginAtZero: true }
                 };
                 mixedOptions.plugins.legend = { display: false };
                 mixedOptions.plugins.datalabels = {
@@ -3798,7 +3807,7 @@
                     anchor: 'end',
                     align: 'top',
                     offset: 6,
-                    color: '#334155',
+                    color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#',
                     font: { weight: 'bold', size: 12, family: "'Inter', sans-serif" },
                     formatter: Math.round
                 };
@@ -3867,14 +3876,14 @@
                 scales: {
                     x: {
                         stacked: true,
-                        grid: { color: 'rgba(226,232,240,0.6)', drawTicks: false },
+                        grid: { color: (ctx) => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : 'rgba(226,232,240,0.6)', drawTicks: false },
                         ticks: { font: { family: "'Inter', sans-serif", size: 10 }, color: '#94a3b8', stepSize: 1 },
                         border: { display: false }
                     },
                     y: {
                         stacked: true,
                         grid: { display: false },
-                        ticks: { font: { family: "'Inter', sans-serif", weight: '600', size: 11 }, color: '#334155' },
+                        ticks: { font: { family: "'Inter', sans-serif", weight: '600', size: 11 }, color: (ctx) => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#' },
                         border: { display: false }
                     }
                 }
@@ -4766,3 +4775,4 @@
 </body>
 
 </html>
+
