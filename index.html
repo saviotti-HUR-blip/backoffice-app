@@ -873,6 +873,7 @@
                                     <option value="Reativação">Reativação</option>
                                     <option value="Risco Sacado (Sacado)">Risco Sacado (Sacado)</option>
                                     <option value="Risco Sacado (Fornecedor)">Risco Sacado (Fornecedor)</option>
+                                    <option value="STAND-BY">STAND-BY</option>
                                 </select>
                             </div>
                             <div>
@@ -3279,9 +3280,14 @@
                         tr.className = 'hover:bg-slate-50 transition-colors whitespace-nowrap text-slate-700';
                         tr.innerHTML = `
                             <td class="px-3 py-2 border-r border-slate-100 bg-white sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0] opacity-95 group-hover:bg-slate-50 transition-colors">
-                                <button type="button" onclick="editCadastroRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors w-full" title="Editar Cadastro">
-                                    <i data-lucide="edit" class="w-4 h-4"></i>
-                                </button>
+                                <div class="flex items-center justify-center space-x-1 w-full">
+                                    <button type="button" onclick="deleteCadastroRecord('${record.id}')" class="flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded-md transition-colors w-full" title="Excluir Cadastro">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button" onclick="editCadastroRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors w-full" title="Editar Cadastro">
+                                        <i data-lucide="edit" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                             </td>
                             <td class="px-3 py-2 font-medium">${recebidoEmExibicao}</td>
                             <td class="px-3 py-2 truncate max-w-[120px]" title="${record.cedente}">${record.cedente || '-'}</td>
@@ -4347,7 +4353,26 @@
             openForm('dashboard-section');
         }
 
-        // Função para carregar os dados de volta para o form de cadastro
+        // Função para deletar registro de cadastro
+        async function deleteCadastroRecord(id) {
+            if (confirm('Tem certeza que deseja excluir este registro de Cadastro?')) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('demandas')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    
+                    showToast('Registro excluído com sucesso', 'trash-2', 'bg-red-600');
+                    await fetchRecords(false);
+                } catch (error) {
+                    console.error('Erro ao deletar Cadastro:', error);
+                    showToast('Erro ao excluir o registro', 'x-circle', 'bg-red-600');
+                }
+            }
+        }
+
         // Função para carregar os dados de volta para o form de cadastro
         async function editCadastroRecord(id) {
             const record = savedRecords.find(r => String(r.id) === String(id));
