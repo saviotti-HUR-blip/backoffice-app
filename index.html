@@ -812,6 +812,14 @@
 
         <!-- Botão Abrir Histórico -->
         <div id="historico-btn-container" class="mt-12 text-center flex flex-col items-center gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <button onclick="openForm('operacoes-form')"
+                class="group flex flex-col items-center bg-gradient-to-r from-cyan-600 via-blue-600 to-cyan-600 hover:from-cyan-700 hover:to-blue-700 text-white py-3 px-12 rounded-2xl shadow-xl shadow-cyan-300/30 transition-all hover:-translate-y-1 hover:shadow-2xl mb-2">
+                <div class="flex items-center space-x-2 font-bold text-lg tracking-wide">
+                    <i data-lucide="activity" class="w-5 h-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"></i>
+                    <span>OPERAÇÕES</span>
+                </div>
+                <span class="text-xs font-medium text-cyan-100 mt-1">Acompanhamento de Operações</span>
+            </button>
             <button onclick="openHistorico()"
                 class="group inline-flex items-center space-x-3 bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 hover:from-slate-900 hover:to-slate-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-xl shadow-slate-300/30 transition-all hover:-translate-y-1 hover:shadow-2xl">
                 <i data-lucide="line-chart" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
@@ -1803,7 +1811,214 @@
             </div>
         </section>
 
-        <!-- 7. HISTÓRICO & GRÁFICOS (DASHBOARD) -->
+        <!-- 8. OPERAÇÕES Form -->
+        <section id="operacoes-form" class="form-section hidden">
+            <div class="max-w-2xl mx-auto">
+                <button type="button" onclick="closeForm()" class="back-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+                </button>
+                <div class="glass-card rounded-2xl p-8 shadow-xl" style="--form-accent: #0891b2;">
+                    <div class="form-header-banner"
+                        style="background: linear-gradient(135deg, #0891b2, #0284c7, #0369a1);">
+                        <div class="banner-icon"><i data-lucide="activity" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <h2>Novas Operações</h2>
+                            <p>Acompanhamento de Operações</p>
+                        </div>
+                    </div>
+                    <form id="form-operacoes" class="space-y-6">
+                        <input type="hidden" name="form_type" value="OPERAÇÕES">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Data</label>
+                                <input type="date" name="data" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Feito Por</label>
+                                <select name="feito_por" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none bg-white">
+                                    <option value="" disabled selected>Selecione um colaborador</option>
+                                    <option value="Leonardo">Leonardo</option>
+                                    <option value="Tatiana">Tatiana</option>
+                                    <option value="Matheus">Matheus</option>
+                                    <option value="Andreza">Andreza</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Gerente</label>
+                            <select name="gerente" required
+                                class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none bg-white">
+                                <option value="" disabled selected>Selecione o gerente</option>
+                                <option value="ADM">ADM</option>
+                                <option value="ANA CAROLINA">ANA CAROLINA</option>
+                                <option value="ANA TAVARES">ANA TAVARES</option>
+                                <option value="ANTONIO">ANTONIO</option>
+                                <option value="AUGUSTO">AUGUSTO</option>
+                                <option value="BRUNO MACEDO">BRUNO MACEDO</option>
+                                <option value="CLAUDIA">CLAUDIA</option>
+                                <option value="ELIZABETH">ELIZABETH</option>
+                                <option value="GUILHERME">GUILHERME</option>
+                                <option value="JULIA">JULIA</option>
+                                <option value="MARLENE">MARLENE</option>
+                                <option value="RAFAELA">RAFAELA</option>
+                                <option value="RICARDO">RICARDO</option>
+                                <option value="SIGRID">SIGRID</option>
+                                <option value="VALERIA">VALERIA</option>
+                                <option value="VECLAINE">VECLAINE</option>
+                                <option value="VRDE BANK">VRDE BANK</option>
+                                <option value="WESLEI">WESLEI</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Cedente</label>
+                                <input type="text" name="cedente" placeholder="Nome do cedente" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Aditivo</label>
+                                <input type="number" name="aditivo" placeholder="Número do aditivo" required
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Demora -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tipos de Demora</label>
+                            <input type="hidden" id="tipo-anomalia-sel" name="tipo_anomalia" required>
+                            <p class="text-xs text-slate-500 mb-2 font-medium">Selecione exatamente 1 opção:</p>
+                            <div class="flex flex-wrap gap-2" id="operacoes-anomalias-list">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Detalhes Ocultos -->
+                        <div id="operacoes-observacao-container" class="hidden space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label id="lbl-operacoes-hr-importacao" class="block text-sm font-semibold text-slate-700 mb-1">Horário de Importação</label>
+                                    <input type="time" name="horario_importacao" id="operacoes-hr-importacao"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label id="lbl-operacoes-hr-liberacao" class="block text-sm font-semibold text-slate-700 mb-1">Horário de Liberação</label>
+                                    <input type="time" name="horario_liberacao" id="operacoes-hr-liberacao"
+                                        class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Observação</label>
+                                <textarea name="observacao" id="operacoes-observacao" rows="3" placeholder="Descreva a observação..."
+                                    class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="pt-6">
+                            <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #0891b2, #0284c7); color: white; border: none; padding: 12px 24px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                <i data-lucide="save" class="w-5 h-5"></i><span>Salvar Operação</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- History Table & Charts for Operações -->
+            <div class="max-w-[1240px] w-full mx-auto mt-12 mb-12">
+                <!-- Tabela Histórico -->
+                <div class="glass-card rounded-2xl p-6 shadow-xl">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="list" class="w-5 h-5 text-cyan-500"></i> Registros de Operações
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                                Total: <span id="qtde-operacoes" class="text-cyan-600">0</span>
+                            </span>
+                            <button type="button" onclick="clearAllFilters()" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
+                                <i data-lucide="filter-x" class="w-4 h-4"></i> Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto overflow-y-auto rounded-xl border border-slate-200 relative mb-8 bg-white shadow-sm" style="max-height: 500px;">
+                        <table class="premium-table min-w-full divide-y divide-slate-200 text-xs text-left">
+                            <thead class="bg-slate-50 sticky top-0 z-10 shadow-sm shadow-slate-200/50 uppercase tracking-wider whitespace-nowrap">
+                                <tr>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 text-center sticky left-0 bg-slate-50 z-20 shadow-[1px_0_0_0_#e2e8f0]">Ação</th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'data', 'Data')">
+                                        <div class="flex items-center gap-2"><span>Data</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'cedente', 'Cedente')">
+                                        <div class="flex items-center gap-2"><span>Cedente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'aditivo', 'Aditivo')">
+                                        <div class="flex items-center gap-2"><span>Aditivo</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'tipo_anomalia', 'Tipo de Demora')">
+                                        <div class="flex items-center gap-2"><span>Tipo de Demora</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'gerente', 'Gerente')">
+                                        <div class="flex items-center gap-2"><span>Gerente</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'feito_por', 'Feito Por')">
+                                        <div class="flex items-center gap-2"><span>Feito Por</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600">
+                                        <div class="flex items-center gap-2"><span>Hr Importação</span></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600">
+                                        <div class="flex items-center gap-2"><span>Hr Liberação</span></div>
+                                    </th>
+                                    <th class="px-3 py-2 font-semibold text-slate-600 group cursor-pointer hover:bg-slate-100 transition-colors" onclick="openFilterMenu(event, 'observacao', 'Observação')">
+                                        <div class="flex items-center gap-2"><span>Observação</span><i data-lucide="filter" class="w-3 h-3 text-slate-400 group-hover:text-blue-500"></i></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot class="bg-slate-50 sticky bottom-0 z-10 font-bold border-t border-slate-200">
+                            </tfoot>
+                            <tbody id="operacoes-table-body" class="bg-white divide-y divide-slate-100">
+                                <!-- Renderizado via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Gráficos e Métricas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <!-- Gráfico de Tipos de Demora -->
+                    <div class="glass-card bg-slate-50/50 rounded-2xl p-4 shadow-md flex flex-col items-center h-[400px] border border-slate-200 w-full">
+                        <h3 class="text-sm font-bold text-slate-800 mb-1 w-full text-center flex items-center justify-center gap-2">
+                            <i data-lucide="pie-chart" class="w-4 h-4 text-slate-500"></i> Tipos de Demora
+                        </h3>
+                        <div class="text-[11px] font-bold text-slate-500 bg-white shadow-sm px-2 py-0.5 rounded border border-slate-200 mb-3 whitespace-nowrap">
+                            TOTAL: <span id="total-tipo-anomalia">0</span>
+                        </div>
+                        <div class="w-full relative flex-1 flex items-center justify-center">
+                            <canvas id="operacoesAnomaliasPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Métrica: Tempo Médio -->
+                    <div class="glass-card bg-slate-50/50 rounded-2xl p-6 shadow-md flex flex-col items-center justify-center h-[400px] border border-slate-200 w-full">
+                        <div class="p-4 bg-cyan-100 rounded-full mb-4">
+                            <i data-lucide="clock" class="w-12 h-12 text-cyan-600"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 text-center mb-2">Tempo Médio de Demora</h3>
+                        <p class="text-sm text-slate-500 text-center mb-6">Média da diferença entre Horário de Importação e Horário de Liberação (conforme filtros atuais)</p>
+                        <div class="text-5xl font-extrabold text-cyan-600 bg-white px-8 py-4 rounded-xl shadow-inner border border-slate-200">
+                            <span id="operacoes-tempo-medio">00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. HISTÓRICO & GRÁFICOS (DASHBOARD) -->
         <section id="historico-section" class="form-section hidden">
             <div class="w-full mx-auto">
 
@@ -2449,12 +2664,146 @@
         }
         // ---- FIM SUPORTE FORM ----
 
+        // ---- OPERAÇÕES FORM ----
+        const operacoesAnomalias = [
+            'GERAÇÃO DE ADITIVO',
+            'ANÁLISE DA 1ª OPERAÇÃO',
+            'ANÁLISE DA OPERAÇÃO',
+            'RETORNO DE OPERAÇÕES COM DEFESA',
+            'EFETIVAÇÃO APÓS VALIDAÇÃO',
+            'LIBERAÇÃO PELA COBRANÇA',
+            'AJUSTE DE CADASTRO'
+        ];
+
+        const operacoesLabelsMap = {
+            'GERAÇÃO DE ADITIVO': ['Horário de Importação', 'Horário Geração de Aditivo'],
+            'ANÁLISE DA 1ª OPERAÇÃO': ['Horário de Importação', 'Horário Finalização da Análise'],
+            'ANÁLISE DA OPERAÇÃO': ['Horário de Importação', 'Horário Finalização da Análise'],
+            'RETORNO DE OPERAÇÕES COM DEFESA': ['Horário Envio de Defesa', 'Horário Finalização da Análise'],
+            'EFETIVAÇÃO APÓS VALIDAÇÃO': ['Horário Validação', 'Horário Efetivação'],
+            'LIBERAÇÃO PELA COBRANÇA': ['Horário Efetivação', 'Horário Cobrança'],
+            'AJUSTE DE CADASTRO': ['Horário Solicitação Ajuste', 'Horário Liberação']
+        };
+
+        function initOperacoesForm() {
+            const list = document.getElementById('operacoes-anomalias-list');
+            const hiddenInput = document.getElementById('tipo-anomalia-sel');
+            const obsContainer = document.getElementById('operacoes-observacao-container');
+            const obsInput = document.getElementById('operacoes-observacao');
+            const hrImpInput = document.getElementById('operacoes-hr-importacao');
+            const hrLibInput = document.getElementById('operacoes-hr-liberacao');
+            const lblHrImp = document.getElementById('lbl-operacoes-hr-importacao');
+            const lblHrLib = document.getElementById('lbl-operacoes-hr-liberacao');
+
+            if (!list) return;
+            list.innerHTML = '';
+            operacoesAnomalias.forEach(opt => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border-2 border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700 hover:border-cyan-400 hover:bg-cyan-50 transition-all operacoes-opt-label';
+                label.innerHTML = `<input type="checkbox" class="operacoes-opt-cb w-4 h-4 accent-cyan-500" value="${opt}"> ${opt}`;
+                list.appendChild(label);
+
+                const cb = label.querySelector('input');
+                cb.addEventListener('change', () => {
+                    if (cb.checked) {
+                        // Uncheck all others
+                        list.querySelectorAll('.operacoes-opt-cb').forEach(other => {
+                            if (other !== cb) {
+                                other.checked = false;
+                                other.closest('.operacoes-opt-label').classList.remove('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                                other.closest('.operacoes-opt-label').classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                            }
+                        });
+                        label.classList.add('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                        label.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                        hiddenInput.value = opt;
+                        obsContainer.classList.remove('hidden');
+                        if(obsInput) obsInput.required = true;
+                        if(hrImpInput) hrImpInput.required = true;
+                        if(hrLibInput) hrLibInput.required = true;
+
+                        if (lblHrImp && lblHrLib && operacoesLabelsMap[opt]) {
+                            lblHrImp.textContent = operacoesLabelsMap[opt][0];
+                            lblHrLib.textContent = operacoesLabelsMap[opt][1];
+                        }
+                    } else {
+                        label.classList.remove('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                        label.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                        hiddenInput.value = '';
+                        obsContainer.classList.add('hidden');
+                        if(obsInput) {
+                            obsInput.required = false;
+                            obsInput.value = '';
+                        }
+                        if(hrImpInput) {
+                            hrImpInput.required = false;
+                            hrImpInput.value = '';
+                        }
+                        if(hrLibInput) {
+                            hrLibInput.required = false;
+                            hrLibInput.value = '';
+                        }
+                        if (lblHrImp) lblHrImp.textContent = 'Horário de Importação';
+                        if (lblHrLib) lblHrLib.textContent = 'Horário de Liberação';
+                    }
+                });
+            });
+        }
+
+        function resetOperacoesForm() {
+            const hiddenInput = document.getElementById('tipo-anomalia-sel');
+            if (hiddenInput) hiddenInput.value = '';
+            
+            const obsContainer = document.getElementById('operacoes-observacao-container');
+            if (obsContainer) obsContainer.classList.add('hidden');
+            
+            const obsInput = document.getElementById('operacoes-observacao');
+            if (obsInput) {
+                obsInput.required = false;
+                obsInput.value = '';
+            }
+            const hrImpInput = document.getElementById('operacoes-hr-importacao');
+            if (hrImpInput) {
+                hrImpInput.required = false;
+                hrImpInput.value = '';
+            }
+            const hrLibInput = document.getElementById('operacoes-hr-liberacao');
+            if (hrLibInput) {
+                hrLibInput.required = false;
+                hrLibInput.value = '';
+            }
+
+            const lblHrImp = document.getElementById('lbl-operacoes-hr-importacao');
+            const lblHrLib = document.getElementById('lbl-operacoes-hr-liberacao');
+            if (lblHrImp) lblHrImp.textContent = 'Horário de Importação';
+            if (lblHrLib) lblHrLib.textContent = 'Horário de Liberação';
+            
+            const list = document.getElementById('operacoes-anomalias-list');
+            if (list) {
+                list.querySelectorAll('.operacoes-opt-cb').forEach(cb => {
+                    cb.checked = false;
+                    const label = cb.closest('.operacoes-opt-label');
+                    if (label) {
+                        label.classList.remove('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                        label.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                    }
+                });
+            }
+        }
+
+        // Initialize checkboxes when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initOperacoesForm();
+        });
+        // ---- FIM OPERAÇÕES FORM ----
+
         // Application State
         let savedRecords = []; // Raw data
         let processedRecords = []; // Data after filters and sorting
 
         // Filter and Sort State
         let activeFilters = {
+            'data': new Set(),
             'mes': new Set(),
             'tipo_cadastro': new Set(),
             'form_type': new Set(),
@@ -2465,12 +2814,16 @@
             'recebido_em': new Set(),
             'porte': new Set(),
             'status': new Set(),
-            'grupo': new Set()
+            'grupo': new Set(),
+            'aditivo': new Set(),
+            'tipo_anomalia': new Set(),
+            'observacao': new Set()
         };
         let currentSort = { column: 'data', direction: 'desc' }; // default sort
 
         let demandChartInstance = null;
         let tipoCadastroChartInstance = null;
+        let operacoesAnomaliasChartInstance = null;
         let suporteOpcaoChartInstance = null;
         let suporteChartInstance = null;
         let gerentesChartInstance = null;
@@ -2647,12 +3000,13 @@
         async function fetchRecords(shouldResetFilters = true) {
             try {
                 let allData = [];
+                
+                // Fetch Demandas
                 let hasMore = true;
                 let from = 0;
                 let to = 999;
                 const pageSize = 1000;
 
-                // Loading indicativo visual básico (opcional)
                 const cloudCountObj = document.getElementById('cloud-count');
                 if (cloudCountObj) cloudCountObj.innerText = "...";
 
@@ -2672,6 +3026,36 @@
                     }
                     if (!data || data.length < pageSize) {
                         hasMore = false;
+                    }
+                }
+
+                // Fetch Operacoes
+                let hasMoreOp = true;
+                let fromOp = 0;
+                let toOp = 999;
+                
+                while (hasMoreOp) {
+                    const { data, error } = await supabaseClient
+                        .from('operacoes')
+                        .select('*')
+                        .order('registrado_em', { ascending: false })
+                        .range(fromOp, toOp);
+
+                    if (error && error.code === '42P01') {
+                        // Table doesn't exist yet, silently ignore for now
+                        break;
+                    } else if (error) {
+                        console.warn("Erro ao buscar operações (pode não existir ainda):", error);
+                        break;
+                    }
+
+                    if (data && data.length > 0) {
+                        allData = allData.concat(data);
+                        fromOp += pageSize;
+                        toOp += pageSize;
+                    }
+                    if (!data || data.length < pageSize) {
+                        hasMoreOp = false;
                     }
                 }
 
@@ -2776,9 +3160,12 @@
                 applyFiltersAndSort();
             }
 
-            // Reseta o formulário de Suporte ao abrir
+            // Reseta o formulário de Suporte e Operações ao abrir
             if (formId === 'suporte-form') {
                 resetSuporteForm();
+            }
+            if (formId === 'operacoes-form') {
+                resetOperacoesForm();
             }
         }
 
@@ -2809,6 +3196,7 @@
                 }
             });
             resetSuporteForm();
+            resetOperacoesForm();
 
             // Esconde campo Motivo do Ajuste ao fechar
             const motivoCont = document.getElementById('motivo-ajuste-container');
@@ -2905,16 +3293,17 @@
 
             try {
                 let saveError;
+                const targetTable = dataObj.form_type === 'OPERAÇÕES' ? 'operacoes' : 'demandas';
                 if (dataObj.id) {
                     const idParaUpdate = dataObj.id;
                     delete dataObj.id; // Evita atualizar a primary key
-                    const { data: updateData, error: updateError } = await supabaseClient.from('demandas').update(dataObj).eq('id', idParaUpdate).select();
+                    const { data: updateData, error: updateError } = await supabaseClient.from(targetTable).update(dataObj).eq('id', idParaUpdate).select();
                     if (!updateError && (!updateData || updateData.length === 0)) {
                         throw new Error("Nenhum registro atualizado. O ID pode estar incorreto ou não existe, ou você não tem permissão.");
                     }
                     saveError = updateError;
                 } else {
-                    const { error: insertError } = await supabaseClient.from('demandas').insert([dataObj]);
+                    const { error: insertError } = await supabaseClient.from(targetTable).insert([dataObj]);
                     saveError = insertError;
                 }
 
@@ -2997,8 +3386,9 @@
         }
 
         function resetFilters() {
-            const columns = ['mes', 'tipo_cadastro', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente', 'recebido_em', 'porte', 'status', 'grupo', 'pendencias_triagem', 'pleito_gerente', 'envio_cadastro', 'data_retorno_credito', 'pendencias_credito', 'data_envio', 'data_elaboracao', 'data_comite'];
+            const columns = ['data', 'mes', 'tipo_cadastro', 'form_type', 'feito_por', 'cedente', 'fase_cadastro', 'gerente', 'recebido_em', 'porte', 'status', 'grupo', 'pendencias_triagem', 'pleito_gerente', 'envio_cadastro', 'data_retorno_credito', 'pendencias_credito', 'data_envio', 'data_elaboracao', 'data_comite', 'aditivo', 'tipo_anomalia', 'observacao'];
             columns.forEach(col => {
+                if (!activeFilters[col]) activeFilters[col] = new Set();
                 activeFilters[col] = new Set(savedRecords.map(r => formatDataForDisplay(r[col], col)));
             });
         }
@@ -3174,6 +3564,7 @@
         function applyFiltersAndSort() {
             // 1. Filter
             processedRecords = savedRecords.filter(r => {
+                const dt = formatDataForDisplay(r.data, 'data');
                 const mesStr = formatDataForDisplay(r.mes, 'mes');
                 const tipoCadastro = formatDataForDisplay(r.tipo_cadastro, 'tipo_cadastro');
                 const formType = formatDataForDisplay(r.form_type, 'form_type');
@@ -3195,8 +3586,12 @@
                 const de = formatDataForDisplay(r.data_envio, 'data_envio');
                 const del = formatDataForDisplay(r.data_elaboracao, 'data_elaboracao');
                 const dc = formatDataForDisplay(r.data_comite, 'data_comite');
+                const adi = formatDataForDisplay(r.aditivo, 'aditivo');
+                const ta = formatDataForDisplay(r.tipo_anomalia, 'tipo_anomalia');
+                const obs = formatDataForDisplay(r.observacao, 'observacao');
 
-                return activeFilters['mes'].has(mesStr) &&
+                return activeFilters['data'].has(dt) &&
+                    activeFilters['mes'].has(mesStr) &&
                     activeFilters['tipo_cadastro'].has(tipoCadastro) &&
                     activeFilters['form_type'].has(formType) &&
                     activeFilters['feito_por'].has(feitoPor) &&
@@ -3214,7 +3609,10 @@
                     activeFilters['pendencias_credito'].has(pc) &&
                     activeFilters['data_envio'].has(de) &&
                     activeFilters['data_elaboracao'].has(del) &&
-                    activeFilters['data_comite'].has(dc);
+                    activeFilters['data_comite'].has(dc) &&
+                    activeFilters['aditivo'].has(adi) &&
+                    activeFilters['tipo_anomalia'].has(ta) &&
+                    activeFilters['observacao'].has(obs);
             });
 
             // 2. Sort
@@ -3266,7 +3664,7 @@
             if (tbodyGeral) tbodyGeral.innerHTML = '';
 
             const cadastroRecords = processedRecords.filter(r => r.form_type === 'CADASTRO');
-            const geralRecords = processedRecords; // Mistura TUDO no histórico
+            const geralRecords = processedRecords.filter(r => r.form_type !== 'OPERAÇÕES'); // Remove operações do histórico geral
 
             if (tbodyCadastro) {
                 if (cadastroRecords.length === 0) {
@@ -3313,6 +3711,74 @@
                         `;
                         tbodyCadastro.appendChild(tr);
                     });
+                }
+            }
+
+            const tbodyOperacoes = document.getElementById('operacoes-table-body');
+            if (tbodyOperacoes) {
+                tbodyOperacoes.innerHTML = '';
+                const operacoesRecords = processedRecords.filter(r => r.form_type === 'OPERAÇÕES');
+                
+                if (operacoesRecords.length === 0) {
+                    tbodyOperacoes.innerHTML = `<tr><td colspan="10" class="px-4 py-8 text-center text-slate-500">Nenhuma operação corresponde aos filtros.</td></tr>`;
+                    const tempoMedioEl = document.getElementById('operacoes-tempo-medio');
+                    if (tempoMedioEl) tempoMedioEl.textContent = '00:00';
+                } else {
+                    const qtdeOperacoes = document.getElementById('qtde-operacoes');
+                    if (qtdeOperacoes) qtdeOperacoes.textContent = operacoesRecords.length;
+                    
+                    let totalMinutes = 0;
+                    let validTimeRecords = 0;
+
+                    operacoesRecords.forEach(record => {
+                        // Calculate time difference
+                        if (record.horario_importacao && record.horario_liberacao) {
+                            const [impH, impM] = record.horario_importacao.split(':').map(Number);
+                            const [libH, libM] = record.horario_liberacao.split(':').map(Number);
+                            let diffMinutes = (libH * 60 + libM) - (impH * 60 + impM);
+                            if (diffMinutes < 0) diffMinutes += 24 * 60; // handle next day
+                            totalMinutes += diffMinutes;
+                            validTimeRecords++;
+                        }
+
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-slate-50 transition-colors whitespace-nowrap text-slate-700';
+                        tr.innerHTML = `
+                            <td class="px-3 py-2 border-r border-slate-100 bg-white sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0] opacity-95 group-hover:bg-slate-50 transition-colors">
+                                <div class="flex items-center justify-center space-x-1 w-full">
+                                    <button type="button" onclick="deleteOperacoesRecord('${record.id}')" class="flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded-md transition-colors w-full" title="Excluir Operação">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button" onclick="editOperacoesRecord('${record.id}')" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 p-1.5 rounded-md transition-colors w-full" title="Editar Operação">
+                                        <i data-lucide="edit" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-3 py-2 font-medium">${formatDataForDisplay(record.data, 'data')}</td>
+                            <td class="px-3 py-2 truncate max-w-[120px]" title="${record.cedente}">${record.cedente || '-'}</td>
+                            <td class="px-3 py-2">${record.aditivo || '-'}</td>
+                            <td class="px-3 py-2">${record.tipo_anomalia || '-'}</td>
+                            <td class="px-3 py-2">${record.gerente || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${record.feito_por || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${record.horario_importacao || '-'}</td>
+                            <td class="px-3 py-2 font-medium">${record.horario_liberacao || '-'}</td>
+                            <td class="px-3 py-2 truncate max-w-[200px]" title="${record.observacao}">${record.observacao || '-'}</td>
+                        `;
+                        tbodyOperacoes.appendChild(tr);
+                    });
+
+                    // Update Average Time UI
+                    const tempoMedioEl = document.getElementById('operacoes-tempo-medio');
+                    if (tempoMedioEl) {
+                        if (validTimeRecords > 0) {
+                            const avgMinutes = Math.round(totalMinutes / validTimeRecords);
+                            const avgH = Math.floor(avgMinutes / 60);
+                            const avgM = avgMinutes % 60;
+                            tempoMedioEl.textContent = `${String(avgH).padStart(2, '0')}:${String(avgM).padStart(2, '0')}`;
+                        } else {
+                            tempoMedioEl.textContent = '00:00';
+                        }
+                    }
                 }
             }
 
@@ -3397,29 +3863,35 @@
             // Conta os Active Records baseados no array processado final
             const activeRecords = processedRecords;
 
-            const ctxDemandas = document.getElementById('demandPieChart').getContext('2d');
-            const ctxTipoCadastro = document.getElementById('tipoCadastroPieChart').getContext('2d');
-            const ctxSuporteOpcao = document.getElementById('suporteOpcaoPieChart').getContext('2d');
-            const ctxSuporte = document.getElementById('suportePieChart').getContext('2d');
-            const ctxGerentes = document.getElementById('gerentesPieChart').getContext('2d');
-            const ctxColaboradores = document.getElementById('colaboradoresPieChart').getContext('2d');
+            const ctxDemandas = document.getElementById('demandPieChart')?.getContext('2d');
+            const ctxTipoCadastro = document.getElementById('tipoCadastroPieChart')?.getContext('2d');
+            const ctxOperacoesAnomalias = document.getElementById('operacoesAnomaliasPieChart')?.getContext('2d');
+            const ctxSuporteOpcao = document.getElementById('suporteOpcaoPieChart')?.getContext('2d');
+            const ctxSuporte = document.getElementById('suportePieChart')?.getContext('2d');
+            const ctxGerentes = document.getElementById('gerentesPieChart')?.getContext('2d');
+            const ctxColaboradores = document.getElementById('colaboradoresPieChart')?.getContext('2d');
 
             // Agrupar contagens
             const countsDemandas = {
                 'CADASTRO': 0, 'SUPORTE': 0, 'IMP DE OPERAÇÕES': 0,
-                'AJUSTE DE OPERAÇÃO': 0, 'DEFESAS': 0, 'DEMANDAS': 0
+                'AJUSTE DE OPERAÇÃO': 0, 'DEFESAS': 0, 'DEMANDAS': 0, 'OPERAÇÕES': 0
             };
             const countsTipoCadastro = {};
             const countsSuporteOpcao = {};
+            const countsOperacoesAnomalias = {};
             const countsSuporte = {};
             const countsGerentes = {};
-            const countsColaboradores = { 'Arthur': 0, 'Cristiane': 0, 'Kamily': 0, 'Stefania': 0 };
+            const countsColaboradores = { 'Arthur': 0, 'Cristiane': 0, 'Kamily': 0, 'Stefania': 0, 'Leonardo': 0, 'Tatiana': 0, 'Matheus': 0, 'Andreza': 0 };
 
             activeRecords.forEach(r => {
                 if (countsDemandas[r.form_type] !== undefined) countsDemandas[r.form_type]++;
 
                 if (r.form_type === 'CADASTRO' && r.tipo_cadastro) {
                     countsTipoCadastro[r.tipo_cadastro] = (countsTipoCadastro[r.tipo_cadastro] || 0) + 1;
+                }
+
+                if (r.form_type === 'OPERAÇÕES' && r.tipo_anomalia) {
+                    countsOperacoesAnomalias[r.tipo_anomalia] = (countsOperacoesAnomalias[r.tipo_anomalia] || 0) + 1;
                 }
 
                 if (r.form_type === 'SUPORTE') {
@@ -3449,6 +3921,7 @@
             // Atualização dos totais visuais na grid de gráficos
             const sumDemandas = Object.values(countsDemandas).reduce((a, b) => a + b, 0);
             const sumTipoCadastro = Object.values(countsTipoCadastro).reduce((a, b) => a + b, 0);
+            const sumOperacoesAnomalias = Object.values(countsOperacoesAnomalias).reduce((a, b) => a + b, 0);
             const sumSuporte = Object.values(countsSuporteOpcao).reduce((a, b) => a + b, 0);
             const sumGerentes = Object.values(countsGerentes).reduce((a, b) => a + b, 0);
             const sumColaboradores = Object.values(countsColaboradores).reduce((a, b) => a + b, 0);
@@ -3458,6 +3931,9 @@
 
             const dtTipoCadastro = document.getElementById('total-tipo-cadastro');
             if (dtTipoCadastro) dtTipoCadastro.innerText = sumTipoCadastro;
+
+            const dtOperacoesAnomalias = document.getElementById('total-tipo-anomalia');
+            if (dtOperacoesAnomalias) dtOperacoesAnomalias.innerText = sumOperacoesAnomalias;
 
             const dtSuporte = document.getElementById('total-suporte');
             if (dtSuporte) dtSuporte.innerText = sumSuporte;
@@ -3470,6 +3946,7 @@
 
             if (demandChartInstance) demandChartInstance.destroy();
             if (tipoCadastroChartInstance) tipoCadastroChartInstance.destroy();
+            if (operacoesAnomaliasChartInstance) operacoesAnomaliasChartInstance.destroy();
             if (suporteOpcaoChartInstance) suporteOpcaoChartInstance.destroy();
             if (suporteChartInstance) suporteChartInstance.destroy();
             if (gerentesChartInstance) gerentesChartInstance.destroy();
@@ -3615,6 +4092,33 @@
                     },
                     options: commonOptions
                 });
+            }
+
+            // ---- GRÁFICO OPERAÇÕES ANOMALIAS (DOUGHNUT) ----
+            if (ctxOperacoesAnomalias) {
+                const operacoesAnomaliasOrdenados = Object.entries(countsOperacoesAnomalias).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+                if (operacoesAnomaliasOrdenados.length === 0) { 
+                    showEmptyState('operacoesAnomaliasPieChart'); 
+                } else {
+                    hideEmptyState('operacoesAnomaliasPieChart');
+                    const colorsOperacoesAnomalias = ['#0891b2', '#0ea5e9', '#06b6d4', '#0369a1', '#0284c7', '#0c4a6e', '#164e63', '#155e75'];
+                    
+                    const operacoesAnomaliasOptions = JSON.parse(JSON.stringify(commonOptions));
+                    
+                    operacoesAnomaliasChartInstance = new Chart(ctxOperacoesAnomalias, {
+                        type: 'doughnut',
+                        data: {
+                            labels: operacoesAnomaliasOrdenados.map(s => s[0]),
+                            datasets: [{
+                                data: operacoesAnomaliasOrdenados.map(s => s[1]),
+                                backgroundColor: colorsOperacoesAnomalias.slice(0, operacoesAnomaliasOrdenados.length),
+                                borderWidth: 0,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: operacoesAnomaliasOptions
+                    });
+                }
             }
 
             // ---- GRÁFICO SUPORTE OPÇÃO (DOUGHNUT INTERATIVO) ----
@@ -4352,6 +4856,91 @@
 
             // Transição visual para a tela do Dashboard (SPA)
             openForm('dashboard-section');
+        }
+
+        // Função para deletar registro de operações
+        async function deleteOperacoesRecord(id) {
+            if (confirm('Tem certeza que deseja excluir este registro de Operações?')) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('operacoes')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    
+                    showToast('Registro excluído com sucesso', 'trash-2', 'bg-red-600');
+                    fetchRecords(); // recarrega a tabela e gráficos
+                } catch (err) {
+                    console.error('Erro ao excluir registro:', err);
+                    showToast('Erro ao excluir registro', 'x-circle', 'bg-red-600');
+                }
+            }
+        }
+
+        // Função para carregar os dados de volta para o form de operações
+        async function editOperacoesRecord(id) {
+            const record = savedRecords.find(r => String(r.id) === String(id));
+            if (!record) {
+                console.error("Record não encontrado para edição:", id);
+                return;
+            }
+
+            openForm('operacoes-form');
+            const form = document.getElementById('form-operacoes');
+
+            form.elements['data'].value = record.data || '';
+            form.elements['feito_por'].value = record.feito_por || '';
+            form.elements['gerente'].value = record.gerente || '';
+            form.elements['cedente'].value = record.cedente || '';
+            form.elements['aditivo'].value = record.aditivo || '';
+
+            // Handle type of anomalia selection
+            const hiddenInput = document.getElementById('tipo-anomalia-sel');
+            hiddenInput.value = record.tipo_anomalia || '';
+            const list = document.getElementById('operacoes-anomalias-list');
+            
+            if (list) {
+                list.querySelectorAll('.operacoes-opt-cb').forEach(cb => {
+                    cb.checked = false;
+                    const label = cb.closest('.operacoes-opt-label');
+                    if (label) {
+                        label.classList.remove('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                        label.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                    }
+                });
+
+                if (record.tipo_anomalia) {
+                    const cbToSelect = list.querySelector(`.operacoes-opt-cb[value="${record.tipo_anomalia}"]`);
+                    if (cbToSelect) {
+                        cbToSelect.checked = true;
+                        const label = cbToSelect.closest('.operacoes-opt-label');
+                        label.classList.add('border-cyan-500', 'bg-cyan-100', 'text-cyan-700');
+                        label.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-700');
+                        
+                        document.getElementById('operacoes-observacao-container').classList.remove('hidden');
+                        document.getElementById('operacoes-hr-importacao').required = true;
+                        document.getElementById('operacoes-hr-liberacao').required = true;
+                        document.getElementById('operacoes-observacao').required = true;
+
+                        const lblHrImp = document.getElementById('lbl-operacoes-hr-importacao');
+                        const lblHrLib = document.getElementById('lbl-operacoes-hr-liberacao');
+                        if (lblHrImp && lblHrLib && typeof operacoesLabelsMap !== 'undefined' && operacoesLabelsMap[record.tipo_anomalia]) {
+                            lblHrImp.textContent = operacoesLabelsMap[record.tipo_anomalia][0];
+                            lblHrLib.textContent = operacoesLabelsMap[record.tipo_anomalia][1];
+                        }
+                    }
+                } else {
+                    document.getElementById('operacoes-observacao-container').classList.add('hidden');
+                }
+            }
+            
+            if(document.getElementById('operacoes-hr-importacao')) document.getElementById('operacoes-hr-importacao').value = record.horario_importacao || '';
+            if(document.getElementById('operacoes-hr-liberacao')) document.getElementById('operacoes-hr-liberacao').value = record.horario_liberacao || '';
+            if(document.getElementById('operacoes-observacao')) document.getElementById('operacoes-observacao').value = record.observacao || '';
+
+            // Store ID for update
+            form.dataset.updateId = record.id;
         }
 
         // Função para deletar registro de cadastro
