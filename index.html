@@ -3310,7 +3310,7 @@
                 if (saveError) throw saveError;
 
                 // Fetch atualizado sem limpar filtros
-                await fetchRecords(false);
+                await fetchRecords();
 
                 const formTypeStr = dataObj['form_type'] || 'Registro';
                 showToast(`${formTypeStr} salvo com sucesso!`, 'success');
@@ -4955,7 +4955,7 @@
                     if (error) throw error;
                     
                     showToast('Registro excluído com sucesso', 'trash-2', 'bg-red-600');
-                    await fetchRecords(false);
+                    await fetchRecords();
                 } catch (error) {
                     console.error('Erro ao deletar Cadastro:', error);
                     showToast('Erro ao excluir o registro', 'x-circle', 'bg-red-600');
