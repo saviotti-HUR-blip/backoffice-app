@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
@@ -905,7 +905,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -1330,7 +1332,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -1449,7 +1453,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -1654,7 +1660,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -1756,7 +1764,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -1842,7 +1852,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -2391,7 +2403,9 @@
                                     <option value="ANTONIO">ANTONIO</option>
                                     <option value="CAMILA">CAMILA</option>
                                     <option value="CLAUDIA">CLAUDIA</option>
+                                    <option value="DANIELA">DANIELA</option>
                                     <option value="GUILHERME">GUILHERME</option>
+                                    <option value="LEONARDO">LEONARDO</option>
                                     <option value="MARIA EDUARDA">MARIA EDUARDA</option>
                                     <option value="MARLENE">MARLENE</option>
                                     <option value="RAFAELA">RAFAELA</option>
@@ -5411,15 +5425,17 @@
             const yearNum = parseInt(parts[0]);
             const monthNum = parseInt(parts[1]);
 
-            // Filtra apenas registros CADASTRO do mês selecionado, tipo prospecção/risco sacado
+            // Filtra apenas registros CADASTRO do mês selecionado, considerando estritamente Prospecção e Risco Sacado (Sacado)
             const recs = (savedRecords || []).filter(function(r) {
                 if (r.form_type !== 'CADASTRO') return false;
                 const recDate = r.mes || r.recebido_em || r.data || '';
                 const dp = recDate.split('-');
                 return parseInt(dp[0]) === yearNum && parseInt(dp[1]) === monthNum;
             }).filter(function(r) {
-                const tipo = (r.tipo_cadastro || '').toUpperCase();
-                return tipo.indexOf('PROSPEC') >= 0 || tipo.indexOf('RISCO SACADO') >= 0;
+                const tipo = (r.tipo_cadastro || '').toUpperCase().trim();
+                const isProspeccao = tipo.indexOf('PROSPEC') >= 0;
+                const isRiscoSacadoSacado = tipo.indexOf('RISCO SACADO') >= 0 && tipo.indexOf('FORNECEDOR') < 0 && (tipo.indexOf('SACADO') >= 0 || tipo === 'RISCO SACADO');
+                return isProspeccao || isRiscoSacadoSacado;
             });
 
             const total = recs.length;
@@ -5542,70 +5558,49 @@
             return xml.substring(0, totalGeralIdx) + tail;
         }
 
-        // Substitui dados de gerentes na tabela do PPTX
-        // O slide original tem gerentes fixos; substituímos linha a linha pelos dados reais
+        // Substitui dados de gerentes na tabela do PPTX linha a linha pelos dados reais ordenados
         function replaceGerentesTable(xml, gerentes) {
-            // Os gerentes originais no slide (em ordem de aparecimento)
-            const gerentesOriginais = [
-                'Ana Tavares', 'Ana Carolina', 'Claudia', 'Rafaela', 'Antonio',
-                'Veclaine', 'Sigrid', 'Weslei', 'Marlene', 'Ricardo'
-            ];
+            const tblStart = xml.indexOf('<a:tbl>');
+            const tblEnd = xml.indexOf('</a:tbl>');
+            if (tblStart < 0 || tblEnd < 0) return xml;
             
-            let modifiedXml = xml;
+            const beforeTbl = xml.substring(0, tblStart);
+            let tblContent = xml.substring(tblStart, tblEnd + 8);
+            const afterTbl = xml.substring(tblEnd + 8);
             
-            gerentesOriginais.forEach(function(nomeOriginal, idx) {
+            const trRegex = /<a:tr[\s\S]*?<\/a:tr>/g;
+            const rows = tblContent.match(trRegex);
+            if (!rows || rows.length < 12) return xml;
+            
+            for (let idx = 0; idx < 10; idx++) {
+                const rowIdx = idx + 1; // Linha 0 é o cabeçalho
+                let rowXml = rows[rowIdx];
                 const dadosReais = gerentes[idx] || null;
                 
-                // Encontra o índice do nome do gerente original no XML
-                const nomeIdx = modifiedXml.indexOf('>' + nomeOriginal + '<');
-                if (nomeIdx < 0) return;
-                
-                if (!dadosReais) {
-                    // Gerente não existe nos dados reais: zera os valores
-                    // Substitui os 5 valores numéricos após o nome do gerente
-                    const searchArea = modifiedXml.substring(nomeIdx, nomeIdx + 1500);
-                    const nums = searchArea.match(/<a:t>(\d+%?)<\/a:t>/g);
-                    if (nums) {
-                        let tempArea = searchArea;
-                        let replCount = 0;
-                        const zeroVals = ['0', '0', '0', '0', '0%'];
-                        tempArea = tempArea.replace(/<a:t>(\d+%?)<\/a:t>/g, function(m) {
-                            if (replCount < 5) {
-                                const r = '<a:t>' + zeroVals[replCount] + '</a:t>';
-                                replCount++;
-                                return r;
-                            }
-                            return m;
-                        });
-                        modifiedXml = modifiedXml.substring(0, nomeIdx) + tempArea + modifiedXml.substring(nomeIdx + 1500);
-                    }
-                    return;
-                }
-                
-                // Substitui nome do gerente
-                modifiedXml = modifiedXml.substring(0, nomeIdx + 1) + dadosReais.nome + modifiedXml.substring(nomeIdx + 1 + nomeOriginal.length);
-                
-                // Agora substitui os valores numéricos (total, aprov, reprov, andamento, pct%)
-                const newNomeIdx = modifiedXml.indexOf('>' + dadosReais.nome + '<');
-                if (newNomeIdx < 0) return;
-                
-                const pctConvStr = dadosReais.pctConversao > 0 ? dadosReais.pctConversao + '%' : '0%';
-                const vals = [String(dadosReais.total), String(dadosReais.aprovados), String(dadosReais.reprovados), String(dadosReais.andamento), pctConvStr];
-                
-                const searchArea2 = modifiedXml.substring(newNomeIdx, newNomeIdx + 1500);
-                let replCount2 = 0;
-                const newSearchArea = searchArea2.replace(/<a:t>(\d+%?)<\/a:t>/g, function(m) {
-                    if (replCount2 < 5) {
-                        const r = '<a:t>' + vals[replCount2] + '</a:t>';
-                        replCount2++;
+                let cellIndex = 0;
+                const newRowXml = rowXml.replace(/<a:t>([^<]*)<\/a:t>/g, function(match, currentText) {
+                    if (cellIndex === 0) {
+                        cellIndex++;
+                        return '<a:t>' + (dadosReais ? dadosReais.nome : '-') + '</a:t>';
+                    } else if (cellIndex >= 1 && cellIndex <= 5) {
+                        const vals = dadosReais ? [
+                            String(dadosReais.total),
+                            String(dadosReais.aprovados),
+                            String(dadosReais.reprovados),
+                            String(dadosReais.andamento),
+                            (dadosReais.pctConversao > 0 ? dadosReais.pctConversao + '%' : '0%')
+                        ] : ['0', '0', '0', '0', '0%'];
+                        const r = '<a:t>' + vals[cellIndex - 1] + '</a:t>';
+                        cellIndex++;
                         return r;
                     }
-                    return m;
+                    return match;
                 });
-                modifiedXml = modifiedXml.substring(0, newNomeIdx) + newSearchArea + modifiedXml.substring(newNomeIdx + 1500);
-            });
+                
+                tblContent = tblContent.replace(rows[rowIdx], newRowXml);
+            }
             
-            return modifiedXml;
+            return beforeTbl + tblContent + afterTbl;
         }
 
         async function gerarAnaliseMensal() {
@@ -5622,7 +5617,7 @@
                 const metrics = computeAnalysisMetrics(monthVal);
 
                 if (metrics.total === 0) {
-                    showToast('Nenhum registro de Cadastro (Prospecção/Risco Sacado) encontrado para este mês.', 'warning');
+                    showToast('Nenhum registro de Cadastro (Prospecção / Risco Sacado Sacado) encontrado para este mês.', 'warning');
                     return;
                 }
 
